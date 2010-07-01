@@ -8,40 +8,40 @@ set :branch, "master"
 set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
 
-# set :user, "yogo"
-# 
-# role :web, "yogo.cns.montana.edu"                          # Your HTTP server, Apache/etc
-# role :app, "yogo.cns.montana.edu"                          # This may be the same as your `Web` server
-
 set :ran_user_settings, false
 
+set :user, "crux"
+set :deploy_to, "/home/crux/"
+
+server "crux.msu.montana.edu", :app, :web, :db, :primary => true
+
 task :user_settings do
-  if !ran_user_settings
-    set :user, "crux"
-    set :deploy_to, "/home/crux/"
-    server "crux.msu.montana.edu", :app, :web, :db, :primary => true
-    
-    # set :default_environment, { 
-    #   'PATH' => "/usr/local/rvm/bin:/usr/local/rvm/bin:/home/crux/.gem/ruby/1.8/bin:/usr/local/rvm/gems/ruby-1.8.7-p174/bin:/usr/local/rvm/gems/ruby-1.8.7-p174@global/bin:/usr/local/rvm/rubies/ruby-1.8.7-p174/bin:$PATH",
-    #   'RUBY_VERSION' => 'ruby 1.8.7',
-    #   'GEM_HOME' => '/usr/local/rvm/gems/ruby-1.8.7-p174',
-    #   'GEM_PATH' => '/usr/local/rvm/gems/ruby-1.8.7-p174:/usr/local/rvm/gems/ruby-1.8.7-p174@global' 
-    # }
-    # server_prompt = "What server are you deploying to?"
-    # set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
-    # role :web, "#{temp_server}"
-    # role :app, "#{temp_server}"
-    # user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
-    # set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
-    # if temp_user.empty?
-    #   set :user, "yogo"
-    #   set :deploy_to, "/home/yogo/rails/yogo/"
-    # else
-    #   set :user, "#{temp_user}"
-    #   set :deploy_to, "/home/#{temp_user}/rails/yogo/"
-    # end
-    set :ran_user_settings, true
-  end
+  # if !ran_user_settings
+  #     set :user, "crux"
+  #     set :deploy_to, "/home/crux/"
+  #     server "crux.msu.montana.edu", :app, :web, :db, :primary => true
+  #     
+  #     # set :default_environment, { 
+  #     #   'PATH' => "/usr/local/rvm/bin:/usr/local/rvm/bin:/home/crux/.gem/ruby/1.8/bin:/usr/local/rvm/gems/ruby-1.8.7-p174/bin:/usr/local/rvm/gems/ruby-1.8.7-p174@global/bin:/usr/local/rvm/rubies/ruby-1.8.7-p174/bin:$PATH",
+  #     #   'RUBY_VERSION' => 'ruby 1.8.7',
+  #     #   'GEM_HOME' => '/usr/local/rvm/gems/ruby-1.8.7-p174',
+  #     #   'GEM_PATH' => '/usr/local/rvm/gems/ruby-1.8.7-p174:/usr/local/rvm/gems/ruby-1.8.7-p174@global' 
+  #     # }
+  #     # server_prompt = "What server are you deploying to?"
+  #     # set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
+  #     # role :web, "#{temp_server}"
+  #     # role :app, "#{temp_server}"
+  #     # user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
+  #     # set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
+  #     # if temp_user.empty?
+  #     #   set :user, "yogo"
+  #     #   set :deploy_to, "/home/yogo/rails/yogo/"
+  #     # else
+  #     #   set :user, "#{temp_user}"
+  #     #   set :deploy_to, "/home/#{temp_user}/rails/yogo/"
+  #     # end
+  #     # set :ran_user_settings, true
+  #  end
 end
 
 [ "bundle:install", "bundle:check", "deploy", "deploy:check", "deploy:cleanup", "deploy:cold", "deploy:migrate",
@@ -109,18 +109,24 @@ after "deploy:update_code", "setup_for_server"
 
 namespace :bundle do
   bundle_cmd = "cd #{release_path} && bundle "
-
+  set :default_environment, { 
+    'PATH' => "/usr/local/rvm/bin:/usr/local/rvm/bin:/home/crux/.gem/ruby/1.8/bin:/usr/local/rvm/gems/ruby-1.8.7-p174/bin:/usr/local/rvm/gems/ruby-1.8.7-p174@global/bin:/usr/local/rvm/rubies/ruby-1.8.7-p174/bin:$PATH",
+    'RUBY_VERSION' => 'ruby 1.8.7',
+    'GEM_HOME' => '/usr/local/rvm/gems/ruby-1.8.7-p174',
+    'GEM_PATH' => '/usr/local/rvm/gems/ruby-1.8.7-p174:/usr/local/rvm/gems/ruby-1.8.7-p174@global' 
+  }
+  
   desc "Run bundle check on the server"
   task :check do
     run(bundle_cmd + 'check', :shell => 'bash')
   end
-
+  
   desc "Run bundle install on the server"
   task :install do
     run("#{bundle_cmd % 'install'}")
   end
 end
-after 'setup_for_server', 'bundle:check'
+# after 'setup_for_server', 'bundle:check'
 
 namespace :tomcat do
   desc "Start the Tomcat Instance on the server (blazeds and persevere)"
