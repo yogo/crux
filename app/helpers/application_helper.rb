@@ -237,7 +237,17 @@ module ApplicationHelper
   # @api public
   #
   def kefed_editor_swf_url
-    "http://localhost:8400/blazeds/kefedEditor/BioScholar.swf"
+    if Rails.env == 'production'
+      base_url =  Yogo::Setting[:production_server_tomcat_url] +
+                  "/blazeds/kefedEditor/KefedModelEditor.html?"
+      params =  ['model','schema','data'].map{ |t| 
+                  "#{t}StoreType=persevere&#{t}StoreUrl=" + 
+                  Yogo::Setting[:production_server_persevere_url]
+                }.join('&')
+      URI.escape(base_url + params)
+    else
+      "http://localhost:8400/blazeds/kefedEditor/KefedModelEditor.html?"
+    end
   end
   
   # Return the kefed editor swf file path

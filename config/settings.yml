@@ -6,3 +6,7 @@ anonymous_user_name:  anonymous
 
 allow_api_key:        false
 api_key_name:         api_key
+
+production_server_url:            http://crux.msu.montana.edu
+production_server_tomcat_url:     http://crux.msu.montana.edu:8400
+production_server_persevere_url:  http://crux.msu.montana.edu:8080
