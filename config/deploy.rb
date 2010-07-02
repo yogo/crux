@@ -64,13 +64,13 @@ end
 
 namespace :db do
   task :setup do
-    run "mkdir -p #{deploy_to}#{shared_dir}/database/persvr"
-    run "mkdir -p #{deploy_to}#{shared_dir}/database/persevere"
+    run "mkdir -p #{deploy_to}#{shared_dir}/db/persvr"
+    run "mkdir -p #{deploy_to}#{shared_dir}/vendor/persevere"
   end
   
   task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/database/persvr #{release_path}/db/persvr"
-    run "ln -nfs #{deploy_to}#{shared_dir}/database/persevere #{release_path}/vendor/persevere"
+    run "ln -nfs #{deploy_to}#{shared_dir}/db/persvr #{release_path}/db/persvr"
+    run "ln -nfs #{deploy_to}#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
 end
 after "deploy:setup",       "db:setup"
@@ -108,7 +108,6 @@ end
 after "deploy:update_code", "setup_for_server"
 
 namespace :bundle do
-  bundle_cmd = "cd #{release_path} && bundle "
   set :default_environment, { 
     'PATH' => "/usr/local/rvm/bin:/usr/local/rvm/bin:/home/crux/.gem/ruby/1.8/bin:/usr/local/rvm/gems/ruby-1.8.7-p174/bin:/usr/local/rvm/gems/ruby-1.8.7-p174@global/bin:/usr/local/rvm/rubies/ruby-1.8.7-p174/bin:$PATH",
     'RUBY_VERSION' => 'ruby 1.8.7',
@@ -118,12 +117,16 @@ namespace :bundle do
   
   desc "Run bundle check on the server"
   task :check do
-    run(bundle_cmd + 'check', :shell => 'bash')
+    run("cd #{release_path} && bundle check", :shell => 'bash')
   end
   
   desc "Run bundle install on the server"
   task :install do
-    run("#{bundle_cmd % 'install'}")
+    begin
+      run("cd #{release_path} && bundle check", :shell => 'bash')
+    rescue
+      run("cd #{release_path} && bundle install", :shell => 'bash')
+    end
   end
 end
 # after 'setup_for_server', 'bundle:check'
@@ -142,6 +145,7 @@ namespace :tomcat do
     puts '************************************* Be patient **************************************'
     run("bash -c 'cd #{current_path} && rake blazeds:stop RAILS_ENV=production'")
   end
+  
 end
 
 namespace :persvr do
