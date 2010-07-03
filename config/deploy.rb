@@ -88,6 +88,29 @@ end
 after "deploy:setup",       "tomcat:setup"
 after "deploy:update_code", "tomcat:symlink"
 
+namespace :kefed do
+  task :upload_swfs do
+    path = 'vendor/blazeds/tomcat/webapps/blazeds/kefedEditor'
+    ['BioScholar.swf','KefedModelEditor.swf','main.swf'].each do |file|
+      upload( File.dirname(__FILE__) + "/../#{path}/#{file}", 
+              "#{deploy_to}#{shared_dir}/#{path}/#{file}")
+    end
+  end
+  
+  task :upload_htmls do
+    path = 'vendor/blazeds/tomcat/webapps/blazeds/kefedEditor'
+    ['BioScholar.html','KefedModelEditor.html','main.html'].each do |file|
+      upload( File.dirname(__FILE__) + "/../#{path}/#{file}", 
+              "#{deploy_to}#{shared_dir}/#{path}/#{file}")
+    end    
+  end
+  
+  task :deploy do
+    upload_swfs
+    upload_htmls
+  end
+end
+
 namespace :assets do
   task :setup do
     run "mkdir -p #{deploy_to}#{shared_dir}/assets/files"
