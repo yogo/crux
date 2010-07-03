@@ -24,7 +24,8 @@ class Project
   
   after :create, :create_default_groups
   
-  has n, :groups
+  has n,      :groups
+  belongs_to  :kefed_model, :model => 'Crux::YogoModel', :required => false
   
   # The number of items to be displayed (by default) per page
   # 
