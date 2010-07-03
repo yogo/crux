@@ -367,7 +367,7 @@ class Yogo::ProjectsController < ApplicationController
   # @api semipublic
   def kefed_editor
     @project = Project.get(params[:id])
-    @kefed_params = "?action=editModel&uid=#{params[:uid].upcase}" if params[:uid]
+    @kefed_params = "&action=editModel&uid=#{params[:uid].upcase}" if params[:uid]
     @kefed_model_uid = params[:uid]
     @no_blueprint = true 
   end
