@@ -49,7 +49,7 @@ class ProjectWizardController < ApplicationController
     if @project.valid?
       @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
-      redirect_to kefed_editor_project_url(@project)
+      redirect_to kefed_library_project_url(@project)
     else
       flash.now[:error] = "Project could not be created."
       render(:action => :name)

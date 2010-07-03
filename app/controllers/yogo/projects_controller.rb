@@ -352,21 +352,41 @@ class Yogo::ProjectsController < ApplicationController
     end
   end
   
-   # Load the kefed editor swf
-   #
-   # @example 
-   #   get /projects/1/kefed_editor
-   #
-   # @param [Hash] params
-   # @option params [String]:id
-   #
-   # @return [Page] returns page with the embedded kefed editor
-   #
-   # @author Pol Llovet <pol.llovet@gmail.com>
-   #
-   # @api semipublic
+  # Load the kefed editor swf
+  #
+  # @example 
+  #   get /projects/1/kefed_editor
+  #
+  # @param [Hash] params
+  # @option params [String]:id
+  #
+  # @return [Page] returns page with the embedded kefed editor
+  #
+  # @author Pol Llovet <pol.llovet@gmail.com>
+  #
+  # @api semipublic
   def kefed_editor
     @project = Project.get(params[:id])
+    @kefed_params = "?action=editModel&uid=#{params[:uid].upcase}" if params[:uid]
+    @kefed_model_uid = params[:uid]
     @no_blueprint = true 
+  end
+  
+  # Load the kefed editor swf
+  #
+  # @example 
+  #   get /projects/1/kefed_library
+  #
+  # @param [Hash] params
+  # @option params [String]:id
+  #
+  # @return [Page] returns page with the embedded kefed editor
+  #
+  # @author Pol Llovet <pol.llovet@gmail.com>
+  #
+  # @api semipublic
+  def kefed_library
+    @project = Project.get(params[:id])
+    @experimental_designs = Crux::YogoModel.all
   end
 end

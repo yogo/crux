@@ -12,7 +12,10 @@
       .project-text
         %h2= link_to(project.name, project_path(project) ) 
         .action-links
-          = link_to("Edit Experimental Design", kefed_editor_project_url(project), :class => 'button-link')
+          - if project.kefed_model
+            = link_to("Edit Experimental Design", kefed_editor_project_url(project), :class => 'button-link')
+          - else
+            = link_to("Add Experimental Design", kefed_library_project_url(project), :class => 'button-link')
           = link_to("Import Spreadsheet", import_csv_path(project), :class => 'button-link')        
         %p.rbox.tight
           - if project.description && project.description.length > 0
