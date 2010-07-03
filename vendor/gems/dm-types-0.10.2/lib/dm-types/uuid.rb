@@ -37,12 +37,18 @@ module DataMapper
     #
     #  -- benburkert Nov 15, 08
     #
+    # UUIDTools::UUID.parse chokes if the value is anything other than a string.
+    # This is problematic if the value has been previously typecast into a less
+    # primitive object.  Expecting it to quack like a string is sensible.
+    # 
+    #  -- pol.llovet 2010-07-02
+    # 
     class UUID < DataMapper::Type
       primitive String
       length    36
 
       def self.load(value, property)
-        UUIDTools::UUID.parse(value) unless value.nil?
+        UUIDTools::UUID.parse(value.to_s) unless value.nil?
       end
 
       def self.dump(value, property)
