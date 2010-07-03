@@ -155,18 +155,24 @@ end
 # after 'setup_for_server', 'bundle:check'
 
 namespace :tomcat do
-  desc "Start the Tomcat Instance on the server (blazeds and persevere)"
+  desc "Start the Tomcat Instance on the server (blazeds)"
   task :start do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake blazeds:start RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake tomcat:start RAILS_ENV=production'")
   end
   
-  desc "Stop the Tomcat Instance on the server (blazeds and persevere)"
+  desc "Stop the Tomcat Instance on the server (blazeds)"
   task :stop do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake blazeds:stop RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake tomcat:stop RAILS_ENV=production'")
+  end
+  
+  desc "Restart the tomcat instance on the servere (blazeds)"
+  task :restart do
+    stop
+    start
   end
   
 end
@@ -189,6 +195,11 @@ namespace :persvr do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
     run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production'")
+  end
+  
+  task :restart do
+    stop
+    start
   end
   
   task :drop do
