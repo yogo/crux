@@ -8,13 +8,13 @@
   var kefed_frame = $('iframe#kefedFrame');
   kefed_frame.load(function() {
     console.debug(this);    
-    console.debug($(this).contents().find('#kefedStatus').contents())
-    console.debug(this.contentWindow.editorCallback = function(params){
+    console.debug($(this).contents().find('#kefedStatus').contents());
+    this.contentWindow.editorCallback = function(params){
       //alert("parent page" + params); 
-      target = $('#kefed_finish').attr('href')
-      $('#kefed_finish').attr('href', target + '?uid=' + params.uid)
+      target = $('#kefed_finish').attr('href');
+      $('#kefed_finish').attr('href', target + '?uid=' + params.uid);
       $('#kefed_finish').toggle();
-    });
+    };
   });
 
 .text-center
