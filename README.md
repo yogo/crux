@@ -36,6 +36,8 @@ The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you
 - Bumped the required dm-reflection gem version
 
 ### Crux Changelog
+0.5.6
+- pass the createModel action to the editor (should be default, but was failing)
 0.5.5
 - fix a bug where the copy action wasn't being passed to the editor
 0.5.4
