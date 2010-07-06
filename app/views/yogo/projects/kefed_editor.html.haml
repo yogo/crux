@@ -1,8 +1,16 @@
 %h1#content-title= @project.name + ": Describe Experiment"
 
-%iframe(src="#{kefed_editor_swf_url}#{@kefed_params}" width="100%" height="500")
+%iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_editor_swf_url}#{@kefed_params}" width="100%" height="600")
   %p Your browser does not support iframes.
 
+:javascript
+  document.domain = 'localhost';
+  var kefed_frame = $('iframe#kefedFrame');
+  kefed_frame.load(function() {
+    console.debug(this);    
+    console.debug(this.contentWindow.body.kefedStatus.innerHTML);
+  });
+
 .text-center
-  = link_to("Cancel",   projects_url, :class => 'big-button-link')  
-  = link_to("Continue", @project, :class => 'big-button-link')
+  = link_to("Cancel",   projects_url, :class => 'big-button-link')
+  = link_to("Continue", add_kefed_diagram_project_url(@project, :uid => @kefed_model_uid), :class => 'big-button-link')
