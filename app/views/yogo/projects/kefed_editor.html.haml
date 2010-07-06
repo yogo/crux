@@ -8,9 +8,15 @@
   var kefed_frame = $('iframe#kefedFrame');
   kefed_frame.load(function() {
     console.debug(this);    
-    console.debug(this.contentWindow.body.kefedStatus.innerHTML);
+    console.debug($(this).contents().find('#kefedStatus').contents())
+    console.debug(this.contentWindow.editorCallback = function(params){
+      //alert("parent page" + params);
+      target = $('#kefed_finish').attr('href')
+      $('#kefed_finish').attr('href', target + '?uid=' + params.uid)
+      $('#kefed_finish').toggle();
+    });
   });
 
 .text-center
   = link_to("Cancel",   projects_url, :class => 'big-button-link')
-  = link_to("Continue", add_kefed_diagram_project_url(@project, :uid => @kefed_model_uid), :class => 'big-button-link')
+  = link_to("Finish & Continue", add_kefed_diagram_project_url(@project), :class => 'big-button-link', :id => 'kefed_finish', :style => 'display: none;')
