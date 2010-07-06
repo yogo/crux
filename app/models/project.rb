@@ -346,9 +346,19 @@ class Project
     # Create models for each measurement
     kefed_model.nodes['measurements'].each do |muid, measurement|
       puts "CREATING KEFED MODEL ==> " + measurement['label'].gsub(/ /,'_').tableize.classify
-      # for every measurement, add all of the parent nodes as properties
+      # for every measurement, add all of the parent parameters as properties plus 'series'
+      parameters = {:series => {:type => Integer}}
+      kefed_model.measurement_parameters(muid).each do |puid, param|
+        name = param['label'].gsub(/\W|\s/,'_').tableize
+        begin 
+          param_type = param['schema']['type'].constantize
+        rescue NameError
+          param_type = DataMapper::Types::Text
+        end
+        parameters[name] = {:type => param_type}
+      end
       add_model(measurement['label'].gsub(/\W|\s/,'_').tableize.classify,
-        {:series => {:type => Integer}}
+        parameters
       ).auto_migrate!
     end
   end

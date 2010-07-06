@@ -48,4 +48,8 @@ class Crux::YogoModel
     id.to_s
   end
   
+  def measurement_parameters(muid)
+    nodes['parameters']
+  end
+  
 end

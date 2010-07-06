@@ -7,8 +7,8 @@
   document.domain = '#{(Rails.env == 'development') ? 'localhost' : 'crux.msu.montana.edu'}';
   var kefed_frame = $('iframe#kefedFrame');
   kefed_frame.load(function() {
-    console.debug(this);    
-    console.debug($(this).contents().find('#kefedStatus').contents());
+    //console.debug(this);    
+    //console.debug($(this).contents().find('#kefedStatus').contents());
     this.contentWindow.editorCallback = function(params){
       //alert("parent page" + params); 
       target = $('#kefed_finish').attr('href');
