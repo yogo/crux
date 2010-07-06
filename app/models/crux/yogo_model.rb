@@ -15,11 +15,11 @@ class Crux::YogoModel
   property :source,       String,                          :writer => :private
   property :modelName,    String,   :field => 'modelName', :writer => :private
   property :type,         String,                          :writer => :private
-  property :dateTime,     DateTime, :field => 'dateTime',  :writer => :private
+  # property :dateTime,     DateTime, :field => 'dateTime',  :writer => :private
   property :description,  Text,                            :writer => :private
-  property :uid,          DataMapper::Types::UUID,         :writer => :private
-  property :edges,        DataMapper::Types::Json,         :writer => :private
-  property :nodes,        DataMapper::Types::Json,         :writer => :private
+  property :uid,          String,         :writer => :private
+  # property :edges,        DataMapper::Types::Json,         :writer => :private
+  # property :nodes,        DataMapper::Types::Json,         :writer => :private
   
   # The number of items to be displayed (by default) per page
   # 

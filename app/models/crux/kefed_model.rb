@@ -15,12 +15,12 @@ class Crux::KefedModel
   property :source,    String,                          :writer => :private
   property :modelName, String,  :field => 'modelName',  :writer => :private
   property :type,      String,                          :writer => :private
-  property :dateTime,  DateTime,:field => 'dateTime',   :writer => :private
+  # property :dateTime,  DateTime,:field => 'dateTime',   :writer => :private
   property :description, Text,                          :writer => :private
   property :diagramXML,  Text,  :field => 'diagramXML', :writer => :private
-  property :uid,       DataMapper::Types::UUID,         :writer => :private
-  property :edges,     DataMapper::Types::Json,         :writer => :private
-  property :nodes,     DataMapper::Types::Json,         :writer => :private
+  property :uid,       String,         :writer => :private
+  # property :edges,     DataMapper::Types::Json,         :writer => :private
+  # property :nodes,     DataMapper::Types::Json,         :writer => :private
   
   def self.default_storage_name
     'KefedModel'
