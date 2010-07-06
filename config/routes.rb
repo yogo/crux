@@ -9,7 +9,8 @@
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
   map.resources :projects, :controller => 'yogo/projects',
-                :member => { :upload => :post, :kefed_editor => :get, :kefed_library => :get },
+                :member => {  :upload => :post, :kefed_editor => :get,
+                              :kefed_library => :get, :add_kefed_diagram => :get },
                 :collection => { :loadexample => :post, :search => :get} do |project|
     
     # /projects/:project_id/yogo_data/:model_name
