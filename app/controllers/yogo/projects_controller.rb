@@ -368,8 +368,14 @@ class Yogo::ProjectsController < ApplicationController
   def kefed_editor
     @project = Project.get(params[:id])
     @uid = @project.yogo_model_uid || params[:uid]
+    @action = params[:action]
     @kefed_params = "callbackFunction=kefedEditorStatus"
-    @kefed_params += "&action=editModel&uid=#{@uid.upcase}" if @uid
+    if params[:editor_action]
+      @kefed_params += "&action=#{params[:editor_action]}"
+    else
+      @kefed_params += "&action=editModel"
+    end
+    @kefed_params += "&uid=#{@uid.upcase}" if @uid
     @no_blueprint = true 
   end
   

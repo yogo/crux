@@ -4,7 +4,7 @@
   %p Your browser does not support iframes.
 
 :javascript
-  document.domain = 'localhost';
+  document.domain = '#{(Rails.env == 'development') ? 'localhost' : 'crux.msu.montana.edu'}';
   var kefed_frame = $('iframe#kefedFrame');
   kefed_frame.load(function() {
     console.debug(this);    

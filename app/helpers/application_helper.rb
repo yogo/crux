@@ -244,7 +244,8 @@ module ApplicationHelper
                   "#{t}StoreType=persevere&#{t}StoreUrl=" + 
                   Yogo::Setting[:production_server_persevere_url]
                 }.join('&')
-      URI.escape(base_url + params)
+      # URI.escape(base_url + params)
+      base_url + params + '&'
     else
       "http://localhost:8400/blazeds/kefedEditor/KefedModelEditor.html?"
     end
