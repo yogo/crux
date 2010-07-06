@@ -45,6 +45,7 @@ Project
 SchemaBackup
 User
 Group
+Yogo::Setting
 Crux::YogoModel
 Crux::KefedModel
 DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
