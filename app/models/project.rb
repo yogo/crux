@@ -341,6 +341,19 @@ class Project
     "There should be a dataset description, make the editor."
   end
   
+  def build_models_from_kefed
+    kefed_model = Crux::YogoModel.first(:uid => self.yogo_model_uid )
+    # Create models for each measurement
+    kefed_model.nodes['measurements'].each do |muid, measurement|
+      puts "CREATING KEFED MODEL ==> " + measurement['label'].gsub(/ /,'_').tableize.classify
+      # for every measurement, add all of the parent nodes as properties
+      add_model(measurement['label'].gsub(/\W|\s/,'_').tableize.classify,
+        {:series => {:type => Integer}}
+      ).auto_migrate!
+    end
+  end
+  
+  
   private
   
   ##
