@@ -16,6 +16,7 @@ class Project
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
   property :is_public, Boolean, :required => true, :default => true
+  property :yogo_model_uid, String, :required => false
   
   validates_is_unique   :name
   
@@ -25,7 +26,6 @@ class Project
   after :create, :create_default_groups
   
   has n,      :groups
-  belongs_to  :kefed_model, :model => 'Crux::YogoModel', :required => false
   
   # The number of items to be displayed (by default) per page
   # 
