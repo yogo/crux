@@ -36,7 +36,10 @@ The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you
 - Bumped the required dm-reflection gem version
 
 ### Crux Changelog
-
+0.5.4
+- Hooking up the kefed editor with Yogo data system
+- added javascript callback for feedback on editor functionality
+- Only rudimentary data layout is being created currently
 0.5.3
 - Major look/feel changes
 - Removed unnecessary ui elements
