@@ -12,7 +12,7 @@
       .project-text
         %h2= link_to(project.name, project_path(project) ) 
         .action-links
-          - if project.kefed_model
+          - if project.yogo_model_uid
             = link_to("Edit Experimental Design", kefed_editor_project_url(project), :class => 'button-link')
           - else
             = link_to("Add Experimental Design", kefed_library_project_url(project), :class => 'button-link')

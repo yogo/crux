@@ -367,7 +367,8 @@ class Yogo::ProjectsController < ApplicationController
   # @api semipublic
   def kefed_editor
     @project = Project.get(params[:id])
-    @kefed_params = "&action=editModel&uid=#{params[:uid].upcase}" if params[:uid]
+    @kefed_params = "?callbackFunction=kefedEditorStatus"
+    @kefed_params += "&action=editModel&uid=#{params[:uid].upcase}" if params[:uid]
     @kefed_model_uid = params[:uid]
     @no_blueprint = true 
   end
@@ -388,5 +389,12 @@ class Yogo::ProjectsController < ApplicationController
   def kefed_library
     @project = Project.get(params[:id])
     @experimental_designs = Crux::YogoModel.all
+  end
+  
+  def add_kefed_diagram
+    @project = Project.get(params[:id])
+    @project.yogo_model_uid = params[:uid]
+    @project.save
+    redirect_to project_url(@project)
   end
 end
