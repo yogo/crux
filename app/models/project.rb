@@ -360,7 +360,7 @@ class Project
         measurement_name.tableize.to_sym =>  {:type => measurement_type}
       }
       kefed_model.measurement_parameters(muid).each do |puid, param|
-        p_name = param['label'].gsub(/\W|\s/,'_').tableize
+        p_name = param['label'].gsub(/\W|\s/,'_')
         begin 
           param_type = param['schema']['type'].constantize
         rescue NameError
@@ -387,6 +387,20 @@ class Project
     models.first
   end
   
+  def kefed_ordered_models
+    models
+    # kefed_model = Crux::YogoModel.first(:uid => self.yogo_model_uid )
+    # sorted_models = []
+    # kefed_model.nodes['measurements'].each do |muid, m|
+    #   num_deps = m['dependsOn'].size
+    #   if sorted_models[num_deps]
+    #     sorted_models[num_deps] << m['label'].gsub(/\W|\s/,'_').tableize.classify
+    #   else
+    #     sorted_models[num_deps] = [m['label'].gsub(/\W|\s/,'_').tableize.classify]
+    #   end
+    # end
+    # sorted_models.flatten.map{|m| models.select{|n| n.class.to_s.include?(m) }}.flatten.compact
+  end
   
   private
   

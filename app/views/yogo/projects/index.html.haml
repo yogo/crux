@@ -10,7 +10,7 @@
       /.project-icon= link_to(image_tag('mock-project-icon.jpg'), project_path(project) )
 
       .project-text
-        %h2= link_to(project.name, project_path(project) ) 
+        %h2= link_to(project.name, project_yogo_data_index_path(project, project.root_model) ) 
         .action-links
           - if project.yogo_model_uid
             = link_to("Edit Experimental Design", kefed_editor_project_url(project, :uid => project.yogo_model_uid), :class => 'button-link')
@@ -38,23 +38,24 @@
                 %th Subject ID
                 %th Rows
             %tbody
-              - for row in project.root_model.all
-                %tr
-                  %td Subject
-                  %td #
-                  /%td= link_to dataset.public_name,
-                  /      project_yogo_data_index_path(project, dataset) 
-                  /%td= link_to(dataset.count(:created_at.gt => 1.week.ago),
-                  /      project_yogo_data_index_path(project, dataset))
-                  /%td= link_to(dataset.count, project_yogo_data_index_path(project, dataset))
-                  /%td= link_to(image_tag('table_edit.png', :title => "Browse Data") + " Browse",
-                  /      project_yogo_data_index_path(project, dataset))
-                  / TODO: Show the model editor
-                  /%td= link_to(image_tag('layout_edit.png', 
-                  /      :title => "Describe Dataset") + " Describe",
-                  /      project_yogo_models_path(project))
-                  /%td= link_to(image_tag('table_add.png', 
-                  /      :title => "Import Spreadsheet") + " Import", 
-                  /      import_csv_path(project))
+              /- for row in project.root_model.all
+              - row = project.root_model.all.first
+              %tr
+                %td= row.inspect
+                %td= project.root_model.all.size
+                /%td= link_to dataset.public_name,
+                /      project_yogo_data_index_path(project, dataset) 
+                /%td= link_to(dataset.count(:created_at.gt => 1.week.ago),
+                /      project_yogo_data_index_path(project, dataset))
+                /%td= link_to(dataset.count, project_yogo_data_index_path(project, dataset))
+                /%td= link_to(image_tag('table_edit.png', :title => "Browse Data") + " Browse",
+                /      project_yogo_data_index_path(project, dataset))
+                / TODO: Show the model editor
+                /%td= link_to(image_tag('layout_edit.png', 
+                /      :title => "Describe Dataset") + " Describe",
+                /      project_yogo_models_path(project))
+                /%td= link_to(image_tag('table_add.png', 
+                /      :title => "Import Spreadsheet") + " Import", 
+                /      import_csv_path(project))
 
 #pagination-links= pagination_links(Project, params[:page], 5)
