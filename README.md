@@ -36,6 +36,8 @@ The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you
 - Bumped the required dm-reflection gem version
 
 ### Crux Changelog
+0.5.8
+- more updates to the system for the demo
 0.5.7
 - updated flex editor with better datatypes
 - adding properties to the measurement spreadsheets
