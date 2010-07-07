@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   include AuthorizationSystem
   
   # Check for local connections before anything else
-  before_filter :check_local_only
+  before_filter :check_local_only, :basic_auth
   
   # Set the current user for the models to use.
   before_filter do |c|
@@ -100,6 +100,14 @@ class ApplicationController < ActionController::Base
   # @api private
   def show_sidebar
     @sidebar = true
+  end
+  
+  def basic_auth
+    # If it's local, let it go. For development
+    return true if ["127.0.0.1", "0:0:0:0:0:0:0:1%0"].include?(request.env["REMOTE_ADDR"])
+    authenticate_or_request_with_http_basic do |id, password|
+      id == 'crux' && password == 'preston'
+    end
   end
   
 end
