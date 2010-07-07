@@ -341,26 +341,50 @@ class Project
     "There should be a dataset description, make the editor."
   end
   
+  
+  # Please refactor me, here there be dragons.  
+  # This is not awesome.
+  # 
   def build_models_from_kefed
     kefed_model = Crux::YogoModel.first(:uid => self.yogo_model_uid )
     # Create models for each measurement
     kefed_model.nodes['measurements'].each do |muid, measurement|
-      puts "CREATING KEFED MODEL ==> " + measurement['label'].gsub(/ /,'_').tableize.classify
-      # for every measurement, add all of the parent parameters as properties plus 'series'
-      parameters = {:series => {:type => Integer}}
+      measurement_name = measurement['label'].gsub(/\W|\s/,'_').tableize.classify
+      begin 
+        measurement_type = measurement['schema']['type'].constantize
+      rescue NameError
+        measurement_type = DataMapper::Types::Text
+      end      
+      parameters = {
+        :series =>                  {:type => Integer},
+        measurement_name.tableize.to_sym =>  {:type => measurement_type}
+      }
       kefed_model.measurement_parameters(muid).each do |puid, param|
-        name = param['label'].gsub(/\W|\s/,'_').tableize
+        p_name = param['label'].gsub(/\W|\s/,'_').tableize
         begin 
           param_type = param['schema']['type'].constantize
         rescue NameError
           param_type = DataMapper::Types::Text
         end
-        parameters[name] = {:type => param_type}
+        parameters[p_name] = {:type => param_type}
       end
-      add_model(measurement['label'].gsub(/\W|\s/,'_').tableize.classify,
-        parameters
-      ).auto_migrate!
+      unless measurement_model = get_model(measurement_name)
+        a_model = add_model(measurement_name, parameters)
+        a_model.auto_migrate! if a_model
+      else
+        # update the model and add only the new properties
+        parameters.each do |param, options|
+          unless measurement_model.respond_to?(param)
+            measurement_model.send(:property, param, options.delete(:type), options.merge(:prefix => 'yogo'))
+          end
+        end
+        measurement_model.auto_upgrade!
+      end
     end
+  end
+  
+  def root_model
+    models.first
   end
   
   

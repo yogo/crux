@@ -49,7 +49,8 @@ class Crux::YogoModel
   end
   
   def measurement_parameters(muid)
-    nodes['parameters']
+    params = nodes['measurements'][muid]['dependsOn']
+    nodes['parameters'].select{|k,v| params.include?(k)}
   end
   
 end

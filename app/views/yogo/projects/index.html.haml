@@ -35,17 +35,18 @@
           %table
             %thead
               %tr
-                %th Dataset
-                %th New
-                %th Total
+                %th Subject ID
+                %th Rows
             %tbody
-              - for dataset in project.models
+              - for row in project.root_model.all
                 %tr
-                  %td= link_to dataset.public_name,
-                        project_yogo_data_index_path(project, dataset) 
-                  %td= link_to(dataset.count(:created_at.gt => 1.week.ago),
-                        project_yogo_data_index_path(project, dataset))
-                  %td= link_to(dataset.count, project_yogo_data_index_path(project, dataset))
+                  %td Subject
+                  %td #
+                  /%td= link_to dataset.public_name,
+                  /      project_yogo_data_index_path(project, dataset) 
+                  /%td= link_to(dataset.count(:created_at.gt => 1.week.ago),
+                  /      project_yogo_data_index_path(project, dataset))
+                  /%td= link_to(dataset.count, project_yogo_data_index_path(project, dataset))
                   /%td= link_to(image_tag('table_edit.png', :title => "Browse Data") + " Browse",
                   /      project_yogo_data_index_path(project, dataset))
                   / TODO: Show the model editor
