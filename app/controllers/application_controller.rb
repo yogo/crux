@@ -18,8 +18,7 @@ class ApplicationController < ActionController::Base
   
   # Set the current user for the models to use.
   before_filter do |c|
-    # TODO: This is a hack until we are on rspec 2.0 and rails 3
-    User.current = c.current_user # unless Rails.env == 'test'
+    User.current = c.current_user
   end
 
   # include all helpers, all the time  
@@ -79,14 +78,12 @@ class ApplicationController < ActionController::Base
   # 
   # @api private
   def check_local_only
-    # HACK HACK HACK to enable remote access to "local only mode"
-    return true
-    # return true if Rails.env == "test"
-    # 
-    # if Yogo::Setting[:local_only] && !["127.0.0.1", "0:0:0:0:0:0:0:1%0"].include?(request.env["REMOTE_ADDR"])
-    #   # Raise a 403 exception or perhaps just redirect.
-    #   render_optional_error_file(:forbidden)
-    # end
+    return true if Rails.env == "test"
+    
+    if Yogo::Setting[:local_only] && !["127.0.0.1", "0:0:0:0:0:0:0:1%0"].include?(request.env["REMOTE_ADDR"])
+      # Raise a 403 exception or perhaps just redirect.
+      render_optional_error_file(:forbidden)
+    end
   end
   
   ##

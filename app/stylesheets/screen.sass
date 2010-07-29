@@ -46,6 +46,7 @@ body
     background: #EEE image-url('logo_gradient.png') repeat-x fixed top
     width: 100%
     position: fixed
+    z-index: 10
     left: 0
     top: 0
     overflow: none
@@ -59,8 +60,7 @@ body
       font-variant: small-caps
       +column(15)
     #login-links
-      +column(4, true)
-      +
+      +column(7, true)
       text-align: right
       line-height: 3em
     #menu
@@ -72,42 +72,62 @@ body
       border: 1px solid #f2f2f2 - #555
       background-color: #FFF
       padding: .5em 2px
-      #menu-links
+      #menu-left-col
         +column(12)
-        line-height: 2em
-        padding: .5em 0 .5em 10px
-      #search-tab
-        +column(9, true)
-        padding: .5em 0
-        text-align: right
-        .button-link
-          font-size: 0.9em
-          padding: 3px 2px 2px 2px
+        #content-title
+          margin-left: 10px
+      #menu-right-col
+        +column(10, true)
+        #menu-links
+          line-height: 2em
+          text-align: right
+          margin-right: 10px
+        #search-tab
+          text-align: right
+          margin-right: 10px
+          .button-link
+            font-size: 0.9em
+            line-height: 1.7em
+            padding: 1px 3px 0px
   // Flash Notices always use blueprint layout
   #flash
     +prepend(4)
     +column(14, true)
     +append(4)
     text-align: center
-    height: 2em
-    margin-top: 3em
+    height: 4em
+    margin-top: 2em
     .error, .notice
       padding: 0
       p
         margin: 0
         padding: 0
+    .notice
+      background: none repeat scroll 0 0 #FFF6BF
+      border: 2px solid #FFD324
+      color: #514721
+    .error
+      background: none repeat scroll 0 0 #FBE3E4
+      border: 2px solid #FBC2C4
+      color: #8A1F11
   // Footer
   #footer
     +column($blueprint_grid_columns - 2)
     text-align: center
+  #footnotes_holder
+    +prepend(2)
+    +column(18)
+    +append(2)
   // Pagination Links
   #pagination-links
-    text-align: center
+    //text-align: center
     +column($blueprint_grid_columns - 2)
     +last
+    margin-bottom: .25em
   // Tables
   table
     border-collapse: collapse
+    margin-bottom: .25em
     td, th
       border: 1px dotted #AAA
     th
@@ -123,6 +143,14 @@ body
         width: 60px
         margin: 0 auto
         text-align: center
+    td.data-label
+      +column(5)
+      border: none
+      font-weight: bold
+      font-size: 1.2em
+      text-align: right
+    td.data-value
+      +column(16, true)
   // Links
   a
     text-decoration: none
@@ -141,7 +169,7 @@ body
       display: block
   .button-link, .big-button-link, .medium-button-link
     border: 1px solid #666666
-    padding: .25em
+    padding: 0 .25em
     background-color: #f2f2f2
     color: #703824
     line-height: 2em
@@ -149,6 +177,8 @@ body
       background-color: #e2e2e2
       text-decoration: none
       cursor: pointer
+    &.fright
+      float: right
   .big-button-link
     font-size: 1.5em
   .medium-button-link
@@ -183,13 +213,15 @@ body
     // padding: 1.5em
     &.happy
       background-color: #EFE
+    &.shady
+      background-color: #DDD
     &.tight
       padding: .5em
     &.dashed
       border-style: dashed
   // H* Tags
   h1 
-    font-size: 2.5em
+    font-size: 2em
     line-height: 1
     margin-bottom: 0.5em
     &.no-gap
@@ -198,44 +230,86 @@ body
       +prepend(1)
       +column(16)
       text-align: center
+    img
+      margin-bottom: -.15em
   h2 
     font-size: 1.7em
     margin-bottom: 0.75em
   h3 
-    font-size: 1.4em
+    font-size: 1.5em
     line-height: 1
     margin-bottom: 1em
-  h4 
-    font-size: 1.1em
-    line-height: 1.25
-    margin-bottom: 1.25em
-  h5 
+  h4
+    font-size: 1.3em
+    line-height: 1
+    margin-bottom: 1em
+  h5, h6 
     font-size: 1em
     font-weight: bold
     margin-bottom: 1.5em
-  h6 
-    font-size: 1em
-    font-weight: bold
+  h1, h2, h3, h4, h5, h6
+    &.tight
+      margin-bottom: .2em
   // Forms
   .form-element
-    margin-bottom: 1em
+    margin-bottom: .5em
+    margin-top: .5em
+  .label
+    margin-bottom: .2em
   .form-actions
     margin-top: 1em
+  label
+    img
+      margin-bottom: -.1em
   //General Styles
+  .bold
+    font-weight: bold
   .text-center
     text-align: center
   .text-right
     text-align: right
+  .emphasis
+    font-style: italic
+  .smaller
+    font-size: .6em
+  .double-height
+    line-height: 2em
   img
     border: 0
+  // Content Header Elements that Occur Outside of bp.
+  #container
+    margin: 0
+    margin-top: -2em
+  #content-title, #data-content-title
+    margin-top: 0
+    text-align: left
+    margin-bottom: 0
+    +column(12)
+    #subtitle
+      font-size: .5em
+      color: #777
+  #data-content-title
+    +prepend(6)
+    +column(10)
+    margin-left: -.5em
+  #content-actions, #data-content-actions
+    +column(12)
+    margin-left: 10px
+    //margin-top: .5em
+    .content-action-links
+      //float: right
+    .content-pagination-links
+      text-align: right
+      line-height: 2em
+      +column(6, true)
+  #data-content-actions
+    +column(6, true)
 
 // Blueprint Body Container
 body.bp
   // Header
   #container
     +container
-    
-    // To left align the grid
     margin: 0
     margin-top: -2em
   // Sidebar
@@ -251,25 +325,12 @@ body.bp
   // Content Frame
   #content
     +column($blueprint_grid_columns)
-    #content-title
-      margin-top: 0
-      text-align: left
-      +column(12)
-    #content-actions
-      +column(10)
-      +last
-      //margin: -.5em 0 1em 0
-      .content-action-links
-        float: right
-      .content-pagination-links
-        text-align: right
-        line-height: 2em
-        +column(6)
-        +last
     h1#project-title
       margin-top: 0
     #content-block
       +column($blueprint_grid_columns - 2)
+    #user-form
+      margin-left: 7em
     // No Project Index
     .description-column, .title-column
       h3
@@ -327,7 +388,7 @@ body.bp
       .project-text
         +prepend(1)
         +column(9)
-        +colborder
+        +append(1)
         .edit-link
           text-align: right
       .project-datasets
@@ -335,22 +396,22 @@ body.bp
         +column(10)
         +append(1)
         +last
+    .project-status
+      font-size: .4em
+      font-style: italic
     // Project Dashboard
     .dataset-name
       +column(6)
-      +last
       h2
-        text-align: center
-        margin: .25em 0
-      p
-        margin-left: 2em
-        font-style: italic
-        font-size: .8em
-      .action-links
-        text-align: center
-        margin-bottom: 1em
-      .description
-        padding: 0 1.5em 1em 1.5em
+        +prepend(1)
+        //padding: 0 25px
+      .vertical-links
+        +prepend(1)
+        .link
+          .button-link
+            margin-bottom: 3px
+            text-align: center
+            +column(4)
     .dataset-info
       +column(16)
       +last
@@ -358,11 +419,7 @@ body.bp
         margin:
           top: .5em
           bottom: .5em
-        +column(16)
-        +last
       .dataset-table
-        +column(16)
-        +last
         +borders
         height: 12em
         padding: 0px
@@ -370,6 +427,7 @@ body.bp
         font-size: .9em
         th
           border-bottom: 1px solid #CCC
+          border-top: 1px solid #CCC
           padding-bottom: 2px
       // Jquery UI Overrides
       .ui-tabs .ui-tabs-nav li a
@@ -380,6 +438,11 @@ body.bp
       .ui-tabs .ui-tabs-panel 
         padding: 0px
     // centered content containers
+    .extra-small-centered
+      +prepend(6)
+      +column(10)
+      +append(6)
+      +last
     .small-centered
       +prepend(4)
       +column(14)
@@ -395,4 +458,5 @@ body.bp
       +column(18)
       +append(2)
       +last
-      
+#project-user-groups-form table td
+  width: 3em

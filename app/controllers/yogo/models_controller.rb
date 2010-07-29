@@ -193,24 +193,6 @@ class Yogo::ModelsController < ApplicationController
     end
   end
   
-  ##
-  # Reloads the models from our special backup Hopefully temporary
-  # 
-  # @example
-  #   post /yogo_model/1/refresh_attributes
-  # 
-  # @return redirects to originating page
-  # 
-  # @author lamb
-  # @api public
-  def refresh_attributes
-    @project.reload_schemas_from_backup!
-    
-    respond_to do |format|
-      format.html { redirect_to(:back) }
-    end
-  end
-  
   private
   
   ##
@@ -266,10 +248,10 @@ class Yogo::ModelsController < ApplicationController
   # @api private
   def check_project_authorization
     if !Yogo::Setting[:local_only]
-      raise AuthenticationError if !@project.is_public? && !logged_in?
+      raise AuthenticationError if @project.is_private? && !logged_in?
         action = request.parameters["action"]
         if ['index', 'show', 'download_csv'].include?(action)
-          raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
+          raise AuthorizationError unless !@project.is_private? || (logged_in? && current_user.is_in_project?(@project))
         else
           raise AuthenticationError if !logged_in?
           raise AuthorizationError  if !current_user.has_permission?(:edit_model_descriptions,@project)

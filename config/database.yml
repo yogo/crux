@@ -6,30 +6,37 @@
 # FILE: database.yml.start
 #
 #
+
 development:
-  adapter: persevere
-  versioned: true
-  host: localhost
-  port: 8080
-  #path: '/persevere'
-  #port: 8400
+  adapter: sqlite3
+  database: db/sqlite3/development.sqlite3
 
 production:
+  adapter: sqlite3
+  database: db/sqlite3/production.sqlite3
+
+test:
+  adapter: sqlite3
+  database: db/sqlite3/test.sqlite3
+
+yogo_development:
   adapter: persevere
   versioned: true
   host: localhost
   port: 8080
-  #path: '/persevere'
-  #port: 8400
+
+yogo_production:
+  adapter: persevere
+  versioned: true
+  host: localhost
+  port: 8080
 
 # run with bin/persvr -p 8081
-test: &TEST
+yogo_test: &YOGO_TEST
   adapter: persevere
   versioned: true
   host: localhost
-  port: 8080
-  #path: '/persevere_test'
-  #port: 8400
+  port: 8081
 
-cucumber:
-  <<: *TEST
+yogo_cucumber:
+  <<: *YOGO_TEST

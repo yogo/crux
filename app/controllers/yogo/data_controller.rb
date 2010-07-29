@@ -63,9 +63,9 @@ class Yogo::DataController < ApplicationController
   #
   # @api public
   def search
-    search_term = params[:search_term]
+    @search_term = params[:search_term]
 
-    @query = @model.search(search_term)
+    @query = @model.search(@search_term)
     @data = @query.paginate(:page => params[:page], :per_page => Project.per_page)
     respond_to do |format|
       format.html { render( :action => :index) }
@@ -146,6 +146,7 @@ class Yogo::DataController < ApplicationController
     if @item.valid?
       if @item.save
         flash[:notice] = "New \"#{@model.name.demodulize}\" has been created."
+        flash[:notice_link] = project_yogo_data_path(@project, @model.name.demodulize, @item)
         redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
       else
         flash[:error] = "\"#{@model.name.demodulize}\" could not be created."
@@ -197,7 +198,7 @@ class Yogo::DataController < ApplicationController
   #
   # @api public
   def destroy
-    @model.get(params[:id]).destroy!
+    @model.get(params[:id]).destroy
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end
 
@@ -316,15 +317,15 @@ class Yogo::DataController < ApplicationController
   # @api private
   def check_project_authorization
     if !Yogo::Setting[:local_only]
-      raise AuthenticationError if !@project.is_public? && !logged_in?
+      raise AuthenticationError if @project.is_private? && !logged_in?
       action = request.parameters["action"]
       if ['index', 'show', 'search', 'download_asset', 'show_asset'].include?(action)
-        raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
+        raise AuthorizationError unless !@project.is_private? || (logged_in? && current_user.is_in_project?(@project))
       else
-        action = :edit_model_data if ['new', 'create' 'edit', 'update'].include?(action)
-        action = :delete_model_data if ['destroy'].include?(action)
+        permission = :edit_model_data if ["new", 'create', 'edit', 'update'].include?(action)
+        permission = :delete_model_data if ['destroy'].include?(action)
         raise AuthenticationError if !logged_in?
-        raise AuthorizationError  if !current_user.has_permission?(action,@project)
+        raise AuthorizationError  if !current_user.has_permission?(permission,@project)
       end
     end
   end

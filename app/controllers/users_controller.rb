@@ -13,25 +13,7 @@ class UsersController < ApplicationController
   #
   # @api public
   def index
-    @users = User.all
-    respond_to do |format|
-      format.html
-    end
-  end
-
-  ##
-  # Retrieves a user in the system
-  #
-  # @example
-  #   get /users/42
-  #
-  # @return [HTML]
-  #  html response
-  #
-  # @api public
-  def show
-    @user = User.get(params[:id])
-    
+    @users = User.paginate(:page => params[:page], :per_page => 25, :order => 'login')
     respond_to do |format|
       format.html
     end
@@ -129,8 +111,12 @@ class UsersController < ApplicationController
   def update
     @user = User.get(params[:id])
 
+    # Remove these if they were sent.
+    params[:user].delete(:password)
+    params[:user].delete(:password_confirmation)
+    
     @user.attributes = params[:user]
-
+    
     respond_to do |format|
       if @user.valid?
         @user.save

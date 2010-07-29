@@ -1,21 +1,21 @@
-%h1#content-title
-  = "Experiment: " + @project.name
-  /&gt;
-  /= @model.public_name + " (#{@model.count})"
-
-#content-actions
-  .content-action-links
-    = link_to("Import CSV", import_csv_path(@project), :class => 'medium-button-link') 
-    = link_to("Delete Project", project_path(@project), 
-      :method => :delete, :class => 'medium-button-link', :confirm => "There is no undo.\n Continue?" ) 
-    = link_to("Edit Experimental Design", kefed_editor_project_url(@project, :uid => @project.yogo_model_uid), :class => 'medium-button-link')
-
-  /- if action_name.eql?("search")
-  /  = link_to("Download CSV", search_project_yogo_data_path(@project, @model,
-  /      :search_term => params[:search_term], :format => 'csv'), :class => "button-link")
-  /- else
-  /  = link_to("Download CSV", project_yogo_data_index_path(@project, @model, :format => 'csv'),
-  /      :class => "button-link")
+/ %h1#content-title
+/   = "Experiment: " + @project.name
+/   /&gt;
+/   /= @model.public_name + " (#{@model.count})"
+/ 
+/ #content-actions
+/   .content-action-links
+/     = link_to("Import CSV", import_csv_path(@project), :class => 'medium-button-link') 
+/     = link_to("Delete Project", project_path(@project), 
+/       :method => :delete, :class => 'medium-button-link', :confirm => "There is no undo.\n Continue?" ) 
+/     = link_to("Edit Experimental Design", kefed_editor_project_url(@project, :uid => @project.yogo_model_uid), :class => 'medium-button-link')
+/ 
+/   /- if action_name.eql?("search")
+/   /  = link_to("Download CSV", search_project_yogo_data_path(@project, @model,
+/   /      :search_term => params[:search_term], :format => 'csv'), :class => "button-link")
+/   /- else
+/   /  = link_to("Download CSV", project_yogo_data_index_path(@project, @model, :format => 'csv'),
+/   /      :class => "button-link")
 
 #measurement-tabs
   - @project.kefed_ordered_models.each do |m|
@@ -31,9 +31,14 @@
 
 - @item = @model.new
 - form_for(@item,
-          :url => project_yogo_data_index_path(@project, @model),
-          :html => { :enctype => 'multipart/form-data' },
-          :builder => YogoDataFormBuilder) do |f|
+
+#pagination-links
+  = "Search results for: <span class='bold'>#{@search_term}</span><br /> " if @search_term
+  = pagination_links(@query, params[:page], Project.per_page)
+=clear_break
+- form_for(@model.new,
+    :url => project_yogo_data_index_path(@project, @model),
+    :html => { :enctype => 'multipart/form-data' }, :builder => YogoDataFormBuilder) do |f|
   %table#data-table
     %thead
       %tr

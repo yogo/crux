@@ -15,8 +15,8 @@ class Project
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
-  property :is_public, Boolean, :required => true, :default => true
   property :yogo_model_uid, String, :required => false
+  property :is_private, Boolean, :required => true, :default => false
   
   validates_is_unique   :name
   
@@ -51,7 +51,7 @@ class Project
   # 
   # @api public
   def self.public(opts = {})
-    all( opts.merge({:is_public => true}) )
+    all( opts.merge({:is_private => false}) )
   end
   
   ##
@@ -60,15 +60,37 @@ class Project
   # @example
   #   Project.private
   # 
-  # @return [DataMapper::Collection or Array]
+  # @return [DataMapper::Collection or nil]
   # 
   # @author lamb
   # 
   # @api public
   def self.private(opts = {})
     current_user = User.current
-    return [] if current_user.nil?
-    all( opts.merge( :is_public => false ) ).select{|p| current_user.is_in_project?(p) }
+    return nil if current_user.nil?
+    current_user.groups.projects(opts)
+  end
+  
+  ##
+  # Returns all projects the current user has access to
+  # 
+  # @example
+  #   Project.available
+  # 
+  # @return [DataMapper::Collection or Array]
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def self.available(opts = {})
+    return self.all(opts) if Yogo::Setting[:local_only]
+    # else
+    private_projects = self.private
+    if private_projects == nil
+      self.public(opts)
+    else
+      (self.public + self.private).all(opts)
+    end
   end
   
   ##
@@ -463,7 +485,6 @@ class Project
     model.send(:include,Yogo::Model)
     return model
   end
-
   
   ##
   # Callback to create some default groups for this project
@@ -477,16 +498,19 @@ class Project
     manager_group = Group.new(:name => 'Manager')
     manager_group.users << User.current unless User.current.nil?
 
+    view_project = Group.new(:name => 'View Project')
     edit_project = Group.new(:name => 'Edit Project')
     edit_model   = Group.new(:name => 'Edit Models')
     edit_data    = Group.new(:name => 'Edit Data')
     delete_data  = Group.new(:name => 'Delete Data')
-    self.groups.push( manager_group, edit_project, edit_model, edit_data, delete_data )
+    self.groups.push( manager_group, view_project, edit_project, edit_model, edit_data, delete_data )
     self.save
     [:edit_project, :edit_model_descriptions, :edit_model_data, :delete_model_data].each do |action|
       manager_group.add_permission(action)
     end
     manager_group.save
+    view_project.add_permission(:view_project)
+    view_project.save
     edit_project.add_permission(:edit_project)
     edit_project.save
     edit_model.add_permission(:edit_model_descriptions)
@@ -495,6 +519,7 @@ class Project
     edit_data.save
     delete_data.add_permission(:delete_model_data)
     delete_data.save
+    
   end
   
   def delete_associated_groups!

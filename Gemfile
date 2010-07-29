@@ -6,7 +6,7 @@ gem "rails",                "2.3.8", :require => nil
 gem "rake",                          :require => nil
 gem "dm-core",              "0.10.2"
 
-gem "dm-reflection",        "0.11.1", :git => "git://github.com/yogo/dm-reflection.git", :ref => '427276350001b4f76622'
+gem "dm-reflection",        "0.11.1", :git => "git://github.com/yogo/dm-reflection.git", :branch => 'stable'
 gem "dm-timestamps",        "0.10.2"
 gem "dm-validations",       "0.10.2"
 gem "dm-is-nested_set",     "0.10.2"
@@ -15,13 +15,13 @@ gem "dm-aggregates",        "0.10.2"
 gem 'bcrypt-ruby'
 gem "dm-types",             "0.10.2", :path => "vendor/gems/dm-types-0.10.2"
 gem "dm-observer",          "0.10.2"
-gem "dm-persevere-adapter", "0.71.4", :require => nil
+gem "dm-persevere-adapter", "0.71.4", :require => nil, :git => "git://github.com/yogo/dm-persevere-adapter.git",:branch => "yogo-integration", :ref => '70bf9ff79cf948a48ff05a4bb2e45e394419cb76'
 gem "rails_datamapper",     "0.10.2", :require => nil
 
 # These are required so we can make it simple to interact with legacy data
 #gem "do_mysql",                       :require => nil
 #gem "do_postgres",                   :require => nil
-#gem "do_sqlite3",                    :require => nil
+gem "do_sqlite3",                    :require => nil
 #gem "do_sqlserver",                  :require => nil
 
 # Extra supporting gems
@@ -42,15 +42,12 @@ else
   gem "bluecloth",            :require => nil # Required for YARD
 end
 
-gem 'ruby-debug',                  :require => nil, :group => :development unless defined?(JRUBY_VERSION)
+gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug', :require => nil, :group => :development unless defined?(JRUBY_VERSION)
 
-group :development do
-  gem "rails-footnotes"
-  gem "capistrano"
-end
+gem "rails-footnotes",             :group => :development
 
 group :test do
-  gem 'ruby-debug',                :require => nil unless defined?(JRUBY_VERSION)
+gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug',       :require => nil unless defined?(JRUBY_VERSION)
   gem 'rspec',                     :require => nil
   gem 'rspec-rails',               :require => 'spec/rails'
   gem 'ZenTest',                   :require => nil
@@ -73,6 +70,7 @@ group :test do
   gem "roodi",                     :require => nil
   gem "googlecharts",              :require => nil
   gem "metric_fu",                 :require => nil
+  gem "test-unit", "~>1.2" if RUBY_VERSION.include?('1.9')
 end
 
 group :cucumber do

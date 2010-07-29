@@ -20,9 +20,11 @@ ActionController::Routing::Routes.draw do |map|
                       :member => { :download_asset => :get, :show_asset => :get }
                           
     # /projects/:project_id/yogo_models/:model_name
-    project.resources :yogo_models, :controller => 'yogo/models',
-                      :collection => { :refresh_attributes => :post },
-                      :member => { :list_attributes => :get }
+    project.resources :yogo_models, :controller => 'yogo/models'
+                      
+    project.resources :users, :controller => 'yogo/users', 
+                              :only => [:index, :new, :create], 
+                              :collection => { :update_user_groups => :post }
     
   end
   map.resources :settings
@@ -43,6 +45,7 @@ ActionController::Routing::Routes.draw do |map|
                   :controller => 'project_wizard', :action => 'import_csv'
   map.upload_csv_wizard "/project_wizard/upload_csv/:id", 
                         :controller => 'project_wizard', :action => 'upload_csv'
+  
 
   map.resource :password, :only => [ :show, :update, :edit ]
   map.resources :users

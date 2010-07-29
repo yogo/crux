@@ -17,9 +17,9 @@ end
 describe Project do
   
   before(:each) do
-    Project.auto_migrate!
-    Group.auto_migrate!
-    User.auto_migrate!
+    Project.all.destroy!
+    Group.all.destroy!
+    User.all.destroy!
     User.current = nil
   end
   
@@ -73,7 +73,7 @@ describe Project do
   end
   
   it "should be created with a set of default groups" do
-    p = Project.new(:name => 'blah', :is_public => false)
+    p = Project.new(:name => 'blah', :is_private => true)
     p.save
   
     p.groups.should_not be_empty
@@ -83,14 +83,14 @@ describe Project do
   end
 
   it "should be by default a public project" do
-    Project.create(:name => 'A Project').is_public.should be_true
+    Project.create(:name => 'A Project').is_private.should be_false
   end
 
   it "should not return private projects when .public is called" do
     p1 = Project.create(:name => 'test project 1')
     p2 = Project.create(:name => 'test project 2')
     p3 = Project.create(:name => 'test project 3')
-    pp = Project.create(:name => 'Private project', :is_public => false)
+    pp = Project.create(:name => 'Private project', :is_private => true)
 
     Project.public.should_not include(pp)
   end
@@ -99,22 +99,24 @@ describe Project do
     p = Project.create(:name => 'test project')
 
     group_names = Project.first.groups.map(&:name)
+
     group_names.should include('Manager')
     group_names.should include('Edit Project')
     group_names.should include('Edit Models')
     group_names.should include('Edit Data')
     group_names.should include('Delete Data')
-    group_names.length.should eql 5
+    group_names.should include('View Project')
+    group_names.length.should eql Group::PROJECT_ACTIONS.length+1
     p.destroy
     Group.all.destroy
   end
   
-  it "should create 5 groups on save" do
+  it "should create #{Group::PROJECT_ACTIONS.length} groups on save" do
     p = Project.new(:name => 'a test project')
     p.save
     
     group_names = Project.first.groups.map(&:name)
-    group_names.length.should eql 5
+    group_names.length.should eql Group::PROJECT_ACTIONS.length+1
     p.destroy
     Group.all.destroy
   end
@@ -156,7 +158,7 @@ describe Project do
   end
   
   it "should process a csv file" do
-    file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
+    file_name = "#{SPEC_ROOT}/models/csv/csvtest.csv"
     p = Project.create(:name => "CSV Test Project")
     p.process_csv(file_name, 'Csvtest').should be_empty
     results = p.search_models('csvtest')
@@ -168,7 +170,7 @@ describe Project do
   end
   
   it "should not process a bad csv file" do
-    file_name = "#{Rails.root}/spec/models/csv/bad_csvtest.csv"
+    file_name = "#{SPEC_ROOT}/models/csv/bad_csvtest.csv"
     p = Project.create(:name => "Bad CSV Test Project")
     errors = p.process_csv(file_name, 'Csvtest')
     errors.should_not be_empty
@@ -183,7 +185,7 @@ describe Project do
   # 4. rake spec # => FAIL! # => SO MYSTERIOUS!
   # n... rake spec # => subsequent successes (?!)
   it "should not overwrite a model that already exists" do
-    file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
+    file_name = "#{SPEC_ROOT}/models/csv/csvtest.csv"
     p = Project.create(:name => "Overwrite") 
     p.process_csv(file_name, 'Csvtest')
     results = p.search_models('csvtest')
@@ -212,8 +214,8 @@ describe Project do
     models.each do |m|
       p.add_model(m, {:name => {:type => String}})
     end
-    p.get_model('giraffe').name.should == 'Yogo::Zoo::Giraffe'
-    p.get_model('aGiraffe').name.should == 'Yogo::Zoo::AGiraffe'
+    p.get_model('giraffe').name.should  eql('Yogo::Zoo::Giraffe')
+    p.get_model('aGiraffe').name.should eql('Yogo::Zoo::AGiraffe')
   end
   
   describe "contains references to reflected datamapper models" do
@@ -234,7 +236,7 @@ describe Project do
         "id"   => {:type => DataMapper::Types::Serial}
       }
       m = project.add_model("Cell", property_hash)
-      m.should == Yogo::TestProject1::Cell
+      m.should eql(Yogo::TestProject1::Cell)
       Yogo::TestProject1::Cell.ancestors.should include(DataMapper::Resource)
     end
   
@@ -272,12 +274,12 @@ describe Project do
         }
       }
       # Simulate a situation where a schema exists prior to the app starting
-      repository.adapter.put_schema(persisted_model_hash)
+      repository(:yogo).adapter.put_schema(persisted_model_hash)
       # Create a project associated with the pre-existing data
       project = Project.create(:name => 'Persisted Data')
-      DataMapper::Reflection.reflect(:default)
+      DataMapper::Reflection.reflect(:yogo)
       # The models in the datastore should be reflected and exist
-      project.models.map(&:name).should == ["Yogo::PersistedDatum::Cell"]
+      project.models.map(&:name).should eql(["Yogo::PersistedDatum::Cell"])
       Yogo::PersistedDatum::Cell.should_not be_nil
       
       #clean up
@@ -292,9 +294,9 @@ describe Project do
           "name" => {"type" => "string"}
         }
       }
-      repository.adapter.put_schema(persisted_model_hash)
+      repository(:yogo).adapter.put_schema(persisted_model_hash)
       project = Project.new(:name => 'Persisted Bozon')
-      DataMapper::Reflection.reflect(:default)
+      DataMapper::Reflection.reflect(:yogo)
       project.models.should_not be_empty
       project.delete_models!
       project.models.should be_empty

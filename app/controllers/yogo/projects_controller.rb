@@ -21,7 +21,7 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def index
-    @projects = Project.public.paginate(:page => params[:page], :per_page => 5)
+    @projects = Project.available.paginate(:page => params[:page], :per_page => 5)
     
      respond_to do |format|
         if @projects.empty?
@@ -45,33 +45,41 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def search
-    search_scope = params[:search_scope]
-    search_term = params[:search_term]
-    if search_scope == 'everywhere' || params[:model_name].blank?
-      @projects = Project.public.search(search_term)
+    @search_scope = params[:search_scope]
+    @search_term = params[:search_term]
+    if @search_scope == 'everywhere' || params[:model_name].blank?
+      @projects = Project.available.search(@search_term)
 
       @proj_models = []
-      Project.public.each do |project|
-        @proj_models << [project, project.search_models(search_term).flatten ]
+      Project.available.each do |project|
+        @proj_models << [project, project.search_models(@search_term).flatten ]
       end
 
       @proj_models_data = []
-      Project.public.each do |project|
+      Project.available.each do |project|
         project.models.each do |model|
-          count = model.search(search_term).count
+          count = model.search(@search_term).count
           @proj_models_data << [project, model, count] if count > 0
         end
       end
-      
+
       respond_to do |format|
-        format.html
+        format.html {
+          if @proj_models_data.length == 1
+            redirect_to(search_project_yogo_data_url(@proj_models_data[0][0], 
+                                                     @proj_models_data[0][1], 
+                                                     :search_term => @search_term))
+          end
+        }
       end
       
     else
       project = Project.get(params[:project_id])
       model = project.get_model(params[:model_name])
       respond_to do |format|
-        format.html { redirect_to search_project_yogo_data_url(project, model, :search_term => search_term) }
+        format.html { 
+          redirect_to search_project_yogo_data_url(project, model, :search_term => @search_term) 
+        }
       end
     end
 
@@ -91,7 +99,7 @@ class Yogo::ProjectsController < ApplicationController
   def show
     @project = Project.get(params[:id])
     
-    if !Yogo::Setting[:local_only] && !@project.is_public?
+    if !Yogo::Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?
       raise AuthorizationError  if !current_user.is_in_project?(@project)
     end
@@ -178,7 +186,7 @@ class Yogo::ProjectsController < ApplicationController
     
     if !Yogo::Setting[:local_only]
       raise AuthenticationError unless logged_in? 
-      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
+      raise AuthorizationError  unless @project.groups.users.empty? || current_user.has_permission?(:edit_project,@project)
     end
     
     respond_to do |format|
@@ -320,35 +328,18 @@ class Yogo::ProjectsController < ApplicationController
     end
 
     @project = Project.create(:name => "Cricket Cercal System DB")
-    errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
-    if errors.empty?
-      flash[:notice]  = "Example Project imported succesfully."
+    if @project.valid?
+      errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
+      if errors.empty?
+        flash[:notice]  = "Example Project imported succesfully."
+      else
+        flash[:error] = errors.join("\n")
+      end
+      Yogo::Setting[:example_project_loaded] = true
+      redirect_to project_url(@project)
     else
-      flash[:error] = errors.join("\n")
-    end
-    redirect_to project_url(@project)
-  end
-
-  # List all models for a selected project
-  #
-  # @example 
-  #   get /projects/1/list_models
-  #
-  # @param [Hash] params
-  # @option params [String]:id
-  #
-  # @return [Page] returns page with a list of models
-  #
-  # @author Yogo Team
-  #
-  # @api semipublic
-  def list_models
-    @project = Project.get(params[:id])
-    @models = @project.models
-    
-    respond_to do |wants|
-      wants.html
-      wants.js  { render(:partial => 'list_models', :locals => { :models => @models, :project => @project }) }
+      flash[:error] = "Example Project could not be created, so was not loaded."
+      redirect_to root_url
     end
   end
   
