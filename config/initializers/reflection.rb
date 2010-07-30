@@ -10,11 +10,11 @@
 models = []
 
 # Hack, Kludge, Requisite ugly code.
-Project.first
-Yogo::Setting.first
+Crux::YogoModel.first
+Crux::KefedModel.first
 
 # Reflect Yogo data into memory
-models = DataMapper::Reflection.reflect(:yogo)
+models = DataMapper::Reflection.reflect(:yogo, Object, false)
 
 models.each{|m| m.send(:include,Yogo::Model) }
 models.each{|m| m.properties.sort! }
