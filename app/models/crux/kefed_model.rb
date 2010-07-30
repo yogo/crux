@@ -11,6 +11,15 @@
 class Crux::KefedModel
   include DataMapper::Resource
   
+  def self.default_repository_name
+    :yogo
+  end
+  
+  def self.default_storage_name
+    'KefedModel'
+  end
+  
+  
   property :id,        Serial,                          :writer => :private
   property :source,    String,                          :writer => :private
   property :modelName, String,  :field => 'modelName',  :writer => :private
@@ -22,9 +31,6 @@ class Crux::KefedModel
   # property :edges,     DataMapper::Types::Json,         :writer => :private
   # property :nodes,     DataMapper::Types::Json,         :writer => :private
   
-  def self.default_storage_name
-    'KefedModel'
-  end
   
   # The number of items to be displayed (by default) per page
   # 

@@ -11,13 +11,17 @@
 class Crux::YogoModel
   include DataMapper::Resource
   
+  def self.default_repository_name
+    :yogo
+  end
+  
   property :id,           Serial,                          :writer => :private
   property :source,       String,                          :writer => :private
-  property :modelName,    String,   :field => 'modelName', :writer => :private
+  property :model_name,    String,   :field => 'modelName', :writer => :private
   property :type,         String,                          :writer => :private
   # property :dateTime,     DateTime, :field => 'dateTime',  :writer => :private
   property :description,  Text,                            :writer => :private
-  property :uid,          String,         :writer => :private
+  property :uid,          String,                         :writer => :private
   property :edges,        DataMapper::Types::Raw,         :writer => :private
   property :nodes,        DataMapper::Types::Raw,         :writer => :private
   
@@ -52,5 +56,4 @@ class Crux::YogoModel
     params = nodes['measurements'][muid]['dependsOn']
     nodes['parameters'].select{|k,v| params.include?(k)}
   end
-  
 end
