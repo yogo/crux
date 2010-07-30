@@ -27,7 +27,7 @@
         %p.rbox.tight
           - if project.description && project.description.length > 0
             %strong= link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
-            %br/
+            =clear_break
             %em= tooltip(project.description, 
                     project.name + ' Description', 200)
           - else
@@ -37,7 +37,7 @@
         - if project.models.empty?
           %p 
             There are no datasets associated with this project.<br />
-            = link_to_edit_project_models(project, "Add Data Models", :class => 'button-link')
+            = link_to('Edit Experimental Design', kefed_editor_project_url(project))
         - else
           %table
             %thead

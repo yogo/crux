@@ -342,6 +342,29 @@ class Yogo::ProjectsController < ApplicationController
       redirect_to root_url
     end
   end
+
+  # List all models for a selected project
+  #
+  # @example 
+  #   get /projects/1/list_models
+  #
+  # @param [Hash] params
+  # @option params [String]:id
+  #
+  # @return [Page] returns page with a list of models
+  #
+  # @author Yogo Team
+  #
+  # @api semipublic
+  def list_models
+    @project = Project.get(params[:id])
+    @models = @project.models
+    
+    respond_to do |wants|
+      wants.html
+      wants.js  { render(:partial => 'list_models', :locals => { :models => @models, :project => @project }) }
+    end
+  end
   
   # Load the kefed editor swf
   #
@@ -395,4 +418,5 @@ class Yogo::ProjectsController < ApplicationController
     @project.build_models_from_kefed
     redirect_to project_url(@project)
   end
+
 end

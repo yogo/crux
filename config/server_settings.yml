@@ -1,4 +1,4 @@
-local_only: false
+local_only: true
 require_change_summary: false
 
 anonymous_user_name:  anonymous

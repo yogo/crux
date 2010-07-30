@@ -30,7 +30,7 @@ Yogo is a Data Management System built on Ruby on Rails, DataMapper, and Perseve
 
 The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you.
 
-### Changelog
+### Yogo Changelog
 0.9.5 2010-07-21
  - Many UI updates
  - Updating the search function to search over all fields except dates
@@ -41,7 +41,6 @@ The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you
  - Updated the look and feel
  - Branched yogo into a stable and development (master) branch
  
-
 0.9.3 2010-07-02
  - Improved pagination
  - Improved csv downloading
@@ -64,13 +63,4 @@ The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you
 - Hooking up the kefed editor with Yogo data system
 - added javascript callback for feedback on editor functionality
 - Only rudimentary data layout is being created currently
-0.5.3
-- Major look/feel changes
-- Removed unnecessary ui elements
-- Removed the 'load example' ui triggers
-0.5.2 
-- Add the local_only server hack
-- Some view tweaks
-- revert the deploy.rb file to its former glory
-0.5.1 2010-06-29 (6c95c6)
-- Integrated the kefed editor into an iframe in the application.
+- Bumped the required dm-reflection gem version

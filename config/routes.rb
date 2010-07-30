@@ -45,7 +45,6 @@ ActionController::Routing::Routes.draw do |map|
                   :controller => 'project_wizard', :action => 'import_csv'
   map.upload_csv_wizard "/project_wizard/upload_csv/:id", 
                         :controller => 'project_wizard', :action => 'upload_csv'
-  
 
   map.resource :password, :only => [ :show, :update, :edit ]
   map.resources :users

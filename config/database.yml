@@ -24,19 +24,25 @@ yogo_development:
   versioned: true
   host: localhost
   port: 8080
+  #path: '/persevere'
+  #port: 8400
 
 yogo_production:
   adapter: persevere
   versioned: true
   host: localhost
   port: 8080
+  #path: '/persevere'
+  #port: 8400
 
 # run with bin/persvr -p 8081
 yogo_test: &YOGO_TEST
   adapter: persevere
   versioned: true
   host: localhost
-  port: 8081
+  port: 8080
+  #path: '/persevere_test'
+  #port: 8400
 
 yogo_cucumber:
   <<: *YOGO_TEST

@@ -221,7 +221,7 @@ body
       border-style: dashed
   // H* Tags
   h1 
-    font-size: 2em
+    font-size: 2.5em
     line-height: 1
     margin-bottom: 0.5em
     &.no-gap
@@ -310,6 +310,7 @@ body.bp
   // Header
   #container
     +container
+    // To left align the grid
     margin: 0
     margin-top: -2em
   // Sidebar
@@ -325,6 +326,21 @@ body.bp
   // Content Frame
   #content
     +column($blueprint_grid_columns)
+    #content-title
+      margin-top: 0
+      text-align: left
+      +column(12)
+    #content-actions
+      +column(10)
+      +last
+      //margin: -.5em 0 1em 0
+      .content-action-links
+        float: right
+      .content-pagination-links
+        text-align: right
+        line-height: 2em
+        +column(6)
+        +last
     h1#project-title
       margin-top: 0
     #content-block

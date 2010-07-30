@@ -157,7 +157,6 @@ module ApplicationHelper
     "<br clear='all' style='clear: both;'/>"
   end
   
-  
   ##
   # Helper for creating a tooltip
   # 
@@ -262,6 +261,36 @@ module ApplicationHelper
     else
       "http://localhost:8400/blazeds/kefedEditor/KefedModelEditor.html?"
     end
+  end
+  
+  # Return the kefed editor swf file path
+  #
+  # @example
+  #   kefed_editor_swf_url
+  #
+  # @return [String] the absolute url for the kefed editor swf
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  #
+  def kefed_editor_swf_path
+    Rails.root / "vendor/blazeds/tomcat/webapps/blazeds/kefedEditor/BioScholar.swf"
+  end
+
+  # Return the kefed editor swf url
+  #
+  # @example
+  #   kefed_editor_swf_url
+  #
+  # @return [String] the absolute url for the kefed editor swf
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  #
+  def kefed_editor_swf_url
+    "http://localhost:8400/blazeds/kefedEditor/BioScholar.swf"
   end
   
   # Return the kefed editor swf file path
