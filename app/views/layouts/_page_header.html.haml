@@ -26,11 +26,12 @@
   .content-action-links
     - case controller_name
     - when "projects"
-      - if @project
-        = link_to_edit_project_models(@project, "Edit/Add Data Model", :class => 'medium-button-link')
-        = link_to("Project Settings", edit_project_path(@project), :class => 'medium-button-link')
-      - else
-        = link_to("Create a Project", start_wizard_path, :class => 'button-link')
+      - unless action_name == 'edit'
+        - if @project
+          = link_to_edit_project_models(@project, "Edit/Add Data Model", :class => 'medium-button-link')
+          = link_to("Project Settings", edit_project_path(@project), :class => 'medium-button-link')
+        - else
+          = link_to("Create a Project", start_wizard_path, :class => 'button-link')
     - when "data"
       - case action_name
         - when "show"
