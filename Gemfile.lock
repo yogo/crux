@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: git://github.com/yogo/dm-persevere-adapter.git
-  revision: 712c7f3
+  revision: a7da91c
   branch: ryan/yogo-integration
   specs:
     dm-persevere-adapter (0.71.4)
