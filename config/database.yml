@@ -1,0 +1,32 @@
+defaults: &defaults
+  adapter: sqlite
+
+yogo: &yogo
+  adapter: persevere
+  versioned: true
+  host: localhost
+  port: 8080
+
+
+development:
+  database: db/sqlite3/development.sqlite3
+  <<: *defaults
+  repositories:
+    yogo:
+      <<: *yogo
+
+test:
+  database: db/sqlite3/test.sqlite3
+  <<: *defaults
+  repositories:
+    yogo:
+      <<: *yogo
+      port: 8081
+
+production:
+  database: db/sqlite3/production.sqlite3
+  <<: *defaults
+  repositories:
+    yogo:
+      <<: *yogo
+
