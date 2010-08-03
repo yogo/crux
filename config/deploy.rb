@@ -4,7 +4,7 @@ set :use_sudo,    false
 set :scm, :git
 set :repository,  "git://github.com/pol/crux.git"
 
-set :branch, "stable"
+set :branch, "master"
 set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
 
