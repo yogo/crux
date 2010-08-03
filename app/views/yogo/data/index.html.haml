@@ -27,11 +27,6 @@
   / <%# cols = @model.usable_properties.map { |prop| [ Yogo::Types.dm_to_gv(prop.type), Extlib::Inflection.humanize(prop.name.to_s) ] }%>
   / <%# gvdata = @data.map { |item| @model.usable_properties.map { |p| item[p.name]  } } %>
   / <%# visualization("test_table", "Table", {:data => gvdata, :columns => cols }) { } %>
-%br(clear = 'all')
-
-- @item = @model.new
-- form_for(@item,
-
 #pagination-links
   = "Search results for: <span class='bold'>#{@search_term}</span><br /> " if @search_term
   = pagination_links(@query, params[:page], Project.per_page)

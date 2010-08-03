@@ -7,7 +7,7 @@
     %h3 Choose an Experimental Design Template
     %ul(style='list-style-type: star')
       - for design in @experimental_designs
-        %li= link_to(design.modelName, 
+        %li= link_to(design.model_name, 
                     kefed_editor_project_url(@project) + "?uid=#{design.uid}&editor_action=copyModel", 
                     :class => 'button-link')
     %h3 Or
