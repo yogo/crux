@@ -6,7 +6,7 @@
         - dataset.usable_properties.each do |h|
           %th&= h.display_name.to_s.titleize
     %tbody
-      - if dataset
+      - begin
         - for data in dataset[0..2]
           %tr{:class => cycle("cycle-odd","cycle-even")}
             %td.data-table-actions
@@ -20,3 +20,5 @@
                     :method => :delete, :confirm => "There is no undo.\n Continue?")
             - for param in dataset.usable_properties
               %td= yogo_show_helper(data, param, @project, dataset)
+      - rescue
+        - nil
