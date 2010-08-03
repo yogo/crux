@@ -362,7 +362,8 @@ class Project
         end
         parameters[p_name] = {:type => param_type}
       end
-      unless measurement_model = get_model(measurement_name)
+      measurement_model = get_model(measurement_name)
+      if measurement_model.nil?
         a_model = add_model(measurement_name, parameters)
         a_model.auto_migrate! if a_model
       else
@@ -372,6 +373,7 @@ class Project
             measurement_model.send(:property, param, options.delete(:type), options.merge(:prefix => 'yogo'))
           end
         end
+        
         measurement_model.auto_upgrade!
       end
     end
