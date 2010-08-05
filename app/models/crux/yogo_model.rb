@@ -12,7 +12,7 @@ class Crux::YogoModel
   include DataMapper::Resource
   
   def self.default_repository_name
-    :yogo
+    :collection_data
   end
   
   property :id,           Serial,                          :writer => :private
