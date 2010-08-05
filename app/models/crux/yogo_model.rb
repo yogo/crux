@@ -22,8 +22,10 @@ class Crux::YogoModel
   # property :dateTime,     DateTime, :field => 'dateTime',  :writer => :private
   property :description,  Text,                            :writer => :private
   property :uid,          String,                         :writer => :private
-  property :edges,        DataMapper::Types::Raw,         :writer => :private
-  property :nodes,        DataMapper::Types::Raw,         :writer => :private
+  property :edges,        DataMapper::Property::Raw,         :writer => :private
+  property :nodes,        DataMapper::Property::Raw,         :writer => :private
+  
+  has 1, :project, :model => 'Yogo::Project', :child_key => [:yogo_model_uid], :parent_key => [:uid]
   
   # The number of items to be displayed (by default) per page
   # 
@@ -51,9 +53,11 @@ class Crux::YogoModel
   def to_param
     id.to_s
   end
-  
+
   def measurement_parameters(muid)
+    @measurements ||= nodes['measurements'].to_a.sort {|a,b| a[1]['dependsOn'].length <=> b[1]['dependsOn'].length }
     params = nodes['measurements'][muid]['dependsOn']
+    params -= ancestor_parameters(muid)
     nodes['parameters'].select{|k,v| params.include?(k)}
   end
   

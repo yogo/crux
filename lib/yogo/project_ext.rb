@@ -5,8 +5,10 @@ module Yogo
     extend Permission
     
     property :is_private,      Boolean, :required => true, :default => false
-    
+    property :yogo_model_uid,  DataMapper::Property::UUID
     has n, :roles
+    
+    belongs_to :yogo_model, :model => 'Crux::YogoModel', :child_key => [:yogo_model_uid], :parent_key => [:uid]
     
     def self.extended_permissions
       collection_perms = [ :create_models, :retrieve_models, :update_models, :delete_models, :create_data, :retrieve_data, :update_data, :delete_data ]
@@ -20,48 +22,57 @@ module Yogo
       kefed_model = Crux::YogoModel.first(:uid => self.yogo_model_uid )
       # Create models for each measurement
       kefed_model.nodes['measurements'].each do |muid, measurement|
-        measurement_name = measurement['label'].gsub(/\W|\s/,'_').tableize.classify
+        measurement_name = measurement['label']
+        measurement_uid = measurement['uid']
         begin 
           measurement_type = measurement['schema']['type'].constantize
         rescue NameError
-          measurement_type = DataMapper::Types::Text
+          measurement_type = DataMapper::Property::Text
         end      
+        
+        # # Initialize the parameters for a measurement with a series integer and the column for 
+        # the measurement itself
         parameters = {
           :series =>                  {:type => Integer},
           measurement_name.tableize.to_sym =>  {:type => measurement_type}
         }
+        
         kefed_model.measurement_parameters(muid).each do |puid, param|
-          p_name = param['label'].gsub(/\W|\s/,'_')
+          p_name = param['label']
           begin 
             param_type = param['schema']['type'].constantize
           rescue NameError
-            param_type = DataMapper::Types::Text
+            param_type = DataMapper::Property::Text
           end
           parameters[p_name] = {:type => param_type}
         end
-        measurement_model = get_model(measurement_name)
+        
+        # # find or create the measurement collection
+        measurment_model  = self.data_collections.get(measurement_uid)        
         if measurement_model.nil?
-          a_model = add_model(measurement_name, parameters)
-          a_model.auto_migrate! if a_model
-        else
-          # update the model and add only the new properties
-          parameters.each do |param, options|
-            unless measurement_model.respond_to?(param)
-              measurement_model.send(:property, param, options.delete(:type), options.merge(:prefix => 'yogo'))
-            end
-          end
-
-          measurement_model.auto_upgrade!
+          measurment_model = self.data_collections.new(:id => measurement_uid, :name => measurement_name )
         end
+        
+        # find or create each of the parameters
+        parameters.each do |param, options|
+          property = measurement_model.schema.get(param['uid'])
+          if property.nil?
+            property = measurement_model.schema.new(:id  => param['uid'], :name => param['label'], :type => param['schema']['type'])
+          else
+            property.attributes = { :name => param['label'], :type => param['schema']['type']}
+          end
+        end
+        measurement_model.save
+        measurement_model.update_model
       end
     end
 
     def root_model
-      models.first
+      data_collections.first
     end
 
     def kefed_ordered_models
-      models
+      data_collections
       # kefed_model = Crux::YogoModel.first(:uid => self.yogo_model_uid )
       # sorted_models = []
       # kefed_model.nodes['measurements'].each do |muid, m|
