@@ -32,7 +32,6 @@
           /.link= link_to("Import Spreadsheet", import_csv_path(project), :class => 'button-link')
           .link= link_to("Project Settings", edit_yogo_project_path(project), :class => 'button-link')
           =clear_break
-]
           
       .project-datasets
         - if project.data_collections.empty?
