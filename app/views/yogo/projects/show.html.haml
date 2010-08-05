@@ -8,27 +8,48 @@
 /     = link_to("Edit Experimental Design", kefed_editor_project_url(@project, :uid => @project.yogo_model_uid), :class => 'medium-button-link')
 
 //= render(:partial => 'layouts/sidebar') %>
-
-#content-block
-  - for dataset in @project.models
-    - @item = dataset.new
-    .content-row-block
-      .dataset-name
-        %h2= link_to dataset.public_name, project_yogo_data_index_path(@project, dataset)
-        .vertical-links
-          .link= link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(@project, dataset), 
-                :class => 'button-link')
-          .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
-                  :class => 'button-link')
-          .link= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
-          .link= link_to("Export Spreadsheet", project_yogo_data_index_path(@project, dataset, 
-                  :format => 'csv'), :class => 'button-link')
-      .dataset-info
-        .action-tabs
-          %ul
-            %li <a href="##{dataset.to_param}-dataset-details">Dataset Details</a>
-            %li <a href="##{dataset.to_param}-query">Query</a>
-            %li <a href="##{dataset.to_param}-quickview">Quickview</a>
-          = render(:partial => 'yogo/models/dataset',       :locals => {:dataset => dataset})
-          = render(:partial => 'yogo/projects/build_query', :locals => {:dataset => dataset})
-          = render(:partial => 'yogo/data/quickview',       :locals => {:dataset => dataset})
+#project-dashboard
+  #kefed-navigator
+    %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{@project.yogo_model_uid}" width="100%" height="600")
+      %p Your browser does not support iframes.#measurements
+  #parameters
+    %h2 Parameters
+    / - for param in @yogo_model.parameters
+    /   = param
+  #measurements
+    %h2 Measurements
+    / - for measurement in @yogo_model.measurements
+    /   = measurement
+    / - for dataset in @project.models
+    /   = link_to( dataset.public_name, project_yogo_data_index_path(@project, dataset), :class => 'button-link')
+    / .link= link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(@project, dataset), 
+    /       :class => 'button-link')
+    / .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
+    /         :class => 'button-link')
+    / .link= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
+    / .link= link_to("Export Spreadsheet", project_yogo_data_index_path(@project, dataset, 
+    /         :format => 'csv'), :class => 'button-link')
+/ #content-block
+/   - for dataset in @project.models
+/     - @item = dataset.new
+/     .content-row-block
+/       .dataset-name
+/         %h2= link_to dataset.public_name, project_yogo_data_index_path(@project, dataset)
+/         .vertical-links
+/           .link= link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(@project, dataset), 
+/                 :class => 'button-link')
+/           .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
+/                   :class => 'button-link')
+/           .link= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
+/           .link= link_to("Export Spreadsheet", project_yogo_data_index_path(@project, dataset, 
+/                   :format => 'csv'), :class => 'button-link')
+/       .dataset-info
+/         .action-tabs
+/           %ul
+/             %li <a href="##{dataset.to_param}-dataset-details">Dataset Details</a>
+/             %li <a href="##{dataset.to_param}-query">Query</a>
+/             %li <a href="##{dataset.to_param}-quickview">Quickview</a>
+/           = render(:partial => 'yogo/models/dataset',       :locals => {:dataset => dataset})
+/           = render(:partial => 'yogo/projects/build_query', :locals => {:dataset => dataset})
+/           = render(:partial => 'yogo/data/quickview',       :locals => {:dataset => dataset})
+=clear_break
