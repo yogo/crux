@@ -177,8 +177,6 @@ body
       background-color: #e2e2e2
       text-decoration: none
       cursor: pointer
-    &.fright
-      float: right
   .big-button-link
     font-size: 1.5em
   .medium-button-link
@@ -274,6 +272,8 @@ body
     font-size: .6em
   .double-height
     line-height: 2em
+  .fright
+    float: right
   img
     border: 0
   // Content Header Elements that Occur Outside of bp.
@@ -304,6 +304,52 @@ body
       +column(6, true)
   #data-content-actions
     +column(6, true)
+  // Project Dashboard
+  #kefed-navigator
+    +column(10)
+    img
+      border: 1px solid silver
+  #measurements
+    float: left
+    border: 1px solid silver
+  .dataset-name
+    +column(6)
+    h2
+      +prepend(1)
+  .vertical-links
+    +prepend(1)
+    .link
+      .button-link
+        margin-bottom: 3px
+        text-align: center
+        +column(4)
+  .dataset-info
+    +column(16)
+    +last
+    .action-tabs
+      margin:
+        top: .5em
+        bottom: .5em
+    .dataset-table
+      +borders
+      height: 12em
+      padding: 0px
+      overflow: auto
+      font-size: .9em
+      th
+        border-bottom: 1px solid #CCC
+        border-top: 1px solid #CCC
+        padding-bottom: 2px
+    // Jquery UI Overrides
+    .ui-tabs .ui-tabs-nav li a
+      padding: 0.3em 0.5em
+    .ui-tabs .ui-tabs-nav
+      padding: 0.1em 0
+      font-size: .9em
+    .ui-tabs .ui-tabs-panel 
+      padding: 0px
+
+
 
 // Blueprint Body Container
 body.bp
@@ -399,60 +445,25 @@ body.bp
       +borders
       margin: 0
       .project-icon
-        +column(2)
+        +column(8)
         padding-top: 1em
+        img
+          margin-left: 10px
+          border: 1px solid silver
+          width: 300px
       .project-text
         +prepend(1)
-        +column(9)
-        +append(1)
+        +column(12)
         .edit-link
           text-align: right
       .project-datasets
         margin-top: 1em
+        +prepend(1)
         +column(10)
-        +append(1)
-        +last
     .project-status
       font-size: .4em
       font-style: italic
-    // Project Dashboard
-    .dataset-name
-      +column(6)
-      h2
-        +prepend(1)
-        //padding: 0 25px
-      .vertical-links
-        +prepend(1)
-        .link
-          .button-link
-            margin-bottom: 3px
-            text-align: center
-            +column(4)
-    .dataset-info
-      +column(16)
-      +last
-      .action-tabs
-        margin:
-          top: .5em
-          bottom: .5em
-      .dataset-table
-        +borders
-        height: 12em
-        padding: 0px
-        overflow: auto
-        font-size: .9em
-        th
-          border-bottom: 1px solid #CCC
-          border-top: 1px solid #CCC
-          padding-bottom: 2px
-      // Jquery UI Overrides
-      .ui-tabs .ui-tabs-nav li a
-        padding: 0.3em 0.5em
-      .ui-tabs .ui-tabs-nav
-        padding: 0.1em 0
-        font-size: .9em
-      .ui-tabs .ui-tabs-panel 
-        padding: 0px
+
     // centered content containers
     .extra-small-centered
       +prepend(6)
