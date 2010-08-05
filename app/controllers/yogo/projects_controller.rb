@@ -36,7 +36,12 @@ class Yogo::ProjectsController < InheritedResources::Base
         format.html 
       end
     end
-
+  end
+  
+  def create
+    create! do |success, failure|
+      success.html { redirect_to kefed_library_yogo_project_url(@project) }
+    end
   end
   
   
@@ -54,7 +59,7 @@ class Yogo::ProjectsController < InheritedResources::Base
   #
   # @api semipublic
   def kefed_editor
-    @project = Project.get(params[:id])
+    @project = Yogo::Project.get(params[:id])
     @uid = @project.yogo_model_uid || params[:uid]
     @action = params[:action]
     @kefed_params = "callbackFunction=kefedEditorStatus"
@@ -63,7 +68,7 @@ class Yogo::ProjectsController < InheritedResources::Base
     else
       @kefed_params += "&action=editModel"
     end
-    @kefed_params += "&uid=#{@uid.upcase}" if @uid
+    @kefed_params += "&uid=#{@uid}" if @uid
     @no_blueprint = true 
   end
   
@@ -81,12 +86,12 @@ class Yogo::ProjectsController < InheritedResources::Base
   #
   # @api semipublic
   def kefed_library
-    @project = Project.get(params[:id])
+    @project = Yogo::Project.get(params[:id])
     @experimental_designs = Crux::YogoModel.all
   end
   
   def add_kefed_diagram
-    @project = Project.get(params[:id])
+    @project = Yogo::Project.get(params[:id])
     @project.yogo_model_uid = params[:uid]
     @project.save
     @project.build_models_from_kefed
