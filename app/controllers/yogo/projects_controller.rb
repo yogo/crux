@@ -98,6 +98,7 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def show
     @project = Project.get(params[:id])
+    # @yogo_model = Crux::YogoModel.get(@project.yogo_model_uid)
     
     if !Yogo::Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?
@@ -106,9 +107,8 @@ class Yogo::ProjectsController < ApplicationController
     
     @models = @project.models
     @sidebar = true
-    
     respond_to do |format|
-      format.html
+      format.html { @no_blueprint = true }
     end
   end
 
