@@ -27,20 +27,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.dashboard "/dashboard", :controller => 'yogo/projects', :action => 'index'
 
-  # map.connect "/mockup/:action", :controller => 'mockup'
-  
-  # Wizard stuff
-  # map.start_wizard  "/project_wizard/name", 
-  #                   :controller => 'project_wizard', :action => 'name'
-  # map.create_wizard_project "/project_wizard/", 
-  #                           :controller => 'project_wizard', :action => 'create'
-  # map.csv_question  "/project_wizard/csv_question/:id", 
-  #                   :controller => 'project_wizard', :action => 'csv_question'
-  # map.import_csv  "/project_wizard/import_csv/:id", 
-  #                 :controller => 'project_wizard', :action => 'import_csv'
-  # map.upload_csv_wizard "/project_wizard/upload_csv/:id", 
-  #                       :controller => 'project_wizard', :action => 'upload_csv'
-
   
   map.resources :settings
   map.resource :password, :only => [ :show, :update, :edit ]
