@@ -28,7 +28,7 @@
                 %li= user.name + ": " + @project.roles.select{|g| g.users.include?(user) }.map{|g| g.name }.join(', ')
       .form-element
         = f.submit('Update', :class => 'button-link')
-        = link_to('Cancel', projects_path, :class => 'cancel')
+        = link_to('Cancel', yogo_projects_path, :class => 'cancel')
         
   .rbox.dashed
     - field_set_tag("Users:") do

@@ -8,7 +8,7 @@
 /     = link_to("Import CSV", import_csv_path(@project), :class => 'medium-button-link') 
 /     = link_to("Delete Project", project_path(@project), 
 /       :method => :delete, :class => 'medium-button-link', :confirm => "There is no undo.\n Continue?" ) 
-/     = link_to("Edit Experimental Design", kefed_editor_project_url(@project, :uid => @project.yogo_model_uid), :class => 'medium-button-link')
+/     = link_to("Edit Experimental Design", kefed_editor_yogo_project_url(@project, :uid => @project.yogo_model_uid), :class => 'medium-button-link')
 / 
 /   /- if action_name.eql?("search")
 /   /  = link_to("Download CSV", search_project_yogo_data_path(@project, @model,
