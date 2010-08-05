@@ -56,4 +56,12 @@ class Crux::YogoModel
     params = nodes['measurements'][muid]['dependsOn']
     nodes['parameters'].select{|k,v| params.include?(k)}
   end
+  
+  def kefed_measurements
+    nodes['measurements'].map{|n| n.label }
+  end
+  
+  def kefed_parameters
+    nodes['parameters'].map{|p| n.label }
+  end
 end
