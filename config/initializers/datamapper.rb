@@ -7,46 +7,16 @@
 # 
 
 # Require custom extensions to datamapper.
-require 'datamapper/associations/relationship'
+require 'datamapper/model'
 require 'datamapper/paginate'
-require 'datamapper/property'
-require 'datamapper/model/relationship'
 require 'datamapper/search'
 require 'datamapper/paginate'
-require 'datamapper/factory'
 require 'datamapper/dm-userstamp'
-require 'datamapper/types/yogo_file'
-require 'datamapper/types/yogo_image'
-require 'datamapper/types/raw'
-require 'yogo/reflection'
+require 'datamapper/property/yogo_file'
+require 'datamapper/property/yogo_image'
+require 'datamapper/property/raw'
 
-
-module Extlib
-  module Assertions
-
-    # Allows for classes to be reloaded.
-    # In theory, we might only want to allow this while in development mode.
-    #
-    # As run the original assert_kind_of and, if an ArgumentError is raised, 
-    # we double-check that none of the class names match.
-    #
-    # If they match, we return, assuming that, if the class names match, 
-    # then the actual type is a match.
-    #
-    # If there are no class name matches, we raise the original exception.
-    def assert_kind_of_with_allow_class_name_matching(name, value, *klasses)
-      begin
-        assert_kind_of_without_allow_class_name_matching(name, value, *klasses)
-      rescue ArgumentError
-        klasses.each { |k| return if value.class.name == k.name }
-        raise # if we haven't returned, raise the original exception
-      end
-    end
-
-    alias_method_chain :assert_kind_of, :allow_class_name_matching
-
-  end 
-end
+require 'yogo/project_ext'
 
 
 # Read the configuration from the existing database.yml file
@@ -58,7 +28,7 @@ config = Rails.configuration.database_configuration
 DataMapper.setup(:default, config[Rails.env])
 
 # Alias :default to :yogo so things work well
-DataMapper.setup(:yogo, config["yogo_"+Rails.env])
+DataMapper.setup(:collection_data, config["yogo_"+Rails.env])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger
@@ -72,23 +42,9 @@ end
 # Load the project model and migrate it if needed.
 # proj_model_file = File.join(RAILS_ROOT, "app", "models", "project.rb")
 # require proj_model_file
-Project
-SchemaBackup
-User
-Group
-Yogo::Setting
-DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
-                                DataMapper.repository(:default).storage_exists?(Group.storage_name) &&
-                                DataMapper.repository(:default).storage_exists?(User.storage_name)
 
-admin_g = Group.first(:name => 'Administrators', :admin => true, :project => nil)
-admin_g ||= Group.create(:name => 'Administrators', :admin => true)
-create_g = Group.first(:name => "Create Projects", :admin => false, :project => nil)
-create_g ||= Group.create(:name => 'Create Projects', :admin => false, :permissions => 'create_projects')
+Yogo::Project
 
-if admin_g.users.empty?
-  u = User.create(:login => 'yogo', :password => 'change me', :password_confirmation => 'change me')
-  u.groups << admin_g
-  u.groups << create_g
-  u.save
-end
+DataMapper.finalize
+DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Yogo::Project.storage_name)
+                                

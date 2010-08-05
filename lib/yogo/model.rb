@@ -22,15 +22,12 @@ module Yogo
       base.send(:extend, ModelEditor)
       base.class_eval do
 
-        after_class_method :auto_migrate!, :backup_schema!
-        after_class_method :auto_upgrade!, :backup_schema!
-
-        validates_present :change_summary, :if => :require_change_summary?
+        validates_presence_of :change_summary, :if => :require_change_summary?
 
         base.properties.each do |property|
           # Create carrierwave class for this property.
-          if property.type == DataMapper::Types::YogoFile || property.type == DataMapper::Types::YogoImage
-            create_uploader(property.name, property.type)
+          if property.kind_of?(DataMapper::Property::YogoFile) || property.kind_of?(DataMapper::Property::YogoImage)
+            create_uploader(property.name, property.class)
           end
         end
         
@@ -75,7 +72,7 @@ module Yogo
       def property_with_carrierwave(name, type, options = {})
         prop = original_property(name, type, options)
 
-        if type == DataMapper::Types::YogoFile || type == DataMapper::Types::YogoImage
+        if prop.kind_of?(DataMapper::Property::YogoFile) || prop.kind_of?(DataMapper::Property::YogoImage)
           create_uploader(prop.name, prop.type)
         end
         return prop
@@ -137,28 +134,13 @@ module Yogo
         self.name.demodulize
       end
       
-      ##
-      # Backup the schema into our special table
-      # @example
-      #   model.backup_schema!
-      # 
-      # @return [SchemaBackup]
-      #   The backup object for this model.
-      # 
-      # @api public
-      def backup_schema!
-        schema_backup = SchemaBackup.get_or_create_by_name(self.name)
-        schema_backup.schema =  self.to_json_schema
-        schema_backup.save
-      end
-      
       private
       
       ##
       # Creates a carrierwave uploader for the specified field
       # 
       # @example 
-      #   create_uploader(:yogo__file, DataMapper::Types::YogoFile)
+      #   create_uploader(:yogo__file, DataMapper::Property::YogoFile)
       # 
       # @param [Symbol or String] name the name of the property to add a handler to
       # @param [Class] type the type of property this is

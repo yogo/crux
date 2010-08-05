@@ -1,15 +1,8 @@
-/ %h1#content-title Dashboard
-/ #content-actions
-/   .content-action-links
-/     = link_to("Create a Project", start_wizard_path, :class => 'medium-button-link')
-/     - unless Yogo::Setting[:example_project_loaded]
-/       = link_to("Load Example Project", loadexample_projects_path, 
-/         :class => 'medium-button-link', :method => :post)
 
-#pagination-links= pagination_links(Project, params[:page], 5) 
+#pagination-links= pagination_links(Yogo::Project, params[:page], 5) 
 =clear_break
 #content-block
-  - for project in @projects
+  - for project in collection
     .content-row-block
       - if project.yogo_model_uid
         .project-icon(style = 'margin-left: 10px')
@@ -19,38 +12,40 @@
 
       .project-text
         %h2
-          = link_to(project.name, project_path(project) ) 
+          = link_to(project.name, yogo_project_path(project) ) 
           = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
 
         %p.rbox.tight
           - if project.description && project.description.length > 0
-            %strong= link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
+            %strong= link_to('Project Description', edit_yogo_project_path(project), :title => 'Edit Project Description')
             =clear_break
             %em= tooltip(project.description, 
                     project.name + ' Description', 200)
           - else
-            %em= link_to('[Add Project Description]', edit_project_path(project))
+            %em= link_to('[Add Project Description]', edit_yogo_project_path(project))
         .vertical-links
-          .link= link_to("Project Dashboard", project_path(project), :class => 'button-link')
+          .link= link_to("Project Dashboard", yogo_project_path(project), :class => 'button-link')
           - if project.yogo_model_uid
-            .link= link_to("Edit Experimental Design", kefed_editor_project_url(project, :uid => project.yogo_model_uid), :class => 'button-link')
+            .link= link_to("Edit Experimental Design", kefed_editor_yogo_project_url(project, :uid => project.yogo_model_uid), :class => 'button-link')
           - else
-            .link= link_to("Add Experimental Design", kefed_library_project_url(project), :class => 'button-link')
-          .link= link_to("Import Spreadsheet", import_csv_path(project), :class => 'button-link')
-          .link= link_to("Project Settings", edit_project_path(project), :class => 'button-link')
+            .link= link_to("Add Experimental Design", kefed_library_yogo_project_url(project), :class => 'button-link')
+          /.link= link_to("Import Spreadsheet", import_csv_path(project), :class => 'button-link')
+          .link= link_to("Project Settings", edit_yogo_project_path(project), :class => 'button-link')
           =clear_break
+]
           
       .project-datasets
-        - if project.models.empty?
+        - if project.data_collections.empty?
           %p 
             There are no datasets associated with this project.<br />
-            = link_to('Edit Experimental Design', kefed_editor_project_url(project))
+            = link_to('Edit Experimental Design', kefed_editor_yogo_project_url(project))
         - else
           %table
             %thead
               %tr
                 %th Subject ID
             %tbody
+
               /- for row in project.root_model.all
               - row = project.root_model.all.first
               %tr
@@ -69,5 +64,6 @@
                 /%td= link_to(image_tag('table_add.png', 
                 /      :title => "Import Spreadsheet") + " Import", 
                 /      import_csv_path(project))
+                
 
-#pagination-links= pagination_links(Project, params[:page], 5)
+#pagination-links= pagination_links(Yogo::Project, params[:page], 5)

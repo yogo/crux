@@ -113,11 +113,11 @@ module AuthorizationSystem
       end
 
       ##
-      # Checks if the user given is in a group
+      # Checks if the user given is in a role
       # @return [Boolean]
       # @api private
-      def user_is_in_group?(user, group)
-        user.has_group?(group)
+      def user_is_in_role?(user, role)
+        user.has_role?(role)
       end
 
 
@@ -197,11 +197,12 @@ module AuthorizationSystem
       # @api private
       def url_authorized?(params = {})
         params = params.symbolize_keys
-        if params[:controller]
-          base = eval("#{params[:controller]}_controller".classify)
-        else
+        # if params[:controller]
+        #          debugger
+        #          base = eval("#{params[:controller]}_controller".classify)
+        #        else
           base = self.class
-        end
+        # end
         base.url_authorized?(current_user, params, binding)  
       end
 

@@ -10,6 +10,16 @@
 class Yogo::UsersController < ApplicationController
   before_filter :find_parent_items, :check_project_authorization
   
+  ##
+  # List all users in a project
+  #
+  # @example
+  #   get /project/:project_id/users
+  #
+  # @return [HTML]
+  #  html response
+  #
+  # @api public
   def index
     # Just get all the users. This should work for now
     @users = User.all
@@ -75,21 +85,21 @@ class Yogo::UsersController < ApplicationController
   #  html response
   #
   # @todo Make this less painful with some ajax probably
-  # 
+  #
   # @api public
-  def update_user_groups
-    @groups.each{|g| g.users.clear }
+  def update_user_roles
+    @roles.each{|g| g.users.clear }
 
-    params[:groups].each_pair do |group_id, user_ids|
-      @groups.get(group_id).users = User.all(:id => user_ids)
+    params[:roles].each_pair do |role_id, user_ids|
+      @roles.get(role_id).users = User.all(:id => user_ids)
     end
-    
-    if @groups.save
-      flash[:notice] = "Groups updated for the users"
+
+    if @roles.save
+      flash[:notice] = "Roles updated for the users"
     else
-      flash[:error] = "Something strange happened. I'm sorry, the groups weren't updated with the users."
+      flash[:error] = "Something strange happened. I'm sorry, the Roles weren't updated with the users."
     end
-    
+
     respond_to do |format|
       format.html { redirect_to(project_users_url(@project)) }
     end
@@ -97,11 +107,25 @@ class Yogo::UsersController < ApplicationController
   
   private
   
+  ##
+  # Finds the parent items for the controller
+  # 
+  # @example
+  #   Don't use this directly
+  # @return [nil] Sets variables, doesn't return usefull information
+  # @api private
   def find_parent_items
-    @project = Project.get(params[:project_id])
-    @groups = @project.groups
+    @project = Yogo::Project.get(params[:project_id])
+    @roles = @project.roles
   end
-  
+
+  ##
+  # Checks authorization for the controller
+  # 
+  # @example
+  #   Don't use this directly
+  # @return [nil] Raises an error
+  # @api private
   def check_project_authorization
     raise AuthorizationError if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
   end
