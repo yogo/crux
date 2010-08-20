@@ -52,17 +52,17 @@ class ApplicationController < ActionController::Base
   # @return [HTML Content to browser] This returns a dynamically generated error page.
   # 
   # @api semipublic
-    def render_optional_error_file(status_code)
-      status = interpret_status(status_code)
-      # TODO: Support I18n internationalization
-      # if I18n.locale
-      #   path = "/errors/#{status[0,3]}.#{I18n.locale}.html.erb"
-      # else
-        path = "/errors/#{status[0,3]}.html.erb"
-      # end
-       
-      render :template => path || "/errors/unknown.html.erb", :status => status
-    end
+  def render_optional_error_file(status_code)
+    status = interpret_status(status_code)
+    # TODO: Support I18n internationalization
+    # if I18n.locale
+    #   path = "/errors/#{status[0,3]}.#{I18n.locale}.html.erb"
+    # else
+      path = "/errors/#{status[0,3]}.html.erb"
+    # end
+     
+    render :template => path || "/errors/unknown.html.erb", :status => status
+  end
     
   private
   

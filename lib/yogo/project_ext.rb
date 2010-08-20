@@ -48,19 +48,13 @@ module Yogo
         end
         
         # # find or create the measurement collection
-        measurment_model  = self.data_collections.get(measurement_uid)        
-        if measurement_model.nil?
-          measurment_model = self.data_collections.new(:id => measurement_uid, :name => measurement_name )
-        end
-        
+        measurement_model  = self.data_collections.first_or_new(:id => measurement_uid)
+        measurement_model.attributes = { :name => measurement_name }
+                
         # find or create each of the parameters
         parameters.each do |param, options|
-          property = measurement_model.schema.get(param['uid'])
-          if property.nil?
-            property = measurement_model.schema.new(:id  => param['uid'], :name => param['label'], :type => param['schema']['type'])
-          else
-            property.attributes = { :name => param['label'], :type => param['schema']['type']}
-          end
+          property = measurement_model.schema.first_or_new(:id => param['uid'])
+          property.attributes = { :name => param['label'], :type => param['schema']['type']}
         end
         measurement_model.save
         measurement_model.update_model

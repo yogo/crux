@@ -37,11 +37,11 @@ gem 'inherited_resources', '~> 1.0.6'
 gem "carrierwave"
 gem "compass"
 gem 'bcrypt-ruby'
-gem "fastercsv"                       unless RUBY_VERSION >= '1.9.1'
+gem "fastercsv"               unless RUBY_VERSION >= '1.9.1'
 gem "haml"
-gem "mime-types",                     :require => 'mime/types'
+gem "mime-types",             :require => 'mime/types'
 gem "uuidtools"
-
+gem 'rgl',                    :require => ['rgl/adjacency', 'rgl/transitivity', 'rgl/dot', 'rgl/topsort', 'rgl/connected_components']
 gem 'rails_warden'
 
 if defined?(JRUBY_VERSION)
@@ -57,6 +57,7 @@ gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug', :require => ni
 group :development do
   gem "rails-footnotes"
   gem "capistrano"
+  gem "wirble"
 end
 
 group :test do

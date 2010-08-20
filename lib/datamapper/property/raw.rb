@@ -3,18 +3,24 @@ module DataMapper
     class Raw < String
       length 2000
       
-      ##
-      # The kind of primitive for this class
-      # 
-      # @example
-      #   primitvie?
-      # 
-      # @return [Boolean]
-      # 
-      # @author lamb
-      # @api semipublic
       def primitive?(value)
-        value.kind_of?(::String)
+        true
+      end
+      
+      def custom?
+        true
+      end
+      
+      def load(value)
+        value
+      end
+      
+      def dump(value)
+        value
+      end
+      
+      def typecast_to_primitive(value)
+        value
       end
       
     end
