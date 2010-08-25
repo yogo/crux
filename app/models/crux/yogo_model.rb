@@ -138,11 +138,10 @@ class Crux::YogoModel
   #   }.map{|m| m[1] }
   # end
   # 
-  # def measurement_parameters(muid)
-  #   params = nodes['measurements'][muid]['dependsOn']
-  #   params -= ancestor_parameters(muid)
-  #   nodes['parameters'].select{|k,v| params.include?(k)}
-  # end
+  def measurement_parameters(muid)
+    params = nodes['measurements'][muid]['dependsOn']
+    nodes['parameters'].select{|k,v| params.include?(k)}
+  end
   
   def kefed_measurements
     nodes['measurements'].map{|n| n.label }

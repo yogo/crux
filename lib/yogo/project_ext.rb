@@ -8,56 +8,66 @@ module Yogo
     property :yogo_model_uid,  DataMapper::Property::UUID
     has n, :roles
     
-    belongs_to :yogo_model, :model => 'Crux::YogoModel', :child_key => [:yogo_model_uid], :parent_key => [:uid]
-    
     def self.extended_permissions
       collection_perms = [ :create_models, :retrieve_models, :update_models, :delete_models, :create_data, :retrieve_data, :update_data, :delete_data ]
       [:manage_users, collection_perms, super].flatten
     end
     
-    # Please refactor me, here there be dragons.  
-    # This is not awesome.
-    # 
+    def yogo_model
+      # maybe cache this later
+      @yogo_model = Crux::YogoModel.first(:uid => yogo_model_uid.to_s.upcase )
+    end
+    
+    # Construct the models from the kefed diagram
     def build_models_from_kefed
-      kefed_model = Crux::YogoModel.first(:uid => self.yogo_model_uid )
       # Create models for each measurement
-      kefed_model.nodes['measurements'].each do |muid, measurement|
+      yogo_model.nodes['measurements'].each do |muid, measurement|
         measurement_name = measurement['label']
         measurement_uid = measurement['uid']
         begin 
-          measurement_type = measurement['schema']['type'].constantize
+          measurement_type = measurement['schema']['type'].split('::').last
         rescue NameError
-          measurement_type = DataMapper::Property::Text
+          measurement_type = "Text"
         end      
         
-        # # Initialize the parameters for a measurement with a series integer and the column for 
-        # the measurement itself
-        parameters = {
-          :series =>                  {:type => Integer},
-          measurement_name.tableize.to_sym =>  {:type => measurement_type}
-        }
+        # Initialize the parameters with a column for the measurement itself
+        parameters = [{
+          :label => measurement_name,
+          :type  => measurement_type,
+          :uid   => measurement_uid
+        }]
         
-        kefed_model.measurement_parameters(muid).each do |puid, param|
-          p_name = param['label']
+        yogo_model.measurement_parameters(muid).each do |puid, param|
+          param_name = param['label']
+          param_uid  = param['uid']
           begin 
-            param_type = param['schema']['type'].constantize
+            param_type = param['schema']['type'].split('::').last
           rescue NameError
-            param_type = DataMapper::Property::Text
+            param_type = "Text"
           end
-          parameters[p_name] = {:type => param_type}
+          parameters << {:label => param_name, :type => param_type, :uid => param_uid}
         end
         
-        # # find or create the measurement collection
-        measurement_model  = self.data_collections.first_or_new(:id => measurement_uid)
+        # find or create the measurement collection
+        measurement_model  = self.data_collections.first_or_create(:id => measurement_uid)
         measurement_model.attributes = { :name => measurement_name }
-                
-        # find or create each of the parameters
-        parameters.each do |param, options|
-          property = measurement_model.schema.first_or_new(:id => param['uid'])
-          property.attributes = { :name => param['label'], :type => param['schema']['type']}
-        end
         measurement_model.save
-        measurement_model.update_model
+        
+        # find or create each of the parameters
+        # there are side-effects here: don't change property names, it is data destructive
+        parameters.each do |param, options|
+          property = measurement_model.schema.first_or_new(:name => param[:label])
+          property.attributes = { :name => param[:label], :type => param[:type]}
+        end
+        
+        if measurement_model.save 
+          puts "MODEL CREATED: #{measurement_model.name}"
+          measurement_model.update_model
+        end
+        
+        puts "NUMBER OF DATA_COLLECTIONS: #{self.data_collections.length}"
+        puts "CURRENT DATA_COLLECTIONS: #{self.data_collections.map(&:name).join(',')}"
+        
       end
     end
 
@@ -67,18 +77,6 @@ module Yogo
 
     def kefed_ordered_models
       data_collections
-      # kefed_model = Crux::YogoModel.first(:uid => self.yogo_model_uid )
-      # sorted_models = []
-      # kefed_model.nodes['measurements'].each do |muid, m|
-      #   num_deps = m['dependsOn'].size
-      #   if sorted_models[num_deps]
-      #     sorted_models[num_deps] << m['label'].gsub(/\W|\s/,'_').tableize.classify
-      #   else
-      #     sorted_models[num_deps] = [m['label'].gsub(/\W|\s/,'_').tableize.classify]
-      #   end
-      # end
-      # sorted_models.flatten.map{|m| models.select{|n| n.class.to_s.include?(m) }}.flatten.compact
     end
-    
   end
 end

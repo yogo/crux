@@ -10,7 +10,7 @@
 //= render(:partial => 'layouts/sidebar') %>
 #project-dashboard
   #kefed-navigator
-    %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{@project.yogo_model_uid}" width="100%" height="600")
+    %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{@project.yogo_model_uid.to_s.upcase}" width="100%" height="600")
       %p Your browser does not support iframes.#measurements
   #parameters
     %h2 Parameters
@@ -18,6 +18,8 @@
     /   = param
   #measurements
     %h2 Measurements
+    - for collection in @project.data_collections
+      = link_to(collection.name, yogo_project_items_path(@project, collection.id))
     / - for measurement in @yogo_model.measurements
     /   = measurement
     / - for dataset in @project.models

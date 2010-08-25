@@ -68,7 +68,7 @@ class Yogo::ProjectsController < InheritedResources::Base
     else
       @kefed_params += "&action=editModel"
     end
-    @kefed_params += "&uid=#{@uid}" if @uid
+    @kefed_params += "&uid=#{@uid.to_s.upcase}" if @uid
     @no_blueprint = true 
   end
   
@@ -95,7 +95,7 @@ class Yogo::ProjectsController < InheritedResources::Base
     @project.yogo_model_uid = params[:uid]
     @project.save
     @project.build_models_from_kefed
-    redirect_to project_url(@project)
+    redirect_to yogo_project_url(@project)
   end
   
   protected

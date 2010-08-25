@@ -46,9 +46,9 @@
             %tbody
 
               /- for row in project.root_model.all
-              - row = project.root_model.all.first
+              /- row = project.root_model.all.first
               %tr
-                %td= project.root_model.all.map{|f| f.yogo__subject_id }.uniq
+                /%td= project.root_model.all.map{|f| f.yogo__subject_id }.uniq
                 /%td= link_to dataset.public_name,
                 /      project_yogo_data_index_path(project, dataset) 
                 /%td= link_to(dataset.count(:created_at.gt => 1.week.ago),

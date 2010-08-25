@@ -5,7 +5,7 @@ class Yogo::ItemsController < InheritedResources::Base
            :instance_name => 'items'
            
   belongs_to :project, :parent_class => Yogo::Project, :finder => :get do
-    belongs_to :collection, :parent_class => Yogo::Collection, :finder => :get
+    belongs_to :data_collection, :parent_class => Yogo::Collection, :finder => :get
   end
 
   protected
