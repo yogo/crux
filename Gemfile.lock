@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/datamapper/dm-types.git
   revision: 674738f
+  ref: 674738f2a94788b975e9
   specs:
     dm-types (1.0.0)
       dm-core (~> 1.0.0)
@@ -50,7 +51,7 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.0.0)
-    carrierwave (0.4.9)
+    carrierwave (0.4.10)
     cgi_multipart_eof_fix (2.5.0)
     chronic (0.2.3)
       hoe (>= 1.2.1)
@@ -89,12 +90,10 @@ GEM
     dm-do-adapter (1.0.0)
       data_objects (~> 0.10.1)
       dm-core (~> 1.0.0)
-    dm-is-nested_set (1.0.0)
+    dm-is-list (1.0.0)
       dm-adjust (~> 1.0.0)
       dm-core (~> 1.0.0)
     dm-migrations (1.0.0)
-      dm-core (~> 1.0.0)
-    dm-observer (1.0.0)
       dm-core (~> 1.0.0)
     dm-persevere-adapter (0.72.0)
       dm-aggregates (~> 1.0)
@@ -102,10 +101,6 @@ GEM
       dm-migrations
       dm-types (~> 1.0)
       dm-validations
-    dm-serializer (1.0.0)
-      dm-core (~> 1.0.0)
-      fastercsv (~> 1.5.3)
-      json_pure (~> 1.4.3)
     dm-sqlite-adapter (1.0.0)
       dm-do-adapter (~> 1.0.0)
       do_sqlite3 (~> 0.10.2)
@@ -131,10 +126,10 @@ GEM
     gherkin (2.1.5)
       trollop (~> 1.16.2)
     googlecharts (1.6.0)
-    haml (3.0.16)
+    haml (3.0.17)
     has_scope (0.5.0)
     highline (1.6.1)
-    hirb (0.3.2)
+    hirb (0.3.3)
     hoe (2.6.1)
       rake (>= 0.8.7)
       rubyforge (>= 2.0.4)
@@ -164,9 +159,9 @@ GEM
       daemons (>= 1.0.3)
       fastthread (>= 1.0.1)
       gem_plugin (>= 0.2.3)
-    net-scp (1.0.2)
+    net-scp (1.0.3)
       net-ssh (>= 1.99.1)
-    net-sftp (2.0.4)
+    net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
     net-ssh (2.0.23)
     net-ssh-gateway (1.0.1)
@@ -183,7 +178,7 @@ GEM
       activesupport (= 2.3.8)
       rake (>= 0.8.3)
     rails-footnotes (3.6.7)
-    rails_best_practices (0.3.26)
+    rails_best_practices (0.4.0)
       ruby2ruby (>= 1.2.4)
       ruby_parser (>= 2.0.4)
     rails_warden (0.5.2)
@@ -256,17 +251,12 @@ DEPENDENCIES
   compass
   cucumber
   cucumber-rails
-  dm-aggregates (= 1.0)
   dm-core (= 1.0)
-  dm-is-nested_set (= 1.0)
-  dm-migrations
-  dm-observer (= 1.0)
+  dm-is-list (= 1.0)
+  dm-migrations (= 1.0)
   dm-persevere-adapter (= 0.72.0)
-  dm-serializer (= 1.0)
-  dm-sqlite-adapter
-  dm-timestamps (= 1.0)
-  dm-types (= 1.0)!
-  dm-validations (= 1.0)
+  dm-sqlite-adapter (= 1.0)
+  dm-types (~> 1.0.0)!
   factory_girl (~> 1.2.3)
   fastercsv
   fattr

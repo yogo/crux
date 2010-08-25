@@ -9,27 +9,35 @@
 
 class Role
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
 
   property :id, Serial
   property :name, String, :required => true
-  property :description, String
-  property :permissions, Yaml, :default => [].to_yaml
+  property :description, String, :length => 256
+  property :actions, Yaml, :default => [].to_yaml
 
-  has n, :users, :through => Resource
-  belongs_to :project, :required => false, :model => 'Yogo::Project'
+  has n, :memberships
+  has n, :users, :through => :memberships
+  has n, :projects, :through => :memberships, :model => Yogo::Project
+
+  is :list
 
   def self.permission_sources
-    [Yogo::Project]
+    [Yogo::Project, Membership]
   end
 
   def self.available_permissions
-    permission_sources.map {|ps| ps.to_permissions}.flatten
+    @_availaible_permissions ||= permission_sources.map {|ps| ps.to_permissions}.flatten
   end
 
   def self.available_permissions_by_source
     source_hash = Hash.new
     permission_sources.each { |ps| source_hash[ps.name] = ps.to_permissions }
     source_hash
+  end
+
+  def has_permission?(permission)
+    actions.include?(permission)
   end
 
   ##

@@ -23,7 +23,6 @@ class ApplicationController < ActionController::Base
 
   # include all helpers, all the time  
   helper :all 
-  helper :breadcrumbs
   
   # Specify the layout for the yogo application
   layout 'application'
@@ -32,10 +31,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery 
 
   # Scrub sensitive parameters from your log
-  filter_parameter_logging :password
+  filter_parameter_logging :password, :password_confirmation
   
-  rescue_from AuthorizationError, :with => :authorization_denied
-  rescue_from AuthenticationError, :with => :authentication_required
+  # We might not need these lines anymore. See the method 'rescue_action' defined below
+  rescue_from Facet::PermissionException::Denied, :with => :authorization_denied
+  # rescue_from Facet::PermissionException::Denied, :with => :authentication_required
   
   protected
 
@@ -52,17 +52,17 @@ class ApplicationController < ActionController::Base
   # @return [HTML Content to browser] This returns a dynamically generated error page.
   # 
   # @api semipublic
-  def render_optional_error_file(status_code)
-    status = interpret_status(status_code)
-    # TODO: Support I18n internationalization
-    # if I18n.locale
-    #   path = "/errors/#{status[0,3]}.#{I18n.locale}.html.erb"
-    # else
-      path = "/errors/#{status[0,3]}.html.erb"
-    # end
-     
-    render :template => path || "/errors/unknown.html.erb", :status => status
-  end
+    def render_optional_error_file(status_code)
+      status = interpret_status(status_code)
+      # TODO: Support I18n internationalization
+      # if I18n.locale
+      #   path = "/errors/#{status[0,3]}.#{I18n.locale}.html.erb"
+      # else
+        path = "/errors/#{status[0,3]}.html.erb"
+      # end
+       
+      render :template => path || "/errors/unknown.html.erb", :status => status
+    end
     
   private
   
@@ -99,6 +99,14 @@ class ApplicationController < ActionController::Base
   # @api private
   def show_sidebar
     @sidebar = true
+  end
+  
+  def rescue_action(e)
+    if e.kind_of?(Facet::PermissionException::Denied) || e.original_exception.kind_of?(Facet::PermissionException::Denied)
+      authorization_denied
+    else
+      super
+    end
   end
   
   def basic_auth

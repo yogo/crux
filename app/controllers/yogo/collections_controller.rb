@@ -1,21 +1,45 @@
-class Yogo::CollectionsController < InheritedResources::Base
-  respond_to :html, :json
-  
+class Yogo::CollectionsController < Yogo::BaseController
   defaults :resource_class => Yogo::Collection::Data,
-           :collection_name => 'yogo_collection_data',
-           :instance_name => 'yogo_collection_datum'
+           :collection_name => 'data_collections',
+           :instance_name => 'data_collection'
            
   belongs_to :project, :parent_class => Yogo::Project,
              :finder => :get
-
+  
   protected
   
   def collection
-    @collections ||= end_of_association_chain.all
+    @data_collections ||= end_of_association_chain.all
   end
   
   def resource
-    @collection ||= collection.get(params[:id])
+    @data_collection ||= collection.get(params[:id])
+  end
+  
+  def build_resource
+    if data = parsed_body
+      data.delete('project')
+      get_resource_ivar || set_resource_ivar(end_of_association_chain.send(method_for_build, data || {}))
+    else
+      super
+    end
+  end
+  
+  with_responder do
+    def resource_json(resource)
+      hash = super(resource)
+      hash[:project] = controller.send(:yogo_project_path, resource.project)
+      hash[:schema] =  resource.schema.map do |prop|
+        controller.send(:yogo_project_collection_property_path, resource.project, resource, prop)
+      end
+      hash
+    end
+  end
+  
+  private
+  
+  def method_for_association_build
+    :new
   end
   
 end

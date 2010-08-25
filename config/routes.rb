@@ -15,23 +15,29 @@ ActionController::Routing::Routes.draw do |map|
                                 :kefed_library => :get, :add_kefed_diagram => :get },
                   :collection => { :loadexample => :post, :search => :get} do |project|
     
-      project.resources :collections
+      project.resources :collections do |collection|
+        collection.resources :items
+        collection.resources :properties
+      end
       
-      project.resources :items
-                      
-      project.resources :users, :controller => 'yogo/users', 
-                                :only => [:index, :new, :create], 
-                                :collection => { :update_user_roles => :post }
+      project.resources :memberships, :namespace => nil, :controller => "memberships"
+      project.resources :users, :namespace => nil, :controller => "users"
+      
     end
   end
 
   map.dashboard "/dashboard", :controller => 'yogo/projects', :action => 'index'
 
   
-  map.resources :settings
-  map.resource :password, :only => [ :show, :update, :edit ]
-  map.resources :users
+  map.resources :users do |user|
+    user.resources :memberships, :namespace => nil, :controller => "memberships"
+  end
   map.resources :roles
+  map.resources :system_roles
+  map.resources :memberships
+  map.resources :settings
+
+  map.resource  :password, :only => [ :show, :update, :edit ]
   
   # Login & Logout stuff
   map.resource :user_session, :only => [ :show, :new, :create, :destory ]
