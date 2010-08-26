@@ -111,7 +111,7 @@ class Yogo::ProjectsController < Yogo::BaseController
   end
   
   def resource_class
-    Yogo::Project.access_as(current_user)
+    Yogo::Project
   end
   
   with_responder do

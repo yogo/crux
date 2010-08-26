@@ -36,7 +36,7 @@ class UsersController < InheritedResources::Base
   end
   
   def resource_class
-    User.access_as(current_user)
+    User
   end
   
 end

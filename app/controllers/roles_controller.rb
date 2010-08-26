@@ -30,7 +30,7 @@ class RolesController < ApplicationController
   end
   
   def resource_class
-    Role.access_as(current_user)
+    Role
   end
 
 end

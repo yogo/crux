@@ -6,6 +6,7 @@ module Yogo
     include Facet::DataMapper::Resource
     
     property :is_private,      Boolean, :required => true, :default => false
+    property :yogo_model_uid,  DataMapper::Property::UUID
     
     has n, :memberships, :parent_key => [:id], :child_key => [:project_id], :model => 'Membership'
     has n, :roles, :through => :memberships
@@ -35,54 +36,28 @@ module Yogo
     
     # Construct the models from the kefed diagram
     def build_models_from_kefed
-      # Create models for each measurement
-      yogo_model.nodes['measurements'].each do |muid, measurement|
-        measurement_name = measurement['label']
-        measurement_uid = measurement['uid']
-        begin 
-          measurement_type = measurement['schema']['type'].split('::').last
-        rescue NameError
-          measurement_type = "Text"
-        end      
+      yogo_model.measurements.each do |measurement_uid, measurement|
         
-        # Initialize the parameters with a column for the measurement itself
-        parameters = [{
-          :label => measurement_name,
-          :type  => measurement_type,
-          :uid   => measurement_uid
-        }]
-        
-        yogo_model.measurement_parameters(muid).each do |puid, param|
-          param_name = param['label']
-          param_uid  = param['uid']
-          begin 
-            param_type = param['schema']['type'].split('::').last
-          rescue NameError
-            param_type = "Text"
-          end
-          parameters << {:label => param_name, :type => param_type, :uid => param_uid}
+        collection_opts = {:id => measurement_uid}
+        if Crux::YogoModel.is_asset_measurement?(measurement)
+          collection_opts[:type] = 'Yogo::Collection::Asset'
         end
         
-        # find or create the measurement collection
-        measurement_model  = self.data_collections.first_or_create(:id => measurement_uid)
-        measurement_model.attributes = { :name => measurement_name }
-        measurement_model.save
-        
-        # find or create each of the parameters
-        # there are side-effects here: don't change property names, it is data destructive
-        parameters.each do |param, options|
-          property = measurement_model.schema.first_or_new(:name => param[:label])
-          property.attributes = { :name => param[:label], :type => param[:type]}
+        collection = self.data_collections.first_or_create(collection_opts)
+        collection.attributes = { :name => measurement['label'] }
+        collection.save
+
+        yogo_model.measurement_parameters(measurement_uid).each do |parameter_uid, parameter|
+          property = collection.schema.first_or_new(:name => parameter['label'])
+          property.attributes = { 
+            :name => parameter['label'], 
+            :type  => Crux::YogoModel.legacy_type(parameter)
+          }
         end
         
-        if measurement_model.save 
-          puts "MODEL CREATED: #{measurement_model.name}"
-          measurement_model.update_model
+        if collection.save 
+          collection.update_model
         end
-        
-        puts "NUMBER OF DATA_COLLECTIONS: #{self.data_collections.length}"
-        puts "CURRENT DATA_COLLECTIONS: #{self.data_collections.map(&:name).join(',')}"
-        
       end
     end
 

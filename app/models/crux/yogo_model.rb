@@ -138,9 +138,27 @@ class Crux::YogoModel
   #   }.map{|m| m[1] }
   # end
   # 
+  
+  def measurements
+    nodes['measurements']
+  end
+  
+  # Return the params plus the measurement itself if appropriate
   def measurement_parameters(muid)
-    params = nodes['measurements'][muid]['dependsOn']
-    nodes['parameters'].select{|k,v| params.include?(k)}
+    params = measurements[muid]['dependsOn']
+    measurement_params = nodes['parameters'].select{|k,v| params.include?(k)}
+    unless Crux::YogoModel.is_asset_measurement?(measurements[muid])
+      measurement_params << [muid, measurements[muid]]
+    end
+    measurement_params
+  end
+  
+  def self.legacy_type(node)
+    node['schema']['type'].split('::').last
+  end
+  
+  def self.is_asset_measurement?(node)
+    ['YogoImage','YogoFile'].include?(legacy_type(node))
   end
   
   def kefed_measurements

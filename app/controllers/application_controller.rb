@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
        
       render :template => path || "/errors/unknown.html.erb", :status => status
     end
-    
+
   private
   
   ##
@@ -101,13 +101,13 @@ class ApplicationController < ActionController::Base
     @sidebar = true
   end
   
-  def rescue_action(e)
-    if e.kind_of?(Facet::PermissionException::Denied) || e.original_exception.kind_of?(Facet::PermissionException::Denied)
-      authorization_denied
-    else
-      super
-    end
-  end
+  # def rescue_action(e)
+  #   if e.kind_of?(Facet::PermissionException::Denied) || e.original_exception.kind_of?(Facet::PermissionException::Denied)
+  #     authorization_denied
+  #   else
+  #     super
+  #   end
+  # end
   
   def basic_auth
     # If it's local, let it go. For development

@@ -35,7 +35,7 @@ class SystemRolesController < InheritedResources::Base
    end
    
    def resource_class
-     SystemRole.access_as(current_user)
+     SystemRole
    end
            
 end

@@ -19,7 +19,7 @@
   #measurements
     %h2 Measurements
     - for collection in @project.data_collections
-      = link_to(collection.name, yogo_project_items_path(@project, collection.id))
+      = link_to(collection.name, yogo_project_collection_items_path(@project, collection.id))
     / - for measurement in @yogo_model.measurements
     /   = measurement
     / - for dataset in @project.models
