@@ -17,6 +17,7 @@ require 'datamapper/property/yogo_image'
 require 'datamapper/property/raw'
 
 require 'yogo/project_ext'
+require 'yogo/collection_ext'
 
 
 # Read the configuration from the existing database.yml file
@@ -29,7 +30,9 @@ DataMapper.setup(:default, config[Rails.env])
 
 # Use db configs in the form of "yogo_{default|persvr|sqlite|...}_{RAILS_ENV|development|production|...}"
 yogo_db = ['yogo', (ENV['YOGO_DB'] || 'default'), Rails.env].join('_')
-DataMapper.setup(:collection_data, config[yogo_db])
+DataMapper.setup(:collection_data, config['development_mysql'])
+
+DataMapper.setup(:yogo_persvr, config['yogo_persvr_development'])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger

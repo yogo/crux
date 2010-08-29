@@ -5,10 +5,27 @@ class Yogo::ItemsController < Yogo::BaseController
   belongs_to :project, :parent_class => Yogo::Project, :finder => :get, :collection_name => :data_collections
   belongs_to :data_collection, :parent_class => Yogo::Collection::Data, :finder => :get, :param => :collection_id
   
+  before_filter :no_blueprint
+  
+  
+  def create
+    if params.has_key?(:csv_file)
+      # Do Goo!
+      parse_csv(params[:csv_file][:csv_file_name])
+      redirect_to(:action => :index)
+    else
+      params[:items].delete_if{|key,value| value.blank?}
+      super do |success, failure|
+        success.html {redirect_to :action => :index}
+        failure.html {redirect_to :action => :index}
+      end
+    end
+  end
+  
   protected
   
   def collection
-    @items ||= end_of_association_chain.all
+    @items ||= end_of_association_chain.paginate(:page => params[:page], :per_page => 25)
   end
   
   def resource
@@ -49,10 +66,32 @@ class Yogo::ItemsController < Yogo::BaseController
   end
   
   private
-  
+    
   def method_for_association_build
     :new
   end
   
+  def parse_csv(file)
+    collection
+    output = []
+    contents = FasterCSV.read(file.path)
+    header = contents[0]
+
+    fields = {}
+    @data_collection.schema.each{|s| fields[s.name] = s.to_s.intern }
+    
+    # fields = header.collect{|i| @data_collection.schema.first(:name => i).to_s.intern }
+    # fields = @data_collection.schema.all(:name => header).map{|h| h.to_s.intern } )
+    debugger
+    
+    contents[3..-1].each do |row|
+      tmp_hash = {}
+      row.each_index do |i|
+        tmp_hash[fields[header[i]]] = row[i] unless row[i].blank?
+      end
+      collection.model.create(tmp_hash)
+      # output << tmp_hash
+    end
+  end
   
 end

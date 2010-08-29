@@ -26,6 +26,7 @@ gem "dm-persevere-adapter", "0.72.0", :require => nil
 #gem "do_postgres",       DATAMAPPER_VER, :require => nil
 # gem "do_sqlite3",       DATAMAPPER_VER, :require => nil
 gem 'dm-sqlite-adapter',  DATAMAPPER_VER, :require => nil
+gem 'dm-mysql-adapter',   DATAMAPPER_VER, :require => nil
 #gem "do_sqlserver",      DATAMAPPER_VER  :require => nil
 
 # 1.0 Release of dm-types has problems with UUID properties, use git master

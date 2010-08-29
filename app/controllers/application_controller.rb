@@ -101,6 +101,10 @@ class ApplicationController < ActionController::Base
     @sidebar = true
   end
   
+  def no_blueprint
+    @no_blueprint = true
+  end
+  
   # def rescue_action(e)
   #   if e.kind_of?(Facet::PermissionException::Denied) || e.original_exception.kind_of?(Facet::PermissionException::Denied)
   #     authorization_denied

@@ -6,6 +6,11 @@
 # FILE: database.yml.start
 #
 #
+development_mysql:
+  adapter: mysql
+  database: crux_development
+  user: crux
+  password: preston
 
 development:
   adapter: sqlite3
@@ -55,13 +60,13 @@ yogo_persvr_test: &YOGO_PERSVR_TEST
 
 # Default configurations for storing Yogo Collections
 yogo_default_development: &YOGO_DEFAULT_DEVELOPMENT
-  <<: *YOGO_PERSVR_DEVELOPMENT
+  <<: *YOGO_SQLITE_DEVELOPMENT
 
 yogo_default_production: &YOGO_DEFAULT_PRODUCTION
-  <<: *YOGO_PERSVR_PRODUCTION
+  <<: *YOGO_SQLITE_PRODUCTION
 
 yogo_default_test: &YOGO_DEFAULT_TEST
-  <<: *YOGO_PERSVR_TEST
+  <<: *YOGO_SQLITE_TEST
 
 yogo_cucumber:
   <<: *YOGO_DEFAULT_TEST

@@ -51,7 +51,8 @@ module Yogo
           property = collection.schema.first_or_new(:name => parameter['label'])
           property.attributes = { 
             :name => parameter['label'], 
-            :type  => Crux::YogoModel.legacy_type(parameter)
+            :type  => Crux::YogoModel.legacy_type(parameter),
+            :options => {:required => false}
           }
         end
         

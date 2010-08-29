@@ -3,12 +3,10 @@
 /   /&gt;
 /   /= @model.public_name + " (#{@model.count})"
 / 
-/ #content-actions
-/   .content-action-links
-/     = link_to("Import CSV", import_csv_path(@project), :class => 'medium-button-link') 
-/     = link_to("Delete Project", project_path(@project), 
-/       :method => :delete, :class => 'medium-button-link', :confirm => "There is no undo.\n Continue?" ) 
-/     = link_to("Edit Experimental Design", kefed_editor_yogo_project_url(@project, :uid => @project.yogo_model_uid), :class => 'medium-button-link')
+#content-actions
+  .content-action-links
+    = link_to("Project Settings", yogo_project_path(@project), :class => 'medium-button-link') 
+    = link_to("Edit Experimental Design", kefed_editor_yogo_project_url(@project, :uid => @project.yogo_model_uid), :class => 'medium-button-link')
 / 
 /   /- if action_name.eql?("search")
 /   /  = link_to("Download CSV", search_project_yogo_data_path(@project, @model,
@@ -17,16 +15,22 @@
 /   /  = link_to("Download CSV", project_yogo_data_index_path(@project, @model, :format => 'csv'),
 /   /      :class => "button-link")
 
+#csv-upload
+  - form_for(:csv_file, :url => yogo_project_collection_items_path(@project, @model),
+             :html => { :enctype => 'multipart/form-data' }, :builder => YogoDataFormBuilder) do |f|
+    = f.file_field(:csv_file_name)
+    = f.submit
+    
 #measurement-tabs
   - @project.kefed_ordered_models.each do |m|
     = link_to(m.name, yogo_project_collection_items_path(@project, m), :class => (m == @data_collection) ? 'selected' : '')
 
-/ #pagination-links
-/   /= "Search results for: <span class='bold'>#{@search_term}</span><br /> " if @search_term
-/   = pagination_links(@collection, params[:page], Project.per_page)
+#pagination-links
+  /= "Search results for: <span class='bold'>#{@search_term}</span><br /> " if @search_term
+  = pagination_links(collection, params[:page], 25)
 
 =clear_break
-- form_for(@data_collection.items.new,
+- form_for(:items, @data_collection.items.new,
     :url => yogo_project_collection_items_path(@project, @model),
     :html => { :enctype => 'multipart/form-data' }, :builder => YogoDataFormBuilder) do |f|
   %table#data-table
@@ -35,12 +39,18 @@
         %th.data-table-actions
         - @data_collection.schema.each do |h|
           %th= h.name
+        - if @data_collection.asset_collection?
+          %th= @data_collection.name
       %tr
         %td= f.submit
-        - @data_collection.items.model.properties.each do |p|
-          %td= f.field_for_param(p)
+        /- @data_collection.items.model.properties.each do |p|
+        - @data_collection.schema.each do |p|
+          %td= f.text_field(p.to_s)
+          /%td= f.field_for_param(@data_collection.data_model.properties[p.to_s])
+        - if @data_collection.asset_collection?
+          %td= f.file_field(:file)
 
-      - @data_collection.items.each do |d|
+      - @items.each do |d|
         %tr{:class => cycle("cycle-odd","cycle-even")}
           %td.data-table-actions
             .actions
