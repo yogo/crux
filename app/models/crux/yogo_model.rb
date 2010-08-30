@@ -25,8 +25,6 @@ class Crux::YogoModel
   property :edges,        DataMapper::Property::Raw,         :writer => :private
   property :nodes,        DataMapper::Property::Raw,         :writer => :private
   
-  has 1, :project, :model => 'Yogo::Project', :child_key => [:yogo_model_uid], :parent_key => [:uid]
-  
   # The number of items to be displayed (by default) per page
   # 
   # @example
