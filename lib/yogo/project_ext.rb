@@ -6,7 +6,7 @@ module Yogo
     include Facet::DataMapper::Resource
     
     property :is_private,      Boolean, :required => true, :default => false
-    property :yogo_model_uid,  DataMapper::Property::UUID
+    property :yogo_model_uid,  DataMapper::Property::UUID, :required => false
     
     has n, :memberships, :parent_key => [:id], :child_key => [:project_id], :model => 'Membership'
     has n, :roles, :through => :memberships
