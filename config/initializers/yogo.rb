@@ -5,5 +5,8 @@
 #   FileUtils.mkdir_p(File.join(Rails.root, Yogo::Setting['asset_directory']))
 # end
 
+require 'facet'
+require 'datamapper/property/raw'
+
 # Load the Application Version
 load Rails.root / "VERSION"
