@@ -18,11 +18,11 @@ gem "dm-persevere-adapter", "0.72.0", :require => nil
 
 gem "will_paginate",        "~> 3.0.pre2", :git => 'git://github.com/yogo/will_paginate.git', 
                                            :branch => 'rails3'
-
+gem 'dm-constraints',       DM_VERSION
+gem 'dm-is-list',           DM_VERSION
 gem 'dm-migrations',        DM_VERSION
 gem 'dm-types',             DM_VERSION
 gem 'dm-validations',       DM_VERSION
-gem 'dm-constraints',       DM_VERSION
 gem 'dm-transactions',      DM_VERSION
 gem 'dm-aggregates',        DM_VERSION
 gem 'dm-timestamps',        DM_VERSION
