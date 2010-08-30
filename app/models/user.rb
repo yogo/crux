@@ -11,4 +11,11 @@ class User
   property :id, Serial
 
 
+  has n, :memberships
+  has n, :projects, :through => :memberships, :model => Yogo::Project
+  has n, :roles,    :through => :memberships
+  belongs_to :system_role
+
+  validates_confirmation_of :password
+  
 end
