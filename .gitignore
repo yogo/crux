@@ -6,5 +6,7 @@ db/persvr/*
 log/*.log
 public/stylesheets/compiled/*
 tmp/**/*
+vendor/blazeds
+vendor/blazeds/**/*
 vendor/persevere/*
 
