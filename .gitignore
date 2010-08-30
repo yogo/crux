@@ -1,5 +1,6 @@
 .DS\_Store
 .bundle
+bin/*
 db/**/*.sqlite3
 db/persvr/*
 log/*.log
