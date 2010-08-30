@@ -1,6 +1,11 @@
+require 'sentient_user'
+
 class User
 
   include DataMapper::Resource
+  include SentientUser
+  include Facet::DataMapper::Resource
+  
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   # :registerable
