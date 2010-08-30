@@ -11,12 +11,10 @@ gem 'railties',           RAILS_VERSION, :require => 'rails'
 gem 'rails',              RAILS_VERSION, :require =>  nil
 gem 'inherited_resources', '~> 1.1.2'
 
-gem 'dm-rails',           '~> 1.0.3'
-gem 'dm-sqlite-adapter',  DM_VERSION
-
-# gem "dm-persevere-adapter", '0.71.4', :require => nil, 
-#                                       :git => 'git://github.com/yogo/dm-persevere-adapter.git',
-#                                       :branch => 'ryan/yogo-integration'
+gem 'dm-rails',             '~> 1.0.3'
+gem 'dm-sqlite-adapter',    DM_VERSION
+gem 'dm-postgres-adapter',  DM_VERSION
+gem "dm-persevere-adapter", "0.72.0", :require => nil
 
 gem "will_paginate",        "~> 3.0.pre2", :git => 'git://github.com/yogo/will_paginate.git', 
                                            :branch => 'rails3'
@@ -30,7 +28,7 @@ gem 'dm-aggregates',        DM_VERSION
 gem 'dm-timestamps',        DM_VERSION
 gem 'dm-observer',          DM_VERSION
 
-gem 'yogo-project',                     :require => nil,
+gem 'yogo-project',                     :require => 'yogo/project',
                                         :git => 'git://github.com/yogo/yogo-project.git'
 
 gem 'haml'
@@ -38,6 +36,8 @@ gem 'compass',           '>=0.10.2'
 
 gem 'devise',            '~> 1.1.1'
 gem 'dm-devise',         '~> 1.1.0'
+
+gem 'carrierwave',                     :git => 'git://github.com/jnicklas/carrierwave.git'
 
 group :development, :test do
   platforms(:mri_19){ gem 'ruby-debug19'}
