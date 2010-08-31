@@ -1,8 +1,24 @@
 Yogo::Application.routes.draw do
 
-  # resource :user_session, :only => [ :show, :new, :create, :destory ]
-  # match '/logout' => 'user_sessions#destroy', :as => :logout
-  # match '/login'  => 'user_sessions#new',     :as => :login
+  namespace :yogo do
+    resources :projects do
+      member do
+        get :kefed_library
+        get :add_kefed_diagram
+        get :kefed_editor
+        post :upload
+      end
+      collection do
+        get :search
+      end
+      
+      resources :collections do
+        resources :items
+        resources :properties
+      end
+    end
+    
+  end
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -59,7 +75,7 @@ Yogo::Application.routes.draw do
 
   resources :users
   
-  root :to => "users#index"
+  root :to => "yogo/projects#index"
 
   # See how all your routes lay out with "rake routes"
 
