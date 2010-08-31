@@ -1,8 +1,8 @@
-require 'dm-rails/middleware/identity_map'
-
+# This actually can cause issues:(
+# require 'dm-rails/middleware/identity_map'
 
 class ApplicationController < ActionController::Base
-  use Rails::DataMapper::Middleware::IdentityMap
+  # use Rails::DataMapper::Middleware::IdentityMap
   protect_from_forgery
   
   before_filter :basic_auth
