@@ -14,11 +14,11 @@ require 'net/http'
 namespace :persvr do
   PERSVR_CMD = ENV['PERSVR'] || 
               (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/'bin'/'persvr') || 
-              (File.exists?(Rails.root/'vendor/persevere/bin/persvr') && Rails.root/'vendor/persevere/bin/persvr') || 
+              (File.exists?(::Rails.root.to_s/'vendor/persevere/bin/persvr') && ::Rails.root.to_s/'vendor/persevere/bin/persvr') || 
               'persvr'
   
-  def config(env)
-    cfg = YAML.load_file(Rails.root/'config'/'persvr.yml')[env]
+  def persvr_config(env)
+    cfg = YAML.load_file(::Rails.root.to_s/'config'/'persvr.yml')[env]
     raise "Persevere configuration does not exist for environment: #{env}" unless cfg
     raise "Persevere configuration does not contain a port for environment: #{env}" unless cfg['port']
     raise "Persevere configuration does not contain a database path for environment: #{env}" unless cfg["database"]
@@ -35,8 +35,8 @@ namespace :persvr do
   
   desc "Download and unpack persevere for development"
   task :setup do
-    persvr_zip = Rails.root/'tmp'/'persvr.zip'
-    vendor_dir = Rails.root/'vendor'
+    persvr_zip = ::Rails.root.to_s/'tmp'/'persvr.zip'
+    vendor_dir = ::Rails.root.to_s/'vendor'
     # Grab persevere from http://persevere-framework.googlecode.com/files/persevere1.0.1.rc2.zip
     Net::HTTP.start("persevere-framework.googlecode.com") do |http|
       resp = http.get("/files/persevere1.0.1.rc2.zip")
@@ -55,7 +55,7 @@ namespace :persvr do
     # *and* that it's in your path
 
     # Step 1: Copy our server.js to the unpacked distribution
-    sh "cp #{Rails.root}/db/server.js #{vendor_dir}/persevere/WEB-INF/src/org/persvr/server.js"
+    sh "cp #{::Rails.root.to_s}/db/server.js #{vendor_dir}/persevere/WEB-INF/src/org/persvr/server.js"
 
     # Step 2: Get to the right directory, update the jar, come back (so the rake task returns to the starting directory)
     #sh "pushd #{vendor_dir}/persevere/WEB-INF/src; jar uf ../lib/persevere.jar org/persvr/server.js; popd"
@@ -67,7 +67,7 @@ namespace :persvr do
   
   desc "Cleanup vendor installed persevere"
   task :remove do
-    vendor_dir = Rails.root/'vendor'
+    vendor_dir = ::Rails.root.to_s/'vendor'
     
     # Remove the installed code
     sh "rm -rf #{vendor_dir}/persevere"
@@ -75,25 +75,25 @@ namespace :persvr do
   
   desc "Create the persevere instance for the current environment."
   task :create => [:version] do
-    cfg = config(Rails.env)
-    cd Rails.root do
-      sh "#{PERSVR_CMD} --gen-server #{cfg['database']}" unless File.exist? Rails.root/cfg['database']
+    cfg = persvr_config(Rails.env)
+    cd ::Rails.root.to_s do
+      sh "#{PERSVR_CMD} --gen-server #{cfg['database']}" unless File.exist? ::Rails.root.to_s/cfg['database']
     end
     Rake::Task['persvr:drop'].reenable
   end
   
   desc "Remove the persevere instance for the current environment."
   task :drop => [:version, :stop] do
-    cfg = config(Rails.env)
-    rm_rf Rails.root/cfg['database'] if File.exist?(Rails.root/cfg['database'])
+    cfg = persvr_config(Rails.env)
+    rm_rf ::Rails.root.to_s/cfg['database'] if File.exist?(::Rails.root.to_s/cfg['database'])
     Rake::Task['persvr:create'].reenable
   end
   
   desc "Clear the database of the persevere instance for the current environment."
   task :clear => [:version, :stop] do
-    cfg = config(Rails.env)
-    if File.exist?(Rails.root/cfg['database'])
-      cd Rails.root/cfg['database'] do
+    cfg = persvr_config(Rails.env)
+    if File.exist?(::Rails.root.to_s/cfg['database'])
+      cd ::Rails.root.to_s/cfg['database'] do
         sh "#{PERSVR_CMD} --eraseDB" do |ok|
           puts "No database to clear." if !ok
         end
@@ -103,20 +103,20 @@ namespace :persvr do
   end
   
   def start_persvr(interactive=false)
-    cfg = config(Rails.env)
-    cd Rails.root/cfg['database'] do
+    cfg = persvr_config(Rails.env)
+    cd ::Rails.root.to_s/cfg['database'] do
       if File.exist? "./WEB-INF/process"
-        puts "Persevere instance already running in #{Rails.root/cfg['database']}"
+        puts "Persevere instance already running in #{::Rails.root.to_s/cfg['database']}"
       else
         if defined? JRUBY_VERSION
           puts "I can't fork the persvr into a background process from JRuby."
           puts "You will need to execute `rake pesvr:start` from a separate shell if you want to run script/server."
-          puts "Starting persvr #{Rails.env} instance in #{Rails.root/cfg['database']}..."
+          puts "Starting persvr #{Rails.env} instance in #{::Rails.root.to_s/cfg['database']}..."
           exec "#{PERSVR_CMD} --start --port #{cfg['port']}"
         else
-          log = Rails.root/'log'/"persvr_#{Rails.env}.log"
+          log = ::Rails.root.to_s/'log'/"persvr_#{Rails.env}.log"
           pid = Process.fork do
-            puts "Starting background persvr #{Rails.env} instance in #{Rails.root/cfg['database']}..."
+            puts "Starting background persvr #{Rails.env} instance in #{::Rails.root.to_s/cfg['database']}..."
             puts "...logging persvr output to #{log}."
             exec "#{PERSVR_CMD} --start --port #{cfg['port']} > #{log} 2>&1 &"
           end
@@ -148,13 +148,13 @@ namespace :persvr do
   
   desc "Stop the persevere instance for the current environment."
   task :stop => :version do
-    cfg = config(Rails.env)
-    if File.exist?(Rails.root/cfg['database'])
-      cd Rails.root/cfg['database'] do
+    cfg = persvr_config(Rails.env)
+    if File.exist?(::Rails.root.to_s/cfg['database'])
+      cd ::Rails.root.to_s/cfg['database'] do
         if File.exist? '.'/'WEB-INF'/'process'
           sh "#{PERSVR_CMD} --stop"
         else
-          puts "Persevere instance not running in #{Rails.root/cfg['database']}"
+          puts "Persevere instance not running in #{::Rails.root.to_s/cfg['database']}"
         end
       end
     end
@@ -168,7 +168,7 @@ namespace :persvr do
   task :restart_clean => [:version, :stop, :drop, :create, :start] do end
 
   task :stop_all => :version do
-    FileList[Rails.root/'db'/'persvr'/'*'].each do |dir|
+    FileList[::Rails.root.to_s/'db'/'persvr'/'*'].each do |dir|
       if File.exist? dir/'WEB-INF'/'process'
         cd dir do
           puts "Stopping persevere instance in #{dir}"
@@ -183,7 +183,7 @@ namespace :persvr do
     puts "-"*50
     puts "Status  \t Instance"
     puts "-"*50
-    FileList[Rails.root/'db'/'persvr'/'*'].each do |dir|
+    FileList[::Rails.root.to_s/'db'/'persvr'/'*'].each do |dir|
       if File.exist? dir/'WEB-INF'/'process'
         puts "RUNNING \t #{dir}"
       else
