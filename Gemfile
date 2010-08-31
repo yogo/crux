@@ -13,14 +13,13 @@ gem 'railties',           RAILS_VERSION, :require => 'rails'
 gem 'rails',              RAILS_VERSION, :require =>  nil
 gem 'inherited_resources', '~> 1.1.2'
 
+gem 'dm-core',              DM_VERSION
 gem 'dm-rails',             '~> 1.0.3'
 gem 'dm-sqlite-adapter',    DM_VERSION, :require => nil
 gem 'dm-postgres-adapter',  DM_VERSION, :require => nil
 gem 'dm-mysql-adapter',     DM_VERSION, :require => nil
 gem "dm-persevere-adapter", "0.72.0",   :require => nil
 
-gem "will_paginate",        "~> 3.0.pre2", :git => 'git://github.com/yogo/will_paginate.git', 
-                                           :branch => 'rails3'
 gem 'dm-constraints',       DM_VERSION
 gem 'dm-is-list',           DM_VERSION
 gem 'dm-migrations',        DM_VERSION
@@ -32,9 +31,13 @@ gem 'dm-timestamps',        DM_VERSION
 gem 'dm-observer',          DM_VERSION
 
 # 1.0 Release of dm-types has problems with UUID properties, use git master
-gem "dm-types",       DM_VERSION,     :git => "#{DATAMAPPER}/dm-types.git",
-                                      :ref => "674738f2a94788b975e9",
-                                      :require => false # don't require dm-type/json
+gem "dm-types",             DM_VERSION, :git => "#{DATAMAPPER}/dm-types.git",
+                                        :ref => "674738f2a94788b975e9",
+                                        :require => false # don't require dm-type/json
+
+gem "will_paginate",  "~> 3.0.pre2", :git => 'git://github.com/yogo/will_paginate.git', 
+                                     :branch => 'rails3',
+                                     :require  => 'will_paginate'
 
 gem 'yogo-project',                     :require => 'yogo/project',
                                         :git => 'git://github.com/yogo/yogo-project.git'
