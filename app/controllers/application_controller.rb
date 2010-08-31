@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
   
   before_filter :basic_auth
   
+  def no_blueprint
+    @no_blueprint = true
+  end
+  
   def basic_auth
     # If it's local, let it go. For development
     return true if ["127.0.0.1", "0:0:0:0:0:0:0:1%0"].include?(request.env["REMOTE_ADDR"])
