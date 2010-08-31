@@ -26,7 +26,8 @@ GIT
 
 GIT
   remote: git://github.com/yogo/yogo-project.git
-  revision: 034def15ab1eb9ace53a5c73729667c8ae84412d
+  revision: 072956506d4b8be470003f0da6cefbad520232c0
+  branch: topic/ruby19
   specs:
     yogo-project (0.3.2)
       carrierwave
