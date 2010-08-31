@@ -2,26 +2,31 @@
 %html
   %head
     %meta(http-equiv="content-type" content="text/html;charset=UTF-8")/
-    %title= "Yogo Data Management Toolkit: #{controller.action_name}"
-    = stylesheet_link_tag 'compiled/screen.css', :media => 'screen, projection'
-    = stylesheet_link_tag 'compiled/print.css', :media => 'print'
-    /[if lt IE 8]
-      = stylesheet_link_tag 'compiled/ie.css', :media => 'screen, projection'
-    = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"
-    = javascript_include_tag 'rails'
-    = csrf_meta_tag
+    %title= "Crux Prototype: #{controller.action_name}"
+
+    = stylesheet_link_tag('compiled/screen.css', :media => "screen")
+    = stylesheet_link_tag('compiled/print.css', :media => "print")
+    = stylesheet_link_tag('jquery-ui-1.8.1.custom', 'jquery.fancybox-1.3.1')    
+    /[if IE]
+      = stylesheet_link_tag( 'compiled/ie.css')
+
+    = javascript_include_tag('jquery-1.4.2.min.js', 
+                             'jquery-ui-1.8.1.custom.min.js', 
+                             'jquery.fancybox-1.3.1.pack.js',
+                             'rails.js', 'application.js')
+
     %link{:rel => "shortcut icon", :href => "#{image_path("favicon.png")}"}/
   - if @no_blueprint
     %body.typography
   - else
     %body.bp.typography
- 
+
   / Header (including optional menus)
   #header
     #logo 
-      Yogo Data Management Toolkit 
+      Crux Prototype 
       %span.smaller.emphasis
-        beta
+        = "ALPHA v" + CRUX_VERSION
     - unless Yogo::Setting['local_only']
       #login-links
         - if logged_in?
@@ -32,8 +37,12 @@
           = link_to("Login", login_path)
     =clear_break
     #menu.rbox.tight
-      = render(:partial => 'layouts/menu_links') unless @no_menu
-      
+      #menu-left-col
+        /= controller.controller_name + ":" + controller.action_name
+        = render(:partial => 'layouts/page_header')
+      #menu-right-col
+        = render(:partial => 'layouts/menu_links') unless @no_menu
+        = render(:partial => 'layouts/search') unless @no_search
   =clear_break 
   /Grid Container 
   #container
@@ -48,10 +57,15 @@
           %p.error= link_to(flash[:error], flash[:error_link])
         - else
           %p.error= flash[:error]
+      - if flash[:alert]
+        - if flash[:error_link]
+          %p.error= link_to(flash[:error], flash[:error_link])
+        - else
+          %p.error= flash[:alert]
     =clear_break 
     #content
       = yield 
- 
+
   #footnotes_holder
   =clear_break   
   #footer
@@ -59,4 +73,3 @@
       = link_to(image_tag("yogo.png", 
           :alt => "The Yogo Data Management Toolkit Logo"), 
           'http://yogo.msu.montana.edu/')
-    #application-version= "v" + YOGO_VERSION
