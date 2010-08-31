@@ -8,6 +8,12 @@ postgres: &postgres
   adapter: postgres
   host: localhost
 
+mysql: &mysql
+  adapter: mysql
+  host: localhost
+  user: crux
+  password:
+
 persevere: &persevere
   adapter: persevere
   versioned: true
@@ -19,11 +25,11 @@ development:
   <<: *defaults
   repositories:
     collection_data:
-      <<: *postgres
+      <<: *mysql
       database: crux_development
     yogo_persevere:
       <<: *persevere
-      
+
 test:
   database: db/sqlite3/test.sqlite3
   <<: *defaults
@@ -34,7 +40,7 @@ test:
     yogo_persevere:
       <<: *persevere
       port: 8081
-      
+
 production:
   database: db/sqlite3/production.sqlite3
   <<: *defaults
@@ -44,5 +50,4 @@ production:
       database: crux_production
     yogo_persevere:
       <<: *persevere
-
 
