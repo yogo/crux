@@ -12,8 +12,6 @@ require 'dm-rails/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
-
-
 module Yogo
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -45,8 +43,9 @@ module Yogo
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
+    config.filter_parameters += [:password, :password_confirmation]
   end
 end
 
+# Not sure the best place to require this yet
 require 'yogo/setting'
