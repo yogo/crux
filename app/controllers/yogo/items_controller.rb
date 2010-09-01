@@ -68,6 +68,22 @@ class Yogo::ItemsController < Yogo::BaseController
     end
   end
   
+  with_responder do
+    def csv_header
+      data_collection = controller.send(:parent)
+      data_collection.schema.map{|s| s.name }.join(',') << "\n"
+    end
+    
+    def resource_csv(resource)
+      data_collection = controller.send(:parent)
+      result = ''
+      resource.each do |item|
+        result << data_collection.schema.map{|s| item.send(s.to_s) }.join(',') << "\n"
+      end
+      result
+    end
+  end
+
   private
     
   def method_for_association_build

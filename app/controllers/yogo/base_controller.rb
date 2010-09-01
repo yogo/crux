@@ -1,5 +1,5 @@
 class Yogo::BaseController < InheritedResources::Base
-  respond_to :html, :json
+  respond_to :html, :json, :csv
   
   extend Yogo::Chainable
   self.responder = Class.new(::ActionController::Responder)
@@ -104,5 +104,39 @@ class Yogo::BaseController < InheritedResources::Base
     def collection_json(collection)
       collection.map{|r| resource_json(r) }
     end
+    
   end
+  
+  with_responder do
+    def to_csv
+      case(resource)
+      when DataMapper::Collection
+        controller.send_data(csv_header + resource_csv(resource), :type => :csv)
+      when DataMapper::Resource
+        controller.send_data(csv_header + resource.to_csv, :type => :csv)
+      else
+        to_format
+      end
+    end
+    
+    def csv_header(resource)
+      ''
+    end
+    
+    def resource_csv(resource)
+      result = ''
+      resource.each do |item|
+        result << item.to_csv
+      end
+      result
+    end
+  end
+  
+  public
+  
+  # This should be implemented in controllers for pagination
+  def paginated_scope(relation)
+    instance_variable_set("@#{controller.controller_name}", relation.paginate(:page => controller.params[:page], :per_page => 25))
+  end
+  hide_action :paginated_scope
 end
