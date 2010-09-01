@@ -8,7 +8,7 @@ class UsersController < InheritedResources::Base
   end
   
   def collection
-    @users ||= User.all
+    @users ||= User.paginate(:page => params[:page])
   end
   
 end
