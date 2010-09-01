@@ -13,7 +13,11 @@ Yogo::Application.routes.draw do
       end
       
       resources :collections do
-        resources :items
+        resources :items do
+          collection do
+            get :search
+          end
+        end
         resources :properties
       end
     end

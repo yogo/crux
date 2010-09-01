@@ -7,6 +7,7 @@
 
 require 'facet'
 require 'datamapper/property/raw'
+require 'datamapper/search'
 require 'yogo_data_form_builder'
 require 'yogo_form_builder'
 require 'yogo/chainable'
