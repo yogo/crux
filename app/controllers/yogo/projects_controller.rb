@@ -11,6 +11,11 @@
 class Yogo::ProjectsController < Yogo::BaseController
   belongs_to :role, :user, :optional => true
 
+  def paginated_scope(relation)
+    instance_variable_set("@projects", relation.paginate(:page => params[:page], :per_page => 5))
+  end
+  hide_action :paginated_scope
+
   ##
   # Show all the projects
   #
@@ -107,7 +112,7 @@ class Yogo::ProjectsController < Yogo::BaseController
   end
   
   def collection
-    @projects ||= resource_class.paginate(:page => params[:page], :per_page => 5)
+    @projects ||= resource_class.all #.paginate(:page => params[:page], :per_page => 5)
   end
   
   def resource_class

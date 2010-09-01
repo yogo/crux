@@ -7,6 +7,10 @@ class Yogo::ItemsController < Yogo::BaseController
   
   before_filter :no_blueprint
   
+  def paginated_scope(relation)
+    instance_variable_set("@items", relation.paginate(:page => params[:page], :per_page => 25))
+  end
+  hide_action :paginated_scope
   
   def create
     if params.has_key?(:csv_file)
@@ -25,7 +29,7 @@ class Yogo::ItemsController < Yogo::BaseController
   protected
   
   def collection
-    @items ||= end_of_association_chain.paginate(:page => params[:page], :per_page => 25)
+    @items ||= end_of_association_chain.all #paginate(:page => params[:page], :per_page => 25)
   end
   
   def resource
@@ -42,7 +46,6 @@ class Yogo::ItemsController < Yogo::BaseController
   end
   
   def update_resource(object, attributes)
-    # debugger
     attributes = attributes || parsed_body
     attributes.delete('id')
     attributes = attributes['data'] || {}

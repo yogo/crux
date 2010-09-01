@@ -61,6 +61,17 @@ class Yogo::BaseController < InheritedResources::Base
     include Responders::HttpCacheResponder
   end
   
+  # Handle Pagination
+  with_responder do
+    def to_html
+      if get? && resource.is_a?(DataMapper::Collection)
+        controller.paginated_scope(resource)
+      end
+      super
+    end
+  end
+  
+  # Handle json
   with_responder do
     def to_json
       case(resource)
