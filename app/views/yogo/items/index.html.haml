@@ -65,6 +65,8 @@
 
           - @data_collection.schema.each do |p|
             %td= yogo_show_helper(d, p, @project, @data_collection)
+          - if @data_collection.asset_collection?
+            %td= link_to("Download File", d.file.url ) unless d.file.blank?
 
 / #add-data-link
 /   = link_to(image_tag('add.gif')+' Add Data',
