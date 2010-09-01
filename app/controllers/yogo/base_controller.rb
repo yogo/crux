@@ -5,6 +5,11 @@ class Yogo::BaseController < InheritedResources::Base
   self.responder = Class.new(::ActionController::Responder)
   
   
+  def search
+    @search_collection = collection.search(params[:q])
+    respond_with(@search_collection)
+  end
+  
   extendable do
     def with_responder(&block)
       self.responder = Class.new(self.responder || ::ActionController::Responder)
