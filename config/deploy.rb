@@ -2,7 +2,7 @@ require "bundler/capistrano"
 
 $:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
 require "rvm/capistrano"                  # Load RVM's capistrano plugin.
-set :rvm_ruby_string, 'ruby-1.8.7-p174@crux'        # Or whatever env you want it to run in.
+set :rvm_ruby_string, 'ruby-1.8.7-p174'        # Or whatever env you want it to run in.
 
 
 set :application, "crux"
@@ -11,21 +11,21 @@ set :use_sudo,    false
 set :scm, :git
 set :repository,  "git://github.com/pol/crux.git"
 
-set :branch, "master"
+set :branch, "topic/rails3"
 set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
 
 set :ran_user_settings, false
 
 set :user, "crux"
-set :deploy_to, "/home/crux/"
+set :deploy_to, "/home/crux/rails3/"
 
 server "crux.msu.montana.edu", :app, :web, :db, :primary => true
 
 task :user_settings do
   if !ran_user_settings
     set :user, "crux"
-    set :deploy_to, "/home/crux/"
+    set :deploy_to, "/home/crux/rails3/"
     server "crux.msu.montana.edu", :app, :web, :db, :primary => true
     
     # set :default_environment, { 
@@ -71,15 +71,15 @@ end
 
 namespace :db do
   task :setup do
-    run "mkdir -p #{deploy_to}#{shared_dir}/db/persvr"
-    run "mkdir -p #{deploy_to}#{shared_dir}/db/sqlite3"
-    run "mkdir -p #{deploy_to}#{shared_dir}/vendor/persevere"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/db/persvr"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/db/sqlite3"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/vendor/persevere"
   end
   
   task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/db/persvr #{release_path}/db/persvr"
-    run "ln -nfs #{deploy_to}#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
-    run "ln -nfs #{deploy_to}#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/db/persvr #{release_path}/db/persvr"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
 end
 after "deploy:setup",       "db:setup"
@@ -87,11 +87,11 @@ after "deploy:update_code", "db:symlink"
 
 namespace :tomcat do
   task :setup do
-    run "mkdir -p #{deploy_to}#{shared_dir}/vendor/blazeds"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/vendor/blazeds"
   end
   
   task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/vendor/blazeds #{release_path}/vendor/blazeds"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/vendor/blazeds #{release_path}/vendor/blazeds"
   end
 end
 after "deploy:setup",       "tomcat:setup"
@@ -110,7 +110,7 @@ namespace :kefed do
     path = 'vendor/blazeds/tomcat/webapps/blazeds/kefedEditor'
     ['BioScholar.html','KefedModelEditor.html','main.html'].each do |file|
       upload( File.dirname(__FILE__) + "/../#{path}/#{file}", 
-              "#{deploy_to}#{shared_dir}/#{path}/#{file}")
+              "#{deploy_to}/#{shared_dir}/#{path}/#{file}")
     end    
   end
   
@@ -122,13 +122,13 @@ end
 
 namespace :assets do
   task :setup do
-    run "mkdir -p #{deploy_to}#{shared_dir}/assets/files"
-    run "mkdir -p #{deploy_to}#{shared_dir}/assets/images"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/assets/files"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/assets/images"
   end
   
   task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/assets/files #{release_path}/public/files"
-    run "ln -nfs #{deploy_to}#{shared_dir}/assets/images #{release_path}/public/images"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/assets/files #{release_path}/public/files"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/assets/images #{release_path}/public/images"
   end
 end
 after "deploy:setup",       "assets:setup"
@@ -212,10 +212,10 @@ namespace :persvr do
   end
   
   task :drop do
-    run("bash -c 'cd #{current_path} && rake persvr:drop PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake persvr:drop PERSEVERE_HOME=#{deploy_to}/#{shared_dir}/vendor/persevere RAILS_ENV=production'")
   end
   
   task :version do
-    run("bash -c 'cd #{current_path} && rake persvr:version PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake persvr:version PERSEVERE_HOME=#{deploy_to}/#{shared_dir}/vendor/persevere RAILS_ENV=production'")
   end
 end
