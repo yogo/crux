@@ -46,8 +46,8 @@ gem 'yogo-project',                     :require => 'yogo/project',
 gem 'haml'
 gem 'compass',           '>=0.10.2'
 
-gem 'devise',            '~> 1.1.1'
-gem 'dm-devise',         '~> 1.1.0'
+# gem 'devise',            '~> 1.1.1'
+# gem 'dm-devise',         '~> 1.1.0'
 
 gem 'carrierwave',                     :git => 'git://github.com/jnicklas/carrierwave.git'
 

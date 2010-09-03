@@ -9,8 +9,8 @@ class User
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   # :registerable
-  devise :database_authenticatable, :token_authenticatable,
-         :recoverable, :rememberable, :trackable, :validatable,  :timeoutable
+  # devise :database_authenticatable, :token_authenticatable,
+  #        :recoverable, :rememberable, :trackable, :validatable,  :timeoutable
 
 
   property :id, Serial
@@ -21,6 +21,6 @@ class User
   has n, :roles,    :through => :memberships
   belongs_to :system_role
 
-  validates_confirmation_of :password
+  # validates_confirmation_of :password
   
 end

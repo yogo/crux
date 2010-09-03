@@ -75,9 +75,9 @@ Yogo::Application.routes.draw do
   # just remember to delete public/index.html.
   # root :to => "welcome#index"
 
-  devise_for :users
+  # devise_for :users
 
-  resources :users
+  # resources :users
   
   root :to => "yogo/projects#index"
 
