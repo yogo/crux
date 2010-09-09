@@ -12,6 +12,7 @@ require 'yogo_data_form_builder'
 require 'yogo_form_builder'
 require 'yogo/chainable'
 require 'yogo/collection_ext'
+require 'yogo/datamapper/pagination'
 require 'yogo/project_ext'
 
 # Load the Application Version
