@@ -36,7 +36,7 @@ class Yogo::ItemsController < Yogo::BaseController
   protected
   
   def collection
-    @items ||= end_of_association_chain.all #paginate(:page => params[:page], :per_page => 25)
+    @items ||= end_of_association_chain.all
   end
   
   def resource
@@ -81,7 +81,7 @@ class Yogo::ItemsController < Yogo::BaseController
       data_collection.schema.map{|s| s.name }.join(',') << "\n"
     end
     
-    def resource_csv(resource)
+    def collection_csv(resource)
       data_collection = controller.send(:parent)
       result = ''
       resource.each do |item|

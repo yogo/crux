@@ -9,10 +9,11 @@
 # of the yogo repository.
 
 class Yogo::ProjectsController < Yogo::BaseController
-  belongs_to :role, :user, :optional => true
+  defaults :route_collection_name => :projects, :route_instance_name => :project
 
+  # Setting some pagination for this controller
   def paginated_scope(relation)
-    instance_variable_set("@projects", relation.paginate(:page => params[:page], :per_page => 5))
+    instance_variable_set("@projects", relation.paginate(:page => params[:page], :per_page => 1))
   end
   hide_action :paginated_scope
 
