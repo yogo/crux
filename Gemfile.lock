@@ -18,13 +18,6 @@ GIT
       activesupport (>= 3.0.0.rc)
 
 GIT
-  remote: git://github.com/yogo/will_paginate.git
-  revision: d42c1c1afdc9d4af5b8f9347f5a8ce098186082f
-  branch: rails3
-  specs:
-    will_paginate (3.0.pre2)
-
-GIT
   remote: git://github.com/yogo/yogo-project.git
   revision: 072956506d4b8be470003f0da6cefbad520232c0
   branch: topic/ruby19
@@ -255,6 +248,5 @@ DEPENDENCIES
   rspec-rails (~> 2.0.0.beta.20)
   ruby-debug
   ruby-debug19
-  will_paginate (~> 3.0.pre2)!
   yard
   yogo-project!

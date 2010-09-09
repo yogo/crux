@@ -35,10 +35,6 @@ gem "dm-types",             DM_VERSION, :git => "#{DATAMAPPER}/dm-types.git",
                                         :ref => "674738f2a94788b975e9",
                                         :require => false # don't require dm-type/json
 
-gem "will_paginate",  "~> 3.0.pre2", :git => 'git://github.com/yogo/will_paginate.git', 
-                                     :branch => 'rails3',
-                                     :require  => 'will_paginate'
-
 gem 'yogo-project',                     :require => 'yogo/project',
                                         :branch => 'topic/ruby19',
                                         :git => 'git://github.com/yogo/yogo-project.git'

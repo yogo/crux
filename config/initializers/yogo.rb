@@ -15,5 +15,8 @@ require 'yogo/collection_ext'
 require 'yogo/datamapper/pagination'
 require 'yogo/project_ext'
 
+require 'will_paginate/view_helpers/action_view'
+ActionView::Base.send(:include, WillPaginate::ViewHelpers::ActionView)
+
 # Load the Application Version
 load Rails.root / "VERSION"
