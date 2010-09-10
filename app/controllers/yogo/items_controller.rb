@@ -1,3 +1,5 @@
+require "csv"
+
 class Yogo::ItemsController < Yogo::BaseController
   defaults :collection_name => 'items',
            :instance_name => 'items'
@@ -24,6 +26,11 @@ class Yogo::ItemsController < Yogo::BaseController
         failure.html {redirect_to :action => :index}
       end
     end
+  end
+  
+  def search
+    @search_collection = collection.search(params[:q])
+    respond_with(@search_collection)
   end
   
   protected

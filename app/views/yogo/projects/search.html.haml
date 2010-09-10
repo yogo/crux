@@ -9,13 +9,14 @@
   
 .medium-centered
   %h2 Results
+  
 
 .medium-centered
   #project-search.rbox.dashed
     - unless @projects.empty? 
       %ul
         - for project in @projects
-          %li= link_to(project.name, project_path(project))
+          %li= link_to(project.name, yogo_project_path(project))
 
     - unless @proj_models.empty? 
       - for proj_model in @proj_models

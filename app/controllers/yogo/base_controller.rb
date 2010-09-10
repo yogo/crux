@@ -5,9 +5,13 @@ class Yogo::BaseController < InheritedResources::Base
   self.responder = Class.new(::ActionController::Responder)
   
   
+  # Search through all collections that are available, and produce a result list
   def search
-    @search_collection = collection.search(params[:q])
-    respond_with(@search_collection)
+    @project = Yogo::Project.get(params[:project_id])
+    results = @project.data_collections.map do |collection|
+      [collection, collection.search(params[:q]).count]
+    end
+    respond_with(results)
   end
   
   extendable do
