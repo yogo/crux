@@ -1,6 +1,0 @@
-%div.small-centered-content.boxed
-  %p= @user.name
-  %p= "System Role: #{@user.system_role.name}"
-  %ul
-  - for role in @user.roles
-    %li= role.name

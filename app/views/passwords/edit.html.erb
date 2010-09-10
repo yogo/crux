@@ -1,5 +1,0 @@
-<%- form_for(@user, :url => password_path, :builder => YogoFormBuilder ) do |f| -%>
-  <%= f.password_field(:password, :label => 'New Password') %>
-  <%= f.password_field(:password_confirmation) %>
-  <%= f.submit %>
-<%- end -%>
