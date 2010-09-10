@@ -12,7 +12,7 @@ mysql: &mysql
   adapter: mysql
   host: localhost
   user: crux
-  password:
+  password: preston
 
 persevere: &persevere
   adapter: persevere
@@ -46,7 +46,7 @@ production:
   <<: *defaults
   repositories:
     collection_data:
-      <<: *postgres
+      <<: *mysql
       database: crux_production
     yogo_persevere:
       <<: *persevere
