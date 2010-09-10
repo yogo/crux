@@ -31,7 +31,7 @@
   = will_paginate(collection)
 
 =clear_break
-- form_for(:items, @data_collection.items.new,
+= form_for(@data_collection.items.new, :as => :items,
     :url => yogo_project_collection_items_path(@project, @data_collection),
     :html => { :enctype => 'multipart/form-data' }, :builder => YogoDataFormBuilder) do |f|
   %table#data-table
