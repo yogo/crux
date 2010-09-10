@@ -100,7 +100,7 @@ after "deploy:update_code", "tomcat:symlink"
 namespace :kefed do
   task :upload_swfs do
     path = 'vendor/blazeds/tomcat/webapps/blazeds/kefedEditor'
-    ['BioScholar.swf','KefedModelEditor.swf','main.swf'].each do |file|
+    ['BioScholar.swf','KefedModelEditor.swf','KefedNavigator.swf','main.swf'].each do |file|
       upload( File.dirname(__FILE__) + "/../#{path}/#{file}", 
               "#{deploy_to}#{shared_dir}/#{path}/#{file}")
     end
@@ -108,7 +108,7 @@ namespace :kefed do
   
   task :upload_htmls do
     path = 'vendor/blazeds/tomcat/webapps/blazeds/kefedEditor'
-    ['BioScholar.html','KefedModelEditor.html','main.html'].each do |file|
+    ['BioScholar.html','KefedModelEditor.html','KefedNavigator.swf','main.html'].each do |file|
       upload( File.dirname(__FILE__) + "/../#{path}/#{file}", 
               "#{deploy_to}/#{shared_dir}/#{path}/#{file}")
     end    
