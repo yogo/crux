@@ -100,7 +100,7 @@ class Yogo::ItemsController < Yogo::BaseController
   def parse_csv(file)
     collection
     output = []
-    contents = CSV.read(file.path)
+    contents = FasterCSV.read(file.path)
     header = contents[0]
 
     fields = {}
