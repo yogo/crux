@@ -4,11 +4,11 @@
 #content-block
   - for project in collection
     .content-row-block
-      - if project.yogo_model_uid
-        .project-icon(style = 'margin-left: 10px')
-          = image_tag('kefed.png')
-          / %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{project.yogo_model_uid}" width="100%" height="600")
-          /   %p Your browser does not support iframes.
+      /- if project.yogo_model_uid
+      /  .project-icon(style = 'margin-left: 10px')
+      /    /= image_tag('kefed.png')
+      /    / %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{project.yogo_model_uid}" width="100%" height="600")
+      /    /   %p Your browser does not support iframes.
 
       .project-text
         %h2
