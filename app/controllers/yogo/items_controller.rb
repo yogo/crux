@@ -1,4 +1,4 @@
-require "csv"
+require "fastercsv"
 
 class Yogo::ItemsController < Yogo::BaseController
   defaults :collection_name => 'items',
