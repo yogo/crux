@@ -145,7 +145,7 @@ class Crux::YogoModel
   def measurement_parameters(muid)
     params = measurements[muid]['dependsOn']
     measurement_params = nodes['parameters']
-    measurement_params.delete_if {|k,v| params.include?(k)}
+    measurement_params.delete_if {|k,v| !params.include?(k)}
     unless Crux::YogoModel.is_asset_measurement?(measurements[muid])
       measurement_params[muid] = measurements[muid]
     end
