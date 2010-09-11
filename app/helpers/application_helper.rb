@@ -91,14 +91,15 @@ module ApplicationHelper
   #
   def kefed_editor_swf_url
     if Rails.env == 'production'
-      base_url =  Yogo::Setting[:production_server_tomcat_url] +
-                  "/blazeds/kefedEditor/KefedModelEditor.html?"
-      params =  ['model','schema','data'].map{ |t| 
-                  "#{t}StoreType=persevere&#{t}StoreUrl=" + 
-                  Yogo::Setting[:production_server_persevere_url]
-                }.join('&')
-      # URI.escape(base_url + params)
-      base_url + params + '&'
+      # base_url =  Yogo::Setting[:production_server_tomcat_url] +
+      #             "/blazeds/kefedEditor/KefedModelEditor.html?"
+      # params =  ['model','schema','data'].map{ |t| 
+      #             "#{t}StoreType=persevere&#{t}StoreUrl=" + 
+      #             Yogo::Setting[:production_server_persevere_url]
+      #           }.join('&')
+      # # URI.escape(base_url + params)
+      # base_url + params + '&'
+      "http://crux.msu.montana.edu:8400/blazeds/kefedEditor/KefedModelEditor.html?"
     else
       "http://localhost:8400/blazeds/kefedEditor/KefedModelEditor.html?"
     end
