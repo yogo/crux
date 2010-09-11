@@ -1,7 +1,7 @@
 .DS\_Store
 .bundle
 bin/*
-db/**/*.sqlite3
+db/sqlite3/*.sqlite3
 db/persvr/*
 log/*.log
 public/stylesheets/compiled/*
@@ -9,4 +9,4 @@ tmp/**/*
 vendor/blazeds
 vendor/blazeds/**/*
 vendor/persevere/*
-
+config/database.yml

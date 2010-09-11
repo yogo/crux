@@ -11,7 +11,7 @@ set :use_sudo,    false
 set :scm, :git
 set :repository,  "git://github.com/pol/crux.git"
 
-set :branch, "topic/rails3"
+set :branch, "master"
 set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
 
@@ -27,26 +27,6 @@ task :user_settings do
     set :user, "crux"
     set :deploy_to, "/home/crux/rails3/"
     server "crux.msu.montana.edu", :app, :web, :db, :primary => true
-    
-    # set :default_environment, { 
-    #   'PATH' => "/usr/local/rvm/bin:/usr/local/rvm/bin:/home/crux/.gem/ruby/1.8/bin:/usr/local/rvm/gems/ruby-1.8.7-p174/bin:/usr/local/rvm/gems/ruby-1.8.7-p174@global/bin:/usr/local/rvm/rubies/ruby-1.8.7-p174/bin:$PATH",
-    #   'RUBY_VERSION' => 'ruby 1.8.7',
-    #   'GEM_HOME' => '/usr/local/rvm/gems/ruby-1.8.7-p174',
-    #   'GEM_PATH' => '/usr/local/rvm/gems/ruby-1.8.7-p174:/usr/local/rvm/gems/ruby-1.8.7-p174@global' 
-    # }
-    # server_prompt = "What server are you deploying to?"
-    # set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
-    # role :web, "#{temp_server}"
-    # role :app, "#{temp_server}"
-    # user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
-    # set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
-    # if temp_user.empty?
-    #   set :user, "yogo"
-    #   set :deploy_to, "/home/yogo/rails/yogo/"
-    # else
-    #   set :user, "#{temp_user}"
-    #   set :deploy_to, "/home/#{temp_user}/rails/yogo/"
-    # end
     set :ran_user_settings, true
   end
 end
@@ -73,6 +53,7 @@ namespace :db do
   task :setup do
     run "mkdir -p #{deploy_to}/#{shared_dir}/db/persvr"
     run "mkdir -p #{deploy_to}/#{shared_dir}/db/sqlite3"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/config"
     run "mkdir -p #{deploy_to}/#{shared_dir}/vendor/persevere"
   end
   
@@ -80,6 +61,7 @@ namespace :db do
     run "ln -nfs #{deploy_to}/#{shared_dir}/db/persvr #{release_path}/db/persvr"
     run "ln -nfs #{deploy_to}/#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
     run "ln -nfs #{deploy_to}/#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/config/database.yml #{release_path}/config/database.yml"
   end
 end
 after "deploy:setup",       "db:setup"
@@ -100,7 +82,7 @@ after "deploy:update_code", "tomcat:symlink"
 namespace :kefed do
   task :upload_swfs do
     path = 'vendor/blazeds/tomcat/webapps/blazeds/kefedEditor'
-    ['BioScholar.swf','KefedModelEditor.swf','KefedNavigator.swf','main.swf'].each do |file|
+    ['BioScholar.swf','KefedModelEditor.swf','KefedModelNavigator.swf','main.swf'].each do |file|
       upload( File.dirname(__FILE__) + "/../#{path}/#{file}", 
               "#{deploy_to}#{shared_dir}/#{path}/#{file}")
     end
@@ -108,7 +90,7 @@ namespace :kefed do
   
   task :upload_htmls do
     path = 'vendor/blazeds/tomcat/webapps/blazeds/kefedEditor'
-    ['BioScholar.html','KefedModelEditor.html','KefedNavigator.swf','main.html'].each do |file|
+    ['BioScholar.html','KefedModelEditor.html','KefedModelNavigator.swf','main.html'].each do |file|
       upload( File.dirname(__FILE__) + "/../#{path}/#{file}", 
               "#{deploy_to}/#{shared_dir}/#{path}/#{file}")
     end    
