@@ -150,14 +150,14 @@ namespace :tomcat do
   task :start do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake tomcat:start RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake tomcat:start RAILS_ENV=production' JAVA_HOME=/usr/lib/jvm/java-6-sun")
   end
   
   desc "Stop the Tomcat Instance on the server (blazeds)"
   task :stop do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake tomcat:stop RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake tomcat:stop RAILS_ENV=production' JAVA_HOME=/usr/lib/jvm/java-6-sun")
   end
   
   desc "Restart the tomcat instance on the servere (blazeds)"
@@ -178,14 +178,14 @@ namespace :persvr do
   task :start do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production' JAVA_HOME=/usr/lib/jvm/java-6-sun")
   end
   
   desc "Stop Persevere on the server"
   task :stop do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake persvr:stop PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production' JAVA_HOME=/usr/lib/jvm/java-6-sun")
   end
   
   task :restart do
