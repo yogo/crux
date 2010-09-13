@@ -56,7 +56,7 @@ body
     #logo
       padding-left: 10px
       height: 50px
-      font-size: 2em
+      font-size: 1.25em
       font-variant: small-caps
       +column(15)
     #login-links
@@ -351,138 +351,138 @@ body
 
 
 // Blueprint Body Container
-body.bp
-  // Header
-  #container
-    +container
-    // To left align the grid
-    margin: 0
-    margin-top: -2em
-  // Sidebar
-  #sidebar
-    $sidebar_columns: floor($blueprint_grid_columns / 4)
-    +column($sidebar_columns)
-  // Model Editor iFrame
-  #editor_frame
-    +column(22)
-    +last
-    height: 400px
-    margin-bottom: 2em
-  // Content Frame
-  #content
-    +column($blueprint_grid_columns)
-    #content-title
-      margin-top: 0
-      text-align: left
-      +column(12)
-    #content-actions
-      +column(10)
-      +last
-      //margin: -.5em 0 1em 0
-      .content-action-links
-        float: right
-      .content-pagination-links
-        text-align: right
-        line-height: 2em
-        +column(6)
-        +last
-    h1#project-title
-      margin-top: 0
-    #content-block
-      +column($blueprint_grid_columns - 2)
-    #user-form
-      margin-left: 7em
-    // No Project Index
-    .description-column, .title-column
-      h3
-        text-align: center
-    .description-column
-      margin-top: -2em
-      +column(7)
-      +prepend(1)
-      p
-        margin-bottom: 0
-      .rbox
-        margin-bottom: 1em
-    .title-column
-      margin-top: -2em
-      +column(14)
-      +last
-      h1
-        margin-bottom: 1.5em
-      #getting-started
-        +prepend(2)
-        +column(10)
-        +append(2)
-        +last
-        margin-top: 4em
-    // CSV Question
-    .scratch, .spreadsheet
-      +column(6)
-      height: 150px
-    .spreadsheet
-      +last
-    // CSV Import
-    .import-form
-      +prepend(5)
-      +column(12)
-      +append(5)
-      +last
-    .instructions
-      +prepend(1)
-      +column(12)
-    .example
-      +prepend(1)
-      +column(8)
-      +last
-      p
-        font-style: italic
-    // Yogo Dashboard
-    .content-row-block
-      +column(22)
-      +last
-      +borders
-      margin: 0
-      .project-icon
-        +column(8)
-        padding-top: 1em
-        img
-          margin-left: 10px
-          border: 1px solid silver
-          width: 300px
-      .project-text
-        +prepend(1)
-        +column(12)
-        .edit-link
-          text-align: right
-      .project-datasets
-        margin-top: 1em
-        +prepend(1)
-        +column(10)
-    .project-status
-      font-size: .4em
-      font-style: italic
-
-    // centered content containers
-    .extra-small-centered
-      +prepend(6)
-      +column(10)
-      +append(6)
-      +last
-    .small-centered
-      +prepend(4)
-      +column(14)
-      +append(4)
-      +last
-    .medium-centered
-      +prepend(3)
-      +column(16)
-      +append(3)
-      +last
-    .large-centered
-      +prepend(2)
-      +column(18)
-      +append(2)
-      +last
+// body.bp
+//   // Header
+//   #container
+//     +container
+//     // To left align the grid
+//     margin: 0
+//     margin-top: -2em
+//   // Sidebar
+//   #sidebar
+//     $sidebar_columns: floor($blueprint_grid_columns / 4)
+//     +column($sidebar_columns)
+//   // Model Editor iFrame
+//   #editor_frame
+//     +column(22)
+//     +last
+//     height: 400px
+//     margin-bottom: 2em
+//   // Content Frame
+//   #content
+//     +column($blueprint_grid_columns)
+//     #content-title
+//       margin-top: 0
+//       text-align: left
+//       +column(12)
+//     #content-actions
+//       +column(10)
+//       +last
+//       //margin: -.5em 0 1em 0
+//       .content-action-links
+//         float: right
+//       .content-pagination-links
+//         text-align: right
+//         line-height: 2em
+//         +column(6)
+//         +last
+//     h1#project-title
+//       margin-top: 0
+//     #content-block
+//       +column($blueprint_grid_columns - 2)
+//     #user-form
+//       margin-left: 7em
+//     // No Project Index
+//     .description-column, .title-column
+//       h3
+//         text-align: center
+//     .description-column
+//       margin-top: -2em
+//       +column(7)
+//       +prepend(1)
+//       p
+//         margin-bottom: 0
+//       .rbox
+//         margin-bottom: 1em
+//     .title-column
+//       margin-top: -2em
+//       +column(14)
+//       +last
+//       h1
+//         margin-bottom: 1.5em
+//       #getting-started
+//         +prepend(2)
+//         +column(10)
+//         +append(2)
+//         +last
+//         margin-top: 4em
+//     // CSV Question
+//     .scratch, .spreadsheet
+//       +column(6)
+//       height: 150px
+//     .spreadsheet
+//       +last
+//     // CSV Import
+//     .import-form
+//       +prepend(5)
+//       +column(12)
+//       +append(5)
+//       +last
+//     .instructions
+//       +prepend(1)
+//       +column(12)
+//     .example
+//       +prepend(1)
+//       +column(8)
+//       +last
+//       p
+//         font-style: italic
+//     // Yogo Dashboard
+//     .content-row-block
+//       +column(22)
+//       +last
+//       +borders
+//       margin: 0
+//       .project-icon
+//         +column(8)
+//         padding-top: 1em
+//         img
+//           margin-left: 10px
+//           border: 1px solid silver
+//           width: 300px
+//       .project-text
+//         +prepend(1)
+//         +column(12)
+//         .edit-link
+//           text-align: right
+//       .project-datasets
+//         margin-top: 1em
+//         +prepend(1)
+//         +column(10)
+//     .project-status
+//       font-size: .4em
+//       font-style: italic
+// 
+//     // centered content containers
+//     .extra-small-centered
+//       +prepend(6)
+//       +column(10)
+//       +append(6)
+//       +last
+//     .small-centered
+//       +prepend(4)
+//       +column(14)
+//       +append(4)
+//       +last
+//     .medium-centered
+//       +prepend(3)
+//       +column(16)
+//       +append(3)
+//       +last
+//     .large-centered
+//       +prepend(2)
+//       +column(18)
+//       +append(2)
+//       +last
 #project-user-roles-form table td
   width: 3em
