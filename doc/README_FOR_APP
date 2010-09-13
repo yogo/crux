@@ -1,2 +1,14 @@
-Use this README file to introduce your application and point to useful places in the API for learning more.
-Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+---------------------
+Crux Prototype README
+---------------------
+
+
+
+
+----------
+Change Log
+----------
+
+v0.7.0
+Convert to rails3
+Fix saving issues
