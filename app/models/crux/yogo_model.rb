@@ -15,13 +15,13 @@ class Crux::YogoModel
     :yogo_persevere
   end
   
-  property :id,           Serial,                          :writer => :private
-  property :source,       String,                          :writer => :private
-  property :model_name,    String,   :field => 'modelName', :writer => :private
-  property :type,         String,                          :writer => :private
+  property :id,           Serial,                            :writer => :private
+  property :source,       String,                            :writer => :private
+  property :model_name,    String,   :field => 'modelName',  :writer => :private
+  property :type,         String,                            :writer => :private
   # property :dateTime,     DateTime, :field => 'dateTime',  :writer => :private
-  property :description,  Text,                            :writer => :private
-  property :uid,          String,                         :writer => :private
+  property :description,  Text,                              :writer => :private
+  property :uid,          String,                            :writer => :private
   property :edges,        DataMapper::Property::Raw,         :writer => :private
   property :nodes,        DataMapper::Property::Raw,         :writer => :private
   
