@@ -14,6 +14,9 @@ require 'yogo/chainable'
 require 'yogo/collection_ext'
 require 'yogo/datamapper/pagination'
 require 'yogo/project_ext'
+require 'yogo/responders/csv'
+require 'yogo/responders/json'
+require 'yogo/responders/pagination'
 
 require 'will_paginate/view_helpers/action_view'
 ActionView::Base.send(:include, WillPaginate::ViewHelpers::ActionView)
