@@ -15,6 +15,7 @@
       :confirm => "Are you sure you want to delete the #{@project.name} project?\nThere is no undo! Continue?" )
     = form_for(@project,:as => :project, :builder => YogoFormBuilder) do |f|
       %h3= f.check_box(:is_private, :label => image_tag('icons/private_16.png') + " Private")
+      %h3= f.text_field(:investigator, :label => "Primary Investigator")
       %h3= f.text_area(:description, :label => "Project Description: ")
 
       - unless Yogo::Setting[:local_only]

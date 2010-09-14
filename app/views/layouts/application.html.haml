@@ -17,22 +17,9 @@
 
     %link{:rel => "shortcut icon", :href => "#{image_path("favicon.png")}"}/
 
-  %body.typography
+  %body
     / Header (including optional menus)
     #header
-      #logo 
-        Crux /Users/pol/Library/Application Support/TextMate/Pristine Copy/Support/lib/progress.rb:57: warning: shadowing outer local variable - params
-        /Users/pol/Library/Application Support/TextMate/Pristine Copy/Support/lib/ui.rb:292:in /bin/bash: -c: line 0: unexpected EOF while looking for matching `''
-/bin/bash: -c: line 2: syntax error: unexpected end of fileblock in initialize'
-          from /Users/pol/Library/Application Support/TextMate/Pristine Copy/Support/lib/ui.rb:291:in /bin/bash: -c: line 0: unexpected EOF while looking for matching `''
-/bin/bash: -c: line 2: syntax error: unexpected end of fileinitialize'
-          from /Users/pol/Library/Application Support/TextMate/Pristine Copy/Support/lib/ui.rb:20:in /bin/bash: -c: line 0: unexpected EOF while looking for matching `''
-/bin/bash: -c: line 2: syntax error: unexpected end of filedialog'
-          from /Users/pol/Library/Application Support/TextMate/Pristine Copy/Support/lib/progress.rb:42:in /bin/bash: -c: line 0: unexpected EOF while looking for matching `''
-/bin/bash: -c: line 2: syntax error: unexpected end of filegetLinkWithTitle'
-          from /tmp/temp_textmate.UWQ4XG:25:in 
-        %span.smaller.emphasis 
-          alpha v#{CRUX_VERSION}
       - unless Yogo::Setting['local_only']
         #login-links
           - if logged_in?
@@ -41,36 +28,30 @@
             = link_to("logout", logout_path)
           - else
             = link_to("Login", login_path)
-      =clear_break
-      #menu.rbox.tight
-        #menu-left-col
-          /= controller.controller_name + ":" + controller.action_name
-          = render(:partial => 'layouts/page_header')
-        #menu-right-col
-          = render(:partial => 'layouts/menu_links') unless @no_menu
-          =# render(:partial => 'layouts/search') unless @no_search
-    =clear_break 
-    /Grid Container 
-    #container
-      #flash
-        - if flash[:notice]
-          - if flash[:notice_link]
-            %p.notice= link_to(flash[:notice], flash[:notice_link])
-          - else
-            %p.notice= flash[:notice]
-        - if flash[:error]
-          - if flash[:error_link]
-            %p.error= link_to(flash[:error], flash[:error_link])
-          - else
-            %p.error= flash[:error]
-        - if flash[:alert]
-          - if flash[:error_link]
-            %p.error= link_to(flash[:error], flash[:error_link])
-          - else
-            %p.error= flash[:alert]
-      =clear_break 
-      #content
-        = yield 
+      #logo 
+        Crux Prototype
+        %span.smaller.emphasis 
+          alpha v#{CRUX_VERSION}
+      #menu
+        = render(:partial => "menus/#{controller_name}_#{action_name}") rescue nil
+        #flash
+          - if flash[:notice]
+            - if flash[:notice_link]
+              .notice= link_to(flash[:notice], flash[:notice_link])
+            - else
+              .notice= flash[:notice]
+          - if flash[:error]
+            - if flash[:error_link]
+              .error= link_to(flash[:error], flash[:error_link])
+            - else
+              .error= flash[:error]
+          - if flash[:alert]
+            - if flash[:error_link]
+              .error= link_to(flash[:error], flash[:error_link])
+            - else
+              .error= flash[:alert]
+    #content
+      = yield 
 
     #footnotes_holder
     =clear_break   

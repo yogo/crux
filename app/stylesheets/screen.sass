@@ -40,7 +40,7 @@ form.bp
 body
   +blueprint-typography(true)
   margin: 0 1em
-  padding-top: 6em
+  padding-top: 100px
   // Header (always blueprint layout)
   #header
     background: #EEE image-url('logo_gradient.png') repeat-x fixed top
@@ -51,65 +51,46 @@ body
     top: 0
     overflow: none
     clear: both
-    height: 65px
     border-bottom: 1px solid #DDD
     #logo
       padding-left: 10px
-      height: 50px
       font-size: 1.25em
       font-variant: small-caps
-      +column(15)
     #login-links
-      +column(7, true)
+      float: right
       text-align: right
       line-height: 3em
     #menu
-      background: #eeeeee image-url("shadow-bk.png") repeat-x fixed top
-      margin-top: -1em
-      font-size: 0.9em
-      margin-left: 10px
-      +column(22, true)
-      border: 1px solid #f2f2f2 - #555
-      background-color: #FFF
-      padding: .5em 2px
-      #menu-left-col
-        +column(12)
-        #content-title
-          margin-left: 10px
-      #menu-right-col
-        +column(10, true)
-        #menu-links
-          line-height: 2em
-          text-align: right
-          margin-right: 10px
-        #search-tab
-          text-align: right
-          margin-right: 10px
-          .button-link
-            font-size: 0.9em
-            line-height: 1.7em
-            padding: 1px 3px 0px
-  // Flash Notices always use blueprint layout
-  #flash
-    +prepend(4)
-    +column(14, true)
-    +append(4)
-    text-align: center
-    height: 4em
-    margin-top: 2em
-    .error, .notice
-      padding: 0
-      p
-        margin: 0
-        padding: 0
-    .notice
-      background: none repeat scroll 0 0 #FFF6BF
-      border: 2px solid #FFD324
-      color: #514721
-    .error
-      background: none repeat scroll 0 0 #FBE3E4
-      border: 2px solid #FBC2C4
-      color: #8A1F11
+      -moz-box-shadow: 0px 5px 10px #666
+      -webkit-box-shadow: 0px 5px 10px #666
+      box-shadow: 0px 5px 10px #666
+      #menu-title
+        height: 25px
+        padding: 5px 10px
+        background-color: $menu_background_color
+        border:
+          top: 1px solid $border_color
+          bottom: 1px solid $border_color
+      #menu-actions
+        height: 28px
+        padding-left: 10px
+        background-color: $menu_actions_background_color 
+        border-bottom: 1px solid $border_color
+      #flash
+        text-align: center
+        .error, .notice
+          padding: 0
+          p
+            margin: 0
+            padding: 0
+        .notice
+          background: none repeat scroll 0 0 #FFF6BF
+          border: 2px solid #FFD324
+          color: #514721
+        .error
+          background: none repeat scroll 0 0 #FBE3E4
+          border: 2px solid #FBC2C4
+          color: #8A1F11
   // Footer
   #footer
     +column($blueprint_grid_columns - 2)
@@ -219,9 +200,9 @@ body
       border-style: dashed
   // H* Tags
   h1 
-    font-size: 2.5em
-    line-height: 1
-    margin-bottom: 0.5em
+    font-size: 2em
+    line-height: 1em
+    margin-bottom: 0px
     &.no-gap
       margin-top: -1.2em
     &.center
@@ -277,13 +258,12 @@ body
   img
     border: 0
   // Content Header Elements that Occur Outside of bp.
-  #container
+  #content
     margin: 0
-    margin-top: -2em
+    padding-top: 1em
   #content-title, #data-content-title
     margin-top: 0
     text-align: left
-    margin-bottom: 10px
     #subtitle
       font-size: .5em
       color: #777
@@ -303,7 +283,19 @@ body
       +column(6, true)
   #data-content-actions
     +column(6, true)
-  // Project Dashboard
+  // All Projects Dashboard (Project#index)
+  .content-row-block
+    border: 1px solid #EEE
+    margin-bottom: 1em
+  .project-title
+    background-color: #EEE
+    padding-left: 5px
+  .project-links
+    margin-left: 5px
+    +column(4)
+  .project-text
+    float: left
+  // Project Dashboard (Project#show)
   #kefed-navigator
     +column(10)
     img
@@ -316,7 +308,6 @@ body
     h2
       +prepend(1)
   .vertical-links
-    +prepend(1)
     .link
       .button-link
         margin-bottom: 3px
