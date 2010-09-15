@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 RAILS_VERSION = '~> 3.0.0'
-DM_VERSION    = '~> 1.0.0'
+DM_VERSION    = '~>1.0.0'
 RSPEC_VERSION = '~> 2.0.0.beta.20'
 
 DATAMAPPER = 'git://github.com/datamapper'
