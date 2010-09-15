@@ -1,10 +1,6 @@
-.small-centered
-  %h1#content-title New Project
-
-.small-centered
-  .rbox.dashed
-    - form_for(:project, @project, :url => yogo_projects_path, :builder => YogoFormBuilder) do |form|
-      = render :partial => 'yogo/projects/form', :locals => {:f => form}
-      .form-element
-        =form.submit('Save and Continue', :class => 'button-link')
-        = link_to('Cancel', root_path, :class => 'cancel')
+.rbox.dashed.small.centered
+  - form_for(:project, @project, :url => yogo_projects_path, :builder => YogoFormBuilder) do |form|
+    = render :partial => 'yogo/projects/form', :locals => {:f => form}
+    .form-element
+      =form.submit('Save and Continue', :class => 'button-link')
+      = link_to('Cancel', root_path, :class => 'cancel')

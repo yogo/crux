@@ -13,6 +13,9 @@
 // Import the non-default scaffolding module.
 @import "blueprint/scaffolding"
 
+// Icon links
+@import "partials/icon_links.sass"
+
 // Border Mixins
 =borders
   border: 1px solid $border_color
@@ -72,10 +75,10 @@ body
           top: 1px solid $border_color
           bottom: 1px solid $border_color
       #menu-actions
-        height: 28px
-        padding-left: 10px
+        padding: 3px 5px
         background-color: $menu_actions_background_color 
         border-bottom: 1px solid $border_color
+        font-size: 1.2em
       #flash
         text-align: center
         .error, .notice
@@ -93,8 +96,8 @@ body
           color: #8A1F11
   // Footer
   #footer
-    +column($blueprint_grid_columns - 2)
-    text-align: center
+    text-align: right
+    color: #AAA
   #footnotes_holder
     +prepend(2)
     +column(18)
@@ -135,6 +138,7 @@ body
   // Links
   a
     text-decoration: none
+    font-weight: bold
     &:hover
       text-decoration: underline
   // Button Links
@@ -198,6 +202,17 @@ body
       padding: .5em
     &.dashed
       border-style: dashed
+    &.centered
+      margin: 0px auto
+    &.extra-small
+      width: 30px * 10
+    &.small
+      width: 30px * 14
+    &.medium
+      width: 30px * 16
+    &.large
+      width: 30px * 18
+
   // H* Tags
   h1 
     font-size: 2em
@@ -291,8 +306,9 @@ body
     background-color: #EEE
     padding-left: 5px
   .project-links
+    +column(5,true)
     margin-left: 5px
-    +column(4)
+    font-size: 1em
   .project-text
     float: left
   // Project Dashboard (Project#show)
@@ -309,10 +325,7 @@ body
       +prepend(1)
   .vertical-links
     .link
-      .button-link
-        margin-bottom: 3px
-        text-align: center
-        +column(4)
+      margin-bottom: 5px
   .dataset-info
     +column(16)
     +last
@@ -454,26 +467,6 @@ body
 //       font-size: .4em
 //       font-style: italic
 // 
-//     // centered content containers
-//     .extra-small-centered
-//       +prepend(6)
-//       +column(10)
-//       +append(6)
-//       +last
-//     .small-centered
-//       +prepend(4)
-//       +column(14)
-//       +append(4)
-//       +last
-//     .medium-centered
-//       +prepend(3)
-//       +column(16)
-//       +append(3)
-//       +last
-//     .large-centered
-//       +prepend(2)
-//       +column(18)
-//       +append(2)
-//       +last
+
 #project-user-roles-form table td
   width: 3em

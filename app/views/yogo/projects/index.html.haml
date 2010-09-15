@@ -15,22 +15,22 @@
         = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
       .project-links
         .vertical-links
-          .link= link_to("Project Dashboard", yogo_project_path(project), :class => 'icon icon-project')
+          .link= link_to("Project Dashboard", yogo_project_path(project), :class => 'icon icon-projects')
           - if project.yogo_model_uid
-            .link= link_to("Edit Experimental Design", kefed_editor_yogo_project_url(project, :uid => project.yogo_model_uid), :class => 'icon icon-exp-design')
+            .link= link_to("Experimental Design", kefed_editor_yogo_project_url(project, :uid => project.yogo_model_uid), :class => 'icon icon-exp-design')
           - else
-            .link= link_to("Add Experimental Design", kefed_library_yogo_project_url(project), :class => 'icon icon-exp-design')
+            .link= link_to("Create Experimental Design", kefed_library_yogo_project_url(project))
           /.link= link_to("Import Spreadsheet", import_csv_path(project), :class => 'button-link')
           .link= link_to("Project Settings", edit_yogo_project_path(project), :class => 'icon icon-settings')
           =clear_break
       .project-text
         %p.rbox.tight
-          %strong= link_to('Project Investigator', edit_yogo_project_path(project), :title => 'Edit Project Investigator')
+          = link_to('Project Investigator', edit_yogo_project_path(project), :title => 'Edit Project Investigator')
           =clear_break
           #{project.investigator || 'none' }
           =clear_break
           - if project.description && project.description.length > 0
-            %strong= link_to('Project Description', edit_yogo_project_path(project), :title => 'Edit Project Description')
+            = link_to('Project Description', edit_yogo_project_path(project), :title => 'Edit Project Description')
             =clear_break
             %em= tooltip(project.description, 
                     project.name + ' Description', 200)

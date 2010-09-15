@@ -13,7 +13,7 @@ class Yogo::ProjectsController < Yogo::BaseController
 
   # Setting some pagination for this controller
   def paginated_scope(relation)
-    instance_variable_set("@projects", relation.paginate(:page => params[:page], :per_page => 1))
+    instance_variable_set("@projects", relation.paginate(:page => params[:page], :per_page => 5))
   end
   hide_action :paginated_scope
 
