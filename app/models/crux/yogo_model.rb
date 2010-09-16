@@ -141,12 +141,17 @@ class Crux::YogoModel
     nodes['measurements']
   end
   
+  def parameters
+    nodes['parameters']
+  end
+  
   # Return the params plus the measurement itself if appropriate
-  def measurement_parameters(muid)
+  def measurement_parameters(muid, include_measurement=true)
+    muid = muid.to_s.upcase # in case the muid is a UUID
     params = measurements[muid]['dependsOn']
     measurement_params = nodes['parameters']
     measurement_params.delete_if {|k,v| !params.include?(k)}
-    unless Crux::YogoModel.is_asset_measurement?(measurements[muid])
+    if include_measurement && !Crux::YogoModel.is_asset_measurement?(measurements[muid])
       measurement_params[muid] = measurements[muid]
     end
     measurement_params

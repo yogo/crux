@@ -1,30 +1,15 @@
-/ %h1#content-title
-/   = "Experiment: " + @project.name
-/   /&gt;
-/   /= @model.public_name + " (#{@model.count})"
-/ 
-#content-actions
-  .content-action-links
-    = link_to("Project Settings", yogo_project_path(@project), :class => 'medium-button-link') 
-    = link_to("Edit Experimental Design", kefed_editor_yogo_project_url(@project, :uid => @project.yogo_model_uid), :class => 'medium-button-link')
-/ 
 /   /- if action_name.eql?("search")
 /   /  = link_to("Download CSV", search_project_yogo_data_path(@project, @model,
 /   /      :search_term => params[:search_term], :format => 'csv'), :class => "button-link")
 /   /- else
 /   /  = link_to("Download CSV", project_yogo_data_index_path(@project, @model, :format => 'csv'),
 /   /      :class => "button-link")
-
-#csv-upload
-  = form_for(:csv_file, :url => yogo_project_collection_items_path(@project.id, @data_collection),
-             :html => { :enctype => 'multipart/form-data' }, :builder => YogoDataFormBuilder) do |f|
-    = f.file_field(:csv_file_name)
-    = f.submit
-  = link_to("Download CSV of Data", yogo_project_collection_items_path(@project, @data_collection, :format => :csv))
+  
     
 #measurement-tabs
-  - @project.kefed_ordered_models.each do |m|
-    = link_to(m.name, yogo_project_collection_items_path(@project, m), :class => (m == @data_collection) ? 'selected' : '')
+  %ul
+    - @project.kefed_ordered_models.each do |m|
+      %li= link_to(m.name, yogo_project_collection_items_path(@project, m), :class => (m == @data_collection) ? 'selected' : '')
 
 #pagination-links
   /= "Search results for: <span class='bold'>#{@search_term}</span><br /> " if @search_term

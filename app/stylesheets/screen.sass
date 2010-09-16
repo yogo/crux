@@ -79,6 +79,8 @@ body
         background-color: $menu_actions_background_color 
         border-bottom: 1px solid $border_color
         font-size: 1.2em
+      form
+        display: inline
       #flash
         text-align: center
         .error, .notice
@@ -167,11 +169,15 @@ body
   .medium-button-link
     font-size: 1.25em
   #measurement-tabs
+    width: 100%
+    ul
+      list-style-type: none
+      padding: 0
+      li
+        display: inline
     a
       border: 1px solid silver
       color: silver
-      display: block
-      float: left
       height: 3em
       margin: 0.2em
       padding: 3px
@@ -316,9 +322,8 @@ body
     +column(10)
     img
       border: 1px solid silver
-  #measurements
+  #project-info
     float: left
-    border: 1px solid silver
   .dataset-name
     +column(6)
     h2

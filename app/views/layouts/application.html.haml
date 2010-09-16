@@ -33,7 +33,7 @@
         %span.smaller.emphasis 
           alpha v#{CRUX_VERSION}
       #menu
-        = render(:partial => "menus/#{controller_name}_#{action_name}") rescue nil
+        = render(:partial => "menus/#{controller_name}_#{action_name}") 
         #flash
           - if flash[:notice]
             - if flash[:notice_link]

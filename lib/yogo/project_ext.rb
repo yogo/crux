@@ -32,7 +32,7 @@ module Yogo
     
     def yogo_model
       # maybe cache this later
-      @yogo_model = DataMapper.repository(:yogo_persevere){ Crux::YogoModel.first(:uid => yogo_model_uid.to_s.upcase ) }
+      @yogo_model = ::DataMapper.repository(:yogo_persevere){ Crux::YogoModel.first(:uid => yogo_model_uid.to_s.upcase ) }
     end
     
     # Construct the models from the kefed diagram
