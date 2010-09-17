@@ -7,9 +7,9 @@ module Yogo
     module Csv
       def to_csv
         case(resource)
-        when DataMapper::Collection
+        when ::DataMapper::Collection
           controller.send_data(csv_header(resource) + collection_csv(resource), :type => :csv)
-        when DataMapper::Resource
+        when ::DataMapper::Resource
           controller.send_data(csv_header(resource) + resource.to_csv, :type => :csv)
         else
           to_format
