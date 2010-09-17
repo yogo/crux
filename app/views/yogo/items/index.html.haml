@@ -5,53 +5,52 @@
 /   /  = link_to("Download CSV", project_yogo_data_index_path(@project, @model, :format => 'csv'),
 /   /      :class => "button-link")
   
-    
 #measurement-tabs
   %ul
     - @project.kefed_ordered_models.each do |m|
       %li= link_to(m.name, yogo_project_collection_items_path(@project, m), :class => (m == @data_collection) ? 'selected' : '')
+#data-table-box
+  #pagination-links
+    /= "Search results for: <span class='bold'>#{@search_term}</span><br /> " if @search_term
+    = will_paginate(collection)
 
-#pagination-links
-  /= "Search results for: <span class='bold'>#{@search_term}</span><br /> " if @search_term
-  = will_paginate(collection)
-
-=clear_break
-= form_for(@data_collection.items.new, :as => :items,
-    :url => yogo_project_collection_items_path(@project, @data_collection),
-    :html => { :enctype => 'multipart/form-data' }, :builder => YogoDataFormBuilder) do |f|
-  %table#data-table
-    %thead
-      %tr
-        %th.data-table-actions
-        - @data_collection.schema.each do |h|
-          %th= h.name
-        - if @data_collection.asset_collection?
-          %th= @data_collection.name
-      %tr
-        %td= f.submit("Create #{@data_collection.name}")
-        /- @data_collection.items.model.properties.each do |p|
-        - @data_collection.schema.each do |p|
-          %td= f.text_field(p.to_s)
-          /%td= f.field_for_param(@data_collection.data_model.properties[p.to_s])
-        - if @data_collection.asset_collection?
-          %td= f.file_field(:file)
-
-      - @items.each do |d|
-        %tr{:class => cycle("cycle-odd","cycle-even")}
-          %td.data-table-actions
-            .actions
-              / = link_to(image_tag('view.gif', :alt => "View Item", :title => "View Item"),
-              /                   project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id))
-              /               = link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"),
-              /                   edit_project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id))
-              /               = link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"),
-              /                   project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id),
-              /                   :method => :delete, :confirm => "There is no undo.\n Continue?")
-
-          - @data_collection.schema.each do |p|
-            %td= yogo_show_helper(d, p, @project, @data_collection)
+  =clear_break
+  = form_for(@data_collection.items.new, :as => :items,
+      :url => yogo_project_collection_items_path(@project, @data_collection),
+      :html => { :enctype => 'multipart/form-data' }, :builder => YogoDataFormBuilder) do |f|
+    %table#data-table
+      %thead
+        %tr
+          %th.data-table-actions
+          - @data_collection.schema.each do |h|
+            %th= h.name
           - if @data_collection.asset_collection?
-            %td= link_to("Download File", d.file.url ) unless d.file.blank?
+            %th= @data_collection.name
+        %tr
+          %td= f.submit("Create #{@data_collection.name}")
+          /- @data_collection.items.model.properties.each do |p|
+          - @data_collection.schema.each do |p|
+            %td= f.text_field(p.to_s)
+            /%td= f.field_for_param(@data_collection.data_model.properties[p.to_s])
+          - if @data_collection.asset_collection?
+            %td= f.file_field(:file)
+
+        - @items.each do |d|
+          %tr{:class => cycle("cycle-odd","cycle-even")}
+            %td.data-table-actions
+              .actions
+                / = link_to(image_tag('view.gif', :alt => "View Item", :title => "View Item"),
+                /                   project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id))
+                /               = link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"),
+                /                   edit_project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id))
+                /               = link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"),
+                /                   project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id),
+                /                   :method => :delete, :confirm => "There is no undo.\n Continue?")
+
+            - @data_collection.schema.each do |p|
+              %td= yogo_show_helper(d, p, @project, @data_collection)
+            - if @data_collection.asset_collection?
+              %td= link_to("Download File", d.file.url ) unless d.file.blank?
 
 / #add-data-link
 /   = link_to(image_tag('add.gif')+' Add Data',

@@ -164,28 +164,7 @@ body
       background-color: #e2e2e2
       text-decoration: none
       cursor: pointer
-  .big-button-link
-    font-size: 1.5em
-  .medium-button-link
-    font-size: 1.25em
-  #measurement-tabs
-    width: 100%
-    ul
-      list-style-type: none
-      padding: 0
-      li
-        display: inline
-    a
-      border: 1px solid silver
-      color: silver
-      height: 3em
-      margin: 0.2em
-      padding: 3px
-      text-align: center
-      width: 110px
-      &.selected, &:hover
-        border: 1px solid black
-        color: black
+
   // Tooltip Dialogs
   .tooltip
     font-size: .9em
@@ -356,7 +335,35 @@ body
       font-size: .9em
     .ui-tabs .ui-tabs-panel 
       padding: 0px
-
+  // Items List
+  #measurement-tabs
+    white-space: nowrap
+    ul
+      list-style-type: none
+      padding: 0
+      margin-bottom: 2px
+      li
+        display: inline
+    a
+      border: 
+        top: 1px solid #666
+        left: 1px solid #666
+        right: 1px solid #666
+      color: #666
+      padding: 3px
+      text-align: center
+      width: 110px
+      &:hover
+        text-decoration: underline
+      &.selected
+        border: 
+          top: 1px solid #000
+          left: 1px solid #000
+          right: 1px solid #000
+          bottom: 1px solid white
+        color: #000
+  #data-table-box
+    border: 1px solid black
 
 
 // Blueprint Body Container

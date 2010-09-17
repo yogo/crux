@@ -7,38 +7,25 @@
 /       :method => :delete, :class => 'medium-button-link', :confirm => "There is no undo.\n Continue?" ) 
 /     = link_to("Edit Experimental Design", kefed_editor_yogo_project_url(@project, :uid => @project.id), :class => 'medium-button-link')
 
-//= render(:partial => 'layouts/sidebar') %>
-#project-dashboard
-  #kefed-navigator
-    - if @project.yogo_model_uid
-      %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{@project.yogo_model_uid.to_s.upcase}" width="100%" height="600")
-        %p Your browser does not support iframes.
-    - else
-      %h3= link_to('Create An Experimental Design', kefed_library_yogo_project_url(@project))
-  #project-info.rbox.dashed.small
-    #investigator
-      Project Investigator: #{@project.investigator}
-    #description
-      Project Description: #{@project.description}
-    %h2 Measurements
-    %dl
-      - for collection in @project.data_collections
-        %dt= link_to(collection.name, yogo_project_collection_items_path(@project, collection.id))
-        %dd 
-          %strong Parameters: 
-          #{@project.yogo_model.measurement_parameters(collection.id, false).map{|k,v| v['label'] }.join(', ')}
-          
-    / - for measurement in @yogo_model.measurements
-    /   = measurement
-    / - for dataset in @project.models
-    /   = link_to( dataset.public_name, project_yogo_data_index_path(@project, dataset), :class => 'button-link')
-    / .link= link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(@project, dataset), 
-    /       :class => 'button-link')
-    / .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
-    /         :class => 'button-link')
-    / .link= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
-    / .link= link_to("Export Spreadsheet", project_yogo_data_index_path(@project, dataset, 
-    /         :format => 'csv'), :class => 'button-link')
+#kefed-navigator
+  - if @project.yogo_model_uid
+    %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{@project.yogo_model_uid.to_s.upcase}" width="100%" height="600")
+      %p Your browser does not support iframes.
+  - else
+    %h3= link_to('Create An Experimental Design', kefed_library_yogo_project_url(@project))
+#project-info.rbox.dashed.small
+  #investigator
+    Project Investigator: #{@project.investigator}
+  #description
+    Project Description: #{@project.description}
+  %h2 Measurements
+  %dl
+    - for collection in @project.data_collections
+      %dt= link_to(collection.name, yogo_project_collection_items_path(@project, collection.id))
+      %dd 
+        %strong Parameters: 
+        #{@project.yogo_model.measurement_parameters(collection.id, false).map{|k,v| v['label'] }.join(', ')}
+
 / #content-block
 /   - for dataset in @project.models
 /     - @item = dataset.new
