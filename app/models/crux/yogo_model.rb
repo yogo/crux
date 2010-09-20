@@ -130,29 +130,33 @@ class Crux::YogoModel
   #   ordered_measurements
   # end
   # 
-  # def ordered_measurements
-  #   @measurements ||= nodes['measurements'].to_a.sort { |a,b| 
-  #     a[1]['dependsOn'].length <=> b[1]['dependsOn'].length
-  #   }.map{|m| m[1] }
-  # end
-  # 
-  
+
   def measurements
     nodes['measurements']
   end
   
+  def ordered_measurements
+    nodes['measurements'].to_a.sort { |a,b| 
+      a[1]['dependsOn'].length <=> b[1]['dependsOn'].length
+    }.map{|m| m[1] }
+  end
+    
   def parameters
     nodes['parameters']
+  end
+  
+  # grab the dependsOn list of params for ordering, use all measurements for all of them
+  def ordered_parameters
+    measurements.collect{|m| m['dependsOn']}.flatten.uniq.map{|p| parameters[p]}
   end
   
   # Return the params plus the measurement itself if appropriate
   def measurement_parameters(muid, include_measurement=true)
     muid = muid.to_s.upcase # in case the muid is a UUID
     params = measurements[muid]['dependsOn']
-    measurement_params = nodes['parameters']
-    measurement_params.delete_if {|k,v| !params.include?(k)}
+    measurement_params = params.map{|p| parameters[p]}
     if include_measurement && !Crux::YogoModel.is_asset_measurement?(measurements[muid])
-      measurement_params[muid] = measurements[muid]
+      measurement_params << measurements[muid]
     end
     measurement_params
   end
