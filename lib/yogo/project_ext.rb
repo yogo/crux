@@ -7,14 +7,14 @@ module Yogo
     
     property :is_private,      Boolean, :required => true, :default => false
     property :yogo_model_uid,  ::DataMapper::Property::UUID, :required => false
-    property :investigator,    String, :required => false
+    property :investigator,    String, :required => false, :default => ''
     
     has n, :memberships, :parent_key => [:id], :child_key => [:project_id], :model => 'Membership'
     has n, :roles, :through => :memberships
     has n, :users, :through => :memberships
     
     after :create, :give_current_user_membership
-    before :destroy, :destroy_cleanup
+    #before :destroy, :destroy_cleanup
     
     # def self.extended_permissions
     #   collection_perms = ['collection', 'item'].map do |elem|
