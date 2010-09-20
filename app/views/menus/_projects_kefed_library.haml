@@ -1,0 +1,8 @@
+#menu-title
+  %h1#content-title 
+    %em #{@project.name} 
+    Project Settings
+#menu-actions
+  = link_to("Back", yogo_projects_path, :class => 'icon icon-back')
+  |
+  = link_to("Dashboard", yogo_project_path(@project), :class => 'icon icon-projects')
