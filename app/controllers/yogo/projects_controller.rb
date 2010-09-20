@@ -101,9 +101,12 @@ class Yogo::ProjectsController < Yogo::BaseController
   end
   
   def destroy
-    destroy! do |success,failure|
-      success.html { redirect_to( yogo_projects_path )}
+    if resource.destroy!
+      flash[:notice] = "Project #{resource.name} was successfully deleted."
+    else
+      flash[:error] = "Project #{resource.name} was not deleted."
     end
+    redirect_to( yogo_projects_path )
   end
   
   protected
