@@ -147,4 +147,15 @@ module ApplicationHelper
     Rails.root / "vendor/blazeds/tomcat/webapps/blazeds/kefedEditor/BioScholar.swf"
   end
   
+  def measurement_jump_box(data_collections, this_collection)
+    output = "<select name='measurement_jump' id='measurement_jump' >"
+    data_collections.each do |coll|
+      #debugger
+      output << "<option value='#{yogo_project_collection_items_url(coll.project, coll)}' "
+      output << "selected = 'true'" if coll == this_collection
+      output << ">#{coll.name}</option>"
+    end
+    output << "</select>"
+  end
+  
 end

@@ -8,7 +8,7 @@
   |
   = link_to("Download CSV", yogo_project_collection_items_path(@project, @data_collection, :format => :csv), :class => 'icon icon-csv')
   |
-  - form_for(:csv_file, :url => yogo_project_collection_items_path(@project.id, @data_collection),
+  = form_for(:csv_file, :url => yogo_project_collection_items_path(@project.id, @data_collection),
              :html => { :enctype => 'multipart/form-data' }, :builder => YogoDataFormBuilder) do |f|
     = f.file_field(:csv_file_name)
     = f.submit('Import CSV')

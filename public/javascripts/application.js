@@ -44,8 +44,14 @@ $(document).ready(function(){
     } else {
       $(this).next('label').text('Does Not Have Role');
     };
-    
-  })
+  });
+  
+  // Project Measurement Jump Box
+  $("#measurement_jump").change(function () {
+    url = $("select option:selected").val();
+    location.href = url;
+  });
+  
 });
 
 function check_navigation_element_state(element){
