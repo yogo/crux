@@ -28,6 +28,16 @@ class Yogo::ItemsController < Yogo::BaseController
     end
   end
   
+  def update
+    params[:item].delete_if{|key,value| value.blank?}
+    resource.attributes = params[:item]
+    if resource.save 
+      redirect_to :action => :index
+    else
+      redirect_to :action => :index
+    end
+  end
+  
   def destroy
     super do |success, failure|
       success.html {redirect_to :action => :index}
@@ -38,13 +48,6 @@ class Yogo::ItemsController < Yogo::BaseController
   def search
     @search_collection = collection.search(params[:q])
     respond_with(@search_collection)
-  end
-  
-  def update
-    super do |success, failure|
-      success.html {redirect_to :action => :edit}
-      failure.html {redirect_to :action => :edit}
-    end
   end
   
   protected
@@ -66,15 +69,16 @@ class Yogo::ItemsController < Yogo::BaseController
     end
   end
   
-  def update_resource(object, attributes)
-    attributes = attributes || parsed_body
-    attributes.delete('id')
-    # attributes = attributes['data'] || {}
-    attr_keys = object.attributes.keys.map{|key| key.to_s }
-    valid_attributes = attributes.inject({}) {|h,(k,v)| h[k]=v if attr_keys.include?(k); h }
-    object.attributes = valid_attributes
-    object.save
-  end
+  # def update_resource(object, attributes)
+  #   attributes = attributes || parsed_body
+  #   attributes.delete('id')
+  #   # attributes = attributes['data'] || {}
+  #   debugger
+  #   attr_keys = object.attributes.keys.map{|key| key.to_s }
+  #   valid_attributes = attributes.inject({}) {|h,(k,v)| h[k]=v if attr_keys.include?(k); h }
+  #   object.attributes = valid_attributes
+  #   object.save
+  # end
   
   with_responder do
     def resource_json(item)
