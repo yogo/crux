@@ -100,6 +100,15 @@ class Yogo::ProjectsController < Yogo::BaseController
     redirect_to yogo_project_url(@project)
   end
   
+  # def update
+  #   if update! do |success, failure|
+  #     if success
+  #       flash[:notice] = "Project #{resource.name} was successfully updated."
+  #     if failure
+  #       flash[:notice] = "Project #{resource.name} was not updated."
+  #   end
+  # end
+  
   def destroy
     if resource.destroy!
       flash[:notice] = "Project #{resource.name} was successfully deleted."

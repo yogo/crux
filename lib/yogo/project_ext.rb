@@ -48,7 +48,7 @@ module Yogo
         collection.attributes = { :name => measurement['label'] }
         collection.save
 
-        yogo_model.measurement_parameters(measurement_uid).each do |parameter_uid, parameter|
+        yogo_model.measurement_parameters(measurement_uid).each do |parameter|
           property = collection.schema.first_or_new(:name => parameter['label'])
           property.attributes = { 
             :name => parameter['label'], 
