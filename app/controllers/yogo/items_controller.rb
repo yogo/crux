@@ -2,7 +2,7 @@ require "fastercsv"
 
 class Yogo::ItemsController < Yogo::BaseController
   defaults :collection_name => 'items',
-           :instance_name => 'items'
+           :instance_name => 'item'
   
   belongs_to :project, :parent_class => Yogo::Project, :finder => :get, :collection_name => :data_collections
   belongs_to :data_collection, :parent_class => Yogo::Collection::Data, :finder => :get, :param => :collection_id
@@ -20,7 +20,7 @@ class Yogo::ItemsController < Yogo::BaseController
       parse_csv(params[:csv_file][:csv_file_name])
       redirect_to(:action => :index)
     else
-      params[:items].delete_if{|key,value| value.blank?}
+      params[:item].delete_if{|key,value| value.blank?}
       super do |success, failure|
         success.html {redirect_to :action => :index}
         failure.html {redirect_to :action => :index}
@@ -28,9 +28,23 @@ class Yogo::ItemsController < Yogo::BaseController
     end
   end
   
+  def destroy
+    super do |success, failure|
+      success.html {redirect_to :action => :index}
+      failure.html {redirect_to :action => :index}
+    end
+  end
+  
   def search
     @search_collection = collection.search(params[:q])
     respond_with(@search_collection)
+  end
+  
+  def update
+    super do |success, failure|
+      success.html {redirect_to :action => :edit}
+      failure.html {redirect_to :action => :edit}
+    end
   end
   
   protected
@@ -55,7 +69,7 @@ class Yogo::ItemsController < Yogo::BaseController
   def update_resource(object, attributes)
     attributes = attributes || parsed_body
     attributes.delete('id')
-    attributes = attributes['data'] || {}
+    # attributes = attributes['data'] || {}
     attr_keys = object.attributes.keys.map{|key| key.to_s }
     valid_attributes = attributes.inject({}) {|h,(k,v)| h[k]=v if attr_keys.include?(k); h }
     object.attributes = valid_attributes

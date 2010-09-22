@@ -1,0 +1,40 @@
+= clear_break
+.rbox.dashed.small.centered
+  = link_to("Delete Data Row", yogo_project_collection_item_path(@project), 
+    :method => :delete, :class => 'button-link fright', 
+    :confirm => "Are you sure you want to delete this data?\nThere is no undo! Continue?" )
+  = form_for(@item, :as => :item,
+    :url => yogo_project_collection_item_path(@project, @data_collection, @item),
+    :html => { :enctype => 'multipart/form-data' }, :builder => YogoFormBuilder) do |f|
+    - @data_collection.schema.each do |p|
+      = f.text_field(p.to_s, :label => p.name)
+    - if @data_collection.asset_collection?
+      = f.file_field(:file, :label => @data_collection.name)
+    .form-element
+      = f.submit('Update', :class => 'button-link')
+      = link_to('Cancel', yogo_project_collection_items_path(@project, @data_collection), :class => 'cancel')
+
+
+
+/ <%- form_for(@item, :url => project_yogo_data_path(@project, @model, @item),
+/ 
+/                     :html => { :enctype => 'multipart/form-data' },
+/                     :builder => YogoDataFormBuilder) do |f| -%>
+/ <table>
+/   <thead>
+/   </thead>
+/   <tbody>
+/       <%- @model.usable_properties.each do |p| %>
+/       <tr>
+/         <td><%= f.label(p.display_name, p.display_name.to_s.titleize) %></td>
+/         <td><%= f.field_for_param(p) %></td>
+/       </tr>
+/       <%- end %>
+/       <tr>
+/         <td></td><td><%= f.submit %></td>
+/       </tr>
+/   </tbody>
+/ </table>
+/ 
+/ <%- end -%>
+

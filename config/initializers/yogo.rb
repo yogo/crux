@@ -23,3 +23,6 @@ ActionView::Base.send(:include, WillPaginate::ViewHelpers::ActionView)
 
 # Load the Application Version
 load Rails.root / "VERSION"
+
+# throw exceptions when models fail to save
+DataMapper::Model.raise_on_save_failure = true

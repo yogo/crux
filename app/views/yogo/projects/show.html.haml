@@ -6,6 +6,7 @@
 /     = link_to("Delete Project", project_path(@project), 
 /       :method => :delete, :class => 'medium-button-link', :confirm => "There is no undo.\n Continue?" ) 
 /     = link_to("Edit Experimental Design", kefed_editor_yogo_project_url(@project, :uid => @project.id), :class => 'medium-button-link')
+=clear_break
 
 #kefed-navigator
   - if @project.yogo_model_uid
