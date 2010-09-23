@@ -146,8 +146,8 @@ class Crux::YogoModel
   end
   
   # grab the dependsOn list of params for ordering, use all measurements for all of them
-  def ordered_parameters
-    measurements.collect{|m| m['dependsOn']}.flatten.uniq.map{|p| parameters[p]}
+  def ordered_parameter_uids
+    measurements.collect{|m| m[1]['dependsOn']}.flatten.uniq
   end
   
   # Return the params plus the measurement itself if appropriate
