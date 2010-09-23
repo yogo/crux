@@ -94,7 +94,7 @@ class Yogo::ItemsController < Yogo::BaseController
   end
   
   with_responder do
-    def csv_header
+    def csv_header(resource)
       data_collection = controller.send(:parent)
       data_collection.schema.map{|s| s.name }.join(',') << "\n"
     end
