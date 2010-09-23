@@ -29,10 +29,10 @@
     
     
 #project-info
-  #investigator
+  .investigator
     %strong Investigator: 
     #{@project.investigator}
-  #description
+  .description
     %strong Experiment Description:
     != tooltip(@project.description, @project.name + ' Description', 200)
   %h2 Measurements
@@ -43,7 +43,7 @@
         (#{collection.items.count})
         %span.measurement-toggle{:onclick => "$('#mi_#{collection.id}').toggle();"} [+]
       .measurement-info.rbox.dashed{:id => 'mi_' + collection.id}
-        = link_to("[View Data]", yogo_project_collection_items_path(@project, collection.id), :class => 'icon icon-view')
+        = link_to("View All Data", yogo_project_collection_items_path(@project, collection.id), :class => 'icon icon-show')
         .action-tabs
           %ul
             %li <a href="#md_#{collection.id}">Parameter Details</a>
