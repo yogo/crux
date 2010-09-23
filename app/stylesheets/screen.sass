@@ -126,6 +126,7 @@ body
     td
       .data-table-actions
         width: 50px
+        color: transparent
     td.data-label
       +column(5)
       border: none
@@ -306,7 +307,8 @@ body
     img
       border: 1px solid silver
   #project-info
-    float: left
+    position: absolute
+    left: $grid * 14
     .measurement-info
       display: none
     .measurement-title
@@ -337,9 +339,8 @@ body
       overflow: auto
       font-size: .9em
       th
-        border-bottom: 1px solid #CCC
-        border-top: 1px solid #CCC
-        padding-bottom: 2px
+        background-color: $menu_background_color
+        padding: 4px
     // Jquery UI Overrides
     .ui-tabs .ui-tabs-nav li a
       padding: 0.3em 0.5em

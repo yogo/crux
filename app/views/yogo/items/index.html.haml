@@ -42,12 +42,10 @@
               %td= link_to("Download File", d.file.url ) unless d.file.blank?
             %td
               .data-table-actions
-                = link_to(' ',
-                    edit_yogo_project_collection_item_path(@project, @data_collection, d), 
-                    :class => 'icon icon-edit', :title => 'View/Edit')
-                = link_to(' ',
-                    yogo_project_collection_item_path(@project, @data_collection, d),
+                = link_to(edit_yogo_project_collection_item_path(@project, @data_collection, d), 
+                    :class => 'icon icon-edit', :title => 'View/Edit') { "&nbsp;" }
+                = link_to(yogo_project_collection_item_path(@project, @data_collection, d),
                     :method => :delete, :confirm => "There is no undo.\n Continue?",
-                    :class => 'icon icon-delete', :title => 'Delete')
+                    :class => 'icon icon-delete', :title => 'Delete') { "&nbsp;" }
 
 
