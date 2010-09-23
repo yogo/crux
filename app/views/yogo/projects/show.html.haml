@@ -34,18 +34,18 @@
     #{@project.investigator}
   #description
     %strong Experiment Description:
-    = tooltip(@project.description, @project.name + ' Description', 200)
+    != tooltip(@project.description, @project.name + ' Description', 200)
   %h2 Measurements
   %dl
     - for collection in @project.kefed_ordered_data_collections
-      %dt= link_to(collection.name, yogo_project_collection_items_path(@project, collection.id))
-      %dd 
-        %strong Data Rows:
-        #{collection.items.count}
-        %br/
+      %h4{:id => 'dt_' + collection.id}
+        = link_to(collection.name, yogo_project_collection_items_path(@project, collection.id))
+        (#{collection.items.count})
+        %span.measurement-toggle{:onclick => "$('#mi_#{collection.id}').toggle();"} [+]
+      .measurement-info{:id => 'mi_' + collection.id}
         %strong Parameters: 
         #{@project.yogo_model.measurement_parameters(collection.id, false).map{|p| p['label'] }.join(', ')}
-
+          
 / #content-block
 /   - for dataset in @project.models
 /     - @item = dataset.new
