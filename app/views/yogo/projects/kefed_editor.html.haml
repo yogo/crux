@@ -1,6 +1,5 @@
-%h1#content-title= @project.name + ": Describe Experiment"
-
-%iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_editor_swf_url}#{@kefed_params}" width="100%" height="600")
+=clear_break
+%iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_editor_swf_url}#{@kefed_params}")
   %p Your browser does not support iframes.
 
 :javascript
@@ -15,12 +14,12 @@
       target = $('#kefed_finish').attr('href');
       if(!saved){
         $('#kefed_finish').attr('href', target + '?uid=' + params.uid);
-        $('#kefed_finish').show();
+        $('#flash').html("<a href='#{add_kefed_diagram_yogo_project_url(@project)}?uid=" + params.uid + "'>Experimental Diagram Saved, Click Here to Finish</a>");
         saved = true;
       }
     };
   });
 
 .text-center
-  = link_to("Cancel",   yogo_projects_url, :class => 'big-button-link')
-  = link_to("Finish & Continue", add_kefed_diagram_yogo_project_url(@project), :class => 'big-button-link', :id => 'kefed_finish', :style => 'display: none;')
+  / =# link_to("Cancel",   yogo_projects_url, :class => 'big-button-link')
+  / =# link_to("Finish & Continue", add_kefed_diagram_yogo_project_url(@project), :class => 'big-button-link', :id => 'kefed_finish', :style => 'display: none;')
