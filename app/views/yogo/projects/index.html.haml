@@ -11,30 +11,32 @@
 
       %h2.project-title
         = link_to(project.name, yogo_project_path(project) ) 
-        = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
+        = image_tag('icons/private_16.png', :title => 'Private Experiment') if project.is_private?
       .project-links
         .vertical-links
-          .link= link_to("Project Dashboard", yogo_project_path(project), :class => 'icon icon-projects')
+          .link= link_to("Experiment Dashboard", yogo_project_path(project), :class => 'icon icon-projects')
           - if project.yogo_model_uid
             .link= link_to("Experimental Design", kefed_editor_yogo_project_url(project, :uid => project.yogo_model_uid), :class => 'icon icon-exp-design')
           - else
             .link= link_to("Create Experimental Design", kefed_library_yogo_project_url(project))
           /.link= link_to("Import Spreadsheet", import_csv_path(project), :class => 'button-link')
-          .link= link_to("Project Settings", edit_yogo_project_path(project), :class => 'icon icon-settings')
+          .link= link_to("Experiment Settings", edit_yogo_project_path(project), :class => 'icon icon-settings')
           =clear_break
       .project-text
         %p.rbox.tight
-          = link_to('Project Investigator', edit_yogo_project_path(project), :title => 'Edit Project Investigator')
-          =clear_break
-          #{project.investigator || 'none' }
+          - if project.investigator && project.investigator.length > 0
+            = link_to('Investigator', edit_yogo_project_path(project), :title => 'Edit Experiment Investigator')
+            =clear_break
+            %em= project.investigator
+          - else
+            %em= link_to('[Add Investigator]', edit_yogo_project_path(project))
           =clear_break
           - if project.description && project.description.length > 0
-            = link_to('Project Description', edit_yogo_project_path(project), :title => 'Edit Project Description')
+            = link_to('Experiment Description', edit_yogo_project_path(project), :title => 'Edit Experiment Description')
             =clear_break
-            %em= tooltip(project.description, 
-                    project.name + ' Description', 200)
+            %em= tooltip(project.description, project.name + ' Description', 200)
           - else
-            %em= link_to('[Add Project Description]', edit_yogo_project_path(project))
+            %em= link_to('[Add Experiment Description]', edit_yogo_project_path(project))
       =clear_break
       / .project-datasets
       /   - if project.data_collections.empty?

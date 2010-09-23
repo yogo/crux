@@ -2,9 +2,9 @@
   %h1#content-title 
     #{@project.name} &raquo; #{@data_collection.name}
 #menu-actions
-  = link_to("Projects", yogo_projects_path, :class => 'icon icon-dashboard')
+  = link_to("Experiments", yogo_projects_path, :class => 'icon icon-dashboard')
   |
-  = link_to("Project Dashboard", yogo_project_path(@project), :class => 'icon icon-projects')
+  = link_to("Experiment Dashboard", yogo_project_path(@project), :class => 'icon icon-projects')
   |
   = link_to("Download CSV", yogo_project_collection_items_path(@project, @data_collection, :format => :csv), :class => 'icon icon-csv')
   |

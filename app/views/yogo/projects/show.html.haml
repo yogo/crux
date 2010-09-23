@@ -1,11 +1,3 @@
-/ %h1#content-title= @project.name + " Measurements"
-/ 
-/ #content-actions
-/   .content-action-links
-/     = link_to("Import CSV", import_csv_path(@project), :class => 'medium-button-link') 
-/     = link_to("Delete Project", project_path(@project), 
-/       :method => :delete, :class => 'medium-button-link', :confirm => "There is no undo.\n Continue?" ) 
-/     = link_to("Edit Experimental Design", kefed_editor_yogo_project_url(@project, :uid => @project.id), :class => 'medium-button-link')
 =clear_break
 
 #kefed-navigator
@@ -31,12 +23,6 @@
         location.href = links[param_uid];
       }
       
-      //target = $('#kefed_finish').attr('href');
-      //if(!saved){
-      //  $('#kefed_finish').attr('href', target + '?uid=' + params.uid);
-      //  $('#kefed_finish').show();
-      //  saved = true;
-      //}
     };
   });
 
@@ -44,11 +30,11 @@
     
 #project-info.rbox.dashed.small
   #investigator
-    %strong Project Investigator: 
+    %strong Investigator: 
     #{@project.investigator}
   #description
-    %strong Project Description: 
-    #{@project.description}
+    %strong Experiment Description:
+    = tooltip(@project.description, @project.name + ' Description', 200)
   %h2 Measurements
   %dl
     - for collection in @project.kefed_ordered_data_collections

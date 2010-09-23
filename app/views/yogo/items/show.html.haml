@@ -17,7 +17,7 @@
   %table#data-show
     %thead
     %tbody
-      - @model.usable_properties.each do |p|
+      - @data_collection.schema.each do |p|
         %tr
           %td.data-label= p.display_name.titleize
           %td.data-value= yogo_show_helper(@item, p, @project, @model, true)

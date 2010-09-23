@@ -1,25 +1,15 @@
-/ .medium-centered
-/   %h1.text-center 
-/     Project Settings 
-/     #subtitle= @project.name
-/     
-/ .small-centered.boxed
-/   %h1#content-title
-/     #subtitle Project Settings
-/     = @project.name
-
 = clear_break
 .rbox.dashed.small.centered
-  = link_to("Delete Project", yogo_project_path(@project), 
+  = link_to("Delete Experiment", yogo_project_path(@project), 
     :method => :delete, :class => 'button-link fright', 
     :confirm => "Are you sure you want to delete the #{@project.name} project?\nThere is no undo! Continue?" )
   = form_for(@project,:as => :project, :builder => YogoFormBuilder) do |f|
     = f.check_box(:is_private, :label => image_tag('icons/private_16.png') + " Private")
-    = f.text_field(:investigator, :label => "Primary Investigator: ")
-    = f.text_area(:description, :label => "Project Description: ")
+    = f.text_field(:investigator, :label => "Investigator: ")
+    = f.text_area(:description, :label => "Experiment Description: ")
 
     - unless Yogo::Setting[:local_only]
-      %h3.tight Project Users
+      %h3.tight Experiment Users
       .rbox.tight
         %span.bold All Users:
         %ul.all-users
@@ -31,11 +21,3 @@
       = f.submit('Update', :class => 'button-link')
       = link_to('Cancel', yogo_projects_path, :class => 'cancel')
         
-  / .rbox.dashed
-  /   - field_set_tag("Users:") do
-  /     = collection_select(:user, :user_id, User.all, :id, :name, {:prompt => false, :include_blank => true})
-  / 
-  /   - field_set_tag("Role:") do
-  /     - for role in Role.all do
-  /       = check_box_tag(role.name)
-  /       = label_tag(role.name)
