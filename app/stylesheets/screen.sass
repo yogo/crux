@@ -309,6 +309,11 @@ body
     float: left
     .measurement-info
       display: none
+    .measurement-title
+      margin-top: 1em
+      margin-bottom: .5em
+  .measurement-toggle
+    cursor: pointer
   .dataset-name
     +column(6)
     h2
@@ -316,14 +321,14 @@ body
   .vertical-links
     .link
       margin-bottom: 5px
-  .dataset-info
+  .measurement-info
     +column(16)
     +last
     .action-tabs
       margin:
         top: .5em
         bottom: .5em
-    .dataset-table
+    .collection-table
       +borders
       height: 12em
       padding: 0px

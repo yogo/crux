@@ -28,7 +28,7 @@
 
     
     
-#project-info.rbox.dashed.small
+#project-info
   #investigator
     %strong Investigator: 
     #{@project.investigator}
@@ -38,35 +38,16 @@
   %h2 Measurements
   %dl
     - for collection in @project.kefed_ordered_data_collections
-      %h4{:id => 'dt_' + collection.id}
+      %h4.measurement-title{:id => 'dt_' + collection.id}
         = link_to(collection.name, yogo_project_collection_items_path(@project, collection.id))
         (#{collection.items.count})
         %span.measurement-toggle{:onclick => "$('#mi_#{collection.id}').toggle();"} [+]
-      .measurement-info{:id => 'mi_' + collection.id}
-        %strong Parameters: 
-        #{@project.yogo_model.measurement_parameters(collection.id, false).map{|p| p['label'] }.join(', ')}
-          
-/ #content-block
-/   - for dataset in @project.models
-/     - @item = dataset.new
-/     .content-row-block
-/       .dataset-name
-/         %h2= link_to dataset.public_name, project_yogo_data_index_path(@project, dataset)
-/         .vertical-links
-/           .link= link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(@project, dataset), 
-/                 :class => 'button-link')
-/           .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
-/                   :class => 'button-link')
-/           .link= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
-/           .link= link_to("Export Spreadsheet", project_yogo_data_index_path(@project, dataset, 
-/                   :format => 'csv'), :class => 'button-link')
-/       .dataset-info
-/         .action-tabs
-/           %ul
-/             %li <a href="##{dataset.to_param}-dataset-details">Dataset Details</a>
-/             %li <a href="##{dataset.to_param}-query">Query</a>
-/             %li <a href="##{dataset.to_param}-quickview">Quickview</a>
-/           = render(:partial => 'yogo/models/dataset',       :locals => {:dataset => dataset})
-/           = render(:partial => 'yogo/projects/build_query', :locals => {:dataset => dataset})
-/           = render(:partial => 'yogo/data/quickview',       :locals => {:dataset => dataset})
+      .measurement-info.rbox.dashed{:id => 'mi_' + collection.id}
+        = link_to("[View Data]", yogo_project_collection_items_path(@project, collection.id), :class => 'icon icon-view')
+        .action-tabs
+          %ul
+            %li <a href="#md_#{collection.id}">Parameter Details</a>
+            %li <a href="#qv_#{collection.id}">Quickview</a>
+          = render(:partial => 'yogo/projects/collection_details',  :locals => {:collection => collection})
+          = render(:partial => 'yogo/projects/quickview', :locals => {:collection => collection})
 =clear_break

@@ -1,0 +1,3 @@
+%div{:id => "md_#{collection.id}"}
+  [#{@project.yogo_model.measurement_parameters(collection.id, false).map{|p| p['label'] }.join('][')}]
+  
