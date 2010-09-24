@@ -3,10 +3,10 @@
     %strong Parameter Key:
     = '[' + collection.kefed_ordered_schema.map {|p| p.name}.join('][') + ']'
   -collection.kefed_ordered_schema.each do |param|
-    -# pschema = @project.yogo_model.parameters[param.kefed_uid.upcase]['schema']
-    -# ptype = pschema['valueType']['valueTypeName']
-    -# punits = pschema['valueType']['allowedUnits']
+    - pschema = @project.yogo_model.parameters[param.kefed_uid.upcase]['schema']
+    - ptype = pschema['valueType']['valueTypeName']
+    - punits = pschema['valueType']['allowedUnits']
     .param-details
-      =# param.name + " {" + ptype + (" (#{punits})" if ptype == 'Decimal with units').to_s + '}'
+      = param.name + " {" + ptype + (" (#{punits})" if ptype == 'Decimal with units').to_s + '}'
 
   

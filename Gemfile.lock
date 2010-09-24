@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: git://github.com/yogo/yogo-project.git
-  revision: 0dfaf808e96f416ff9cc6287d45038f4af1fb1c8
+  revision: 2dd26a5fe6205e57962d239e56ede0b1977f1a22
   branch: topic/ruby19
   specs:
     yogo-project (0.3.2)
