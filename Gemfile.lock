@@ -12,14 +12,14 @@ GIT
 
 GIT
   remote: git://github.com/jnicklas/carrierwave.git
-  revision: 7157a0ed628808225744b25798ba10841c929bc1
+  revision: 6d07f75edacb2ab526b34d6e3bc6e166e69c9996
   specs:
     carrierwave (0.5.0)
-      activesupport (~> 3.0.0)
+      activesupport (~> 3.0)
 
 GIT
   remote: git://github.com/yogo/yogo-project.git
-  revision: 098735518308c54679ce9c535756dc23fcba122c
+  revision: 0dfaf808e96f416ff9cc6287d45038f4af1fb1c8
   branch: topic/ruby19
   specs:
     yogo-project (0.3.2)
