@@ -104,13 +104,11 @@ end
 
 namespace :assets do
   task :setup do
-    run "mkdir -p #{deploy_to}/#{shared_dir}/assets/files"
-    run "mkdir -p #{deploy_to}/#{shared_dir}/assets/images"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/asset_collection"
   end
   
   task :symlink do
-    run "ln -nfs #{deploy_to}/#{shared_dir}/assets/files #{release_path}/public/files"
-    run "ln -nfs #{deploy_to}/#{shared_dir}/assets/images #{release_path}/public/images"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/asset_collection #{release_path}/public/asset_collection"
   end
 end
 after "deploy:setup",       "assets:setup"
