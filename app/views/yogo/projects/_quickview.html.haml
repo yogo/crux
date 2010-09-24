@@ -4,6 +4,7 @@
       %tr
         - collection.kefed_ordered_schema.each do |h|
           %th= h.name
+        %th= collection.name
     %tbody
     - for d in collection.items[0..4]
       %tr{:class => cycle("cycle-odd","cycle-even")}
@@ -11,3 +12,5 @@
           %td= yogo_show_helper(d, p, @project, collection)
         - if collection.asset_collection?
           %td= link_to("Download File", d.file.url ) unless d.file.blank?
+        - else
+          %td= yogo_show_helper(d, collection.measurement_schema, @project, collection)

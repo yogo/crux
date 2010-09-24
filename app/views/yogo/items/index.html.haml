@@ -24,14 +24,15 @@
         %tr
           - @data_collection.kefed_ordered_schema.each do |h|
             %th= h.name
-          - if @data_collection.asset_collection?
-            %th= @data_collection.name
+          %th= @data_collection.name
           %th.data-table-actions Actions
         %tr
           - @data_collection.kefed_ordered_schema.each do |p|
             %td= f.text_field(p.to_s)
           - if @data_collection.asset_collection?
             %td= f.file_field(:file)
+          - else
+            %td= f.text_field(@data_collection.measurement_schema)
           %td= f.submit("Save")
 
         - @items.each do |d|
@@ -40,6 +41,8 @@
               %td= yogo_show_helper(d, p, @project, @data_collection)
             - if @data_collection.asset_collection?
               %td= link_to("Download File", d.file.url ) unless d.file.blank?
+            - else
+              %td= yogo_show_helper(d, @data_collection.measurement_schema, @project, @data_collection)
             %td
               .data-table-actions
                 = link_to(edit_yogo_project_collection_item_path(@project, @data_collection, d), 

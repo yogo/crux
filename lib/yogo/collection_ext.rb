@@ -16,6 +16,10 @@ module Yogo
           schema.select{|s| s.kefed_uid.upcase == p}.first
         }.compact
       end
+      
+      def measurement_schema
+        schema.select{|s| s.kefed_uid.upcase == self.id.to_s.upcase}.first
+      end
     end
   end
 end
