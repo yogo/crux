@@ -311,6 +311,7 @@ body
     left: $grid * 14
     .measurement-info
       display: none
+      margin-bottom: 1em
     .measurement-title
       margin-top: 1em
       margin-bottom: .5em
@@ -332,7 +333,7 @@ body
       margin:
         top: .5em
         bottom: .5em
-    .collection-table
+    .collection-details, .collection-table
       +borders
       height: 12em
       padding: 0px
@@ -341,6 +342,12 @@ body
       th
         background-color: $menu_background_color
         padding: 4px
+      .param-array
+        white-space: nowrap
+      .param-array, .param-details
+        margin-left: 5px
+      dl
+        margin-bottom: .5em
     // Jquery UI Overrides
     .ui-tabs .ui-tabs-nav li a
       padding: 0.3em 0.5em

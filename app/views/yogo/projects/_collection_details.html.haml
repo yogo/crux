@@ -1,3 +1,36 @@
-%div{:id => "md_#{collection.id}"}
-  [#{collection.kefed_ordered_schema.map{|p| p.name }.join('][')}]
-  
+%div.collection-details{:id => "md_#{collection.id}"}
+  .param-array
+    %strong Parameter Key:
+    = '[' + collection.kefed_ordered_schema.map {|p| p.name}.join('][') + ']'
+  -collection.kefed_ordered_schema.each do |param|
+    - pschema = @project.yogo_model.parameters[param.kefed_uid.upcase]['schema']
+    - ptype = pschema['valueType']['valueTypeName']
+    - punits = pschema['valueType']['allowedUnits']
+    %dl.param-details
+      %dt 
+        = param.name + " {" + ptype + (" (#{punits})" if ptype == 'Decimal with units').to_s + '}'
+      %dd
+        - if collection.items.count > 0
+          - case ptype
+          - when 'Decimal with units', 'Integer', 'Decimal'
+            Range: 
+            - if min = collection.items.first(:order => [param.to_s.to_sym.asc])
+              Min: #{min[param.name]}
+            - if max = collection.items.first(:order => [param.to_s.to_sym.desc])
+              Max: #{max[param.name]}
+            
+          - when 'True/False'
+            - total = collection.items.count
+            - tru = collection.items.count(param.to_s.to_sym => true)
+            - fls = collection.items.count(param.to_s.to_sym => false)
+            True: #{tru/total}%
+            False: #{fls/total}%
+          - when 'Text'
+            - values = collection.items.aggregate(:all.count, :fields => [param.to_s.to_sym])
+            Values: 
+            =values.map{|v| "#{v[0]} (#{v[1]})" }.join(', ')
+          - else
+            Summary Unavailable
+        - else
+          No Data Stored
+    
