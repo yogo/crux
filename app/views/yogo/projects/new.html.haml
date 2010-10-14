@@ -1,3 +1,4 @@
+= clear_break
 .rbox.dashed.small.centered
   - form_for(:project, @project, :url => yogo_projects_path, :builder => YogoFormBuilder) do |form|
     = render :partial => 'yogo/projects/form', :locals => {:f => form}
