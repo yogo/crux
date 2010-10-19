@@ -3,7 +3,7 @@
   %p Your browser does not support iframes.
 
 :javascript
-  document.domain = '#{(Rails.env == 'development') ? 'localhost' : 'crux.msu.montana.edu'}';
+  document.domain = '#{root_url.match(/\/\/([\w\d]+\.*)+/)[0][2..-1]}';
   var kefed_frame = $('iframe#kefedFrame');
   var saved = false;
   kefed_frame.load(function() {
