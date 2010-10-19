@@ -90,19 +90,7 @@ module ApplicationHelper
   # @api public
   #
   def kefed_editor_swf_url
-    if Rails.env == 'production'
-      # base_url =  Yogo::Setting[:production_server_tomcat_url] +
-      #             "/blazeds/kefedEditor/KefedModelEditor.html?"
-      # params =  ['model','schema','data'].map{ |t| 
-      #             "#{t}StoreType=persevere&#{t}StoreUrl=" + 
-      #             Yogo::Setting[:production_server_persevere_url]
-      #           }.join('&')
-      # # URI.escape(base_url + params)
-      # base_url + params + '&'
-      "http://crux.msu.montana.edu:8400/blazeds/kefedEditor/KefedModelEditor.html?"
-    else
-      "http://localhost:8400/blazeds/kefedEditor/KefedModelEditor.html?"
-    end
+    tomcat_root_url + "blazeds/kefedEditor/KefedModelEditor.html?"
   end
   
   # Return the kefed editor swf url
@@ -117,19 +105,7 @@ module ApplicationHelper
   # @api public
   #
   def kefed_navigator_swf_url
-    if Rails.env == 'production'
-      # base_url =  Yogo::Setting[:production_server_tomcat_url] +
-      #             "/blazeds/kefedEditor/KefedModelNavigator.html?"
-      # params =  ['model','schema','data'].map{ |t| 
-      #             "#{t}StoreType=persevere&#{t}StoreUrl=" + 
-      #             Yogo::Setting[:production_server_persevere_url]
-      #           }.join('&')
-      # # URI.escape(base_url + params)
-      # base_url + params + '&'
-      "http://crux.msu.montana.edu:8400/blazeds/kefedEditor/KefedModelNavigator.html?"
-    else
-      "http://localhost:8400/blazeds/kefedEditor/KefedModelNavigator.html?"
-    end
+    tomcat_root_url + "blazeds/kefedEditor/KefedModelNavigator.html?"
   end
   
   # Return the kefed editor swf file path
@@ -156,6 +132,10 @@ module ApplicationHelper
       output << ">#{coll.name}</option>"
     end
     output << "</select>"
+  end
+  
+  def tomcat_root_url
+    "http:%s:8400/" % root_url.match(/\/\/([\w\d]+\.*)+/)[0]
   end
   
 end
