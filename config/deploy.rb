@@ -4,40 +4,16 @@ $:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory
 require "rvm/capistrano"                  # Load RVM's capistrano plugin.
 set :rvm_ruby_string, 'ruby-1.8.7-p174'        # Or whatever env you want it to run in.
 
-
 set :application, "crux"
 set :use_sudo,    false
-
 set :scm, :git
 set :repository,  "git://github.com/pol/crux.git"
-
 set :branch, "master"
 set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
-
-set :ran_user_settings, false
-
 set :user, "crux"
 set :deploy_to, "/home/crux/rails3/"
-
-server "crux.msu.montana.edu", :app, :web, :db, :primary => true
-
-task :user_settings do
-  if !ran_user_settings
-    set :user, "crux"
-    set :deploy_to, "/home/crux/rails3/"
-    server "crux.msu.montana.edu", :app, :web, :db, :primary => true
-    set :ran_user_settings, true
-  end
-end
-
-[ "bundle:install", "bundle:check", "deploy", "deploy:check", "deploy:cleanup", "deploy:cold", "deploy:migrate",
-  "deploy:migrations", "deploy:pending", "deploy:pending:diff", "deploy:rollback", "deploy:rollback:code",
-  "deploy:setup", "deploy:symlink", "deploy:update", "deploy:update_code", "deploy:upload", "deploy:web:disable",
-  "deploy:web:enable", "invoke", "persvr:setup", "persvr:start", "persvr:stop", "persvr:drop",
-  "persvr:version", "shell" ].each do |task|
-  before task, :user_settings
-end
+server "crux2.msu.montana.edu", :app, :web, :db, :primary => true
 
 # before deploy, :user_settings
 
@@ -90,12 +66,13 @@ namespace :kefed do
   
   task :upload_htmls do
     path = 'vendor/blazeds/tomcat/webapps/blazeds/kefedEditor'
-    ['BioScholar.html','KefedModelEditor.html','KefedModelNavigator.swf','main.html'].each do |file|
+    ['BioScholar.html','KefedModelEditor.html','KefedModelNavigator.html','main.html'].each do |file|
       upload( File.dirname(__FILE__) + "/../#{path}/#{file}", 
               "#{deploy_to}/#{shared_dir}/#{path}/#{file}")
     end    
   end
   
+  desc "Upload the kefed swfs and htmls (this overwrites the server versions)"
   task :deploy do
     upload_swfs
     upload_htmls
@@ -148,14 +125,14 @@ namespace :tomcat do
   task :start do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake tomcat:start RAILS_ENV=production' JAVA_HOME=/usr/lib/jvm/java-6-sun")
+    run("bash -c 'cd #{current_path} && rake tomcat:start RAILS_ENV=production JAVA_HOME=/usr/lib/jvm/java-6-sun'")
   end
   
   desc "Stop the Tomcat Instance on the server (blazeds)"
   task :stop do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake tomcat:stop RAILS_ENV=production' JAVA_HOME=/usr/lib/jvm/java-6-sun")
+    run("bash -c 'cd #{current_path} && rake tomcat:stop RAILS_ENV=production JAVA_HOME=/usr/lib/jvm/java-6-sun'")
   end
   
   desc "Restart the tomcat instance on the servere (blazeds)"
@@ -176,14 +153,14 @@ namespace :persvr do
   task :start do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production' JAVA_HOME=/usr/lib/jvm/java-6-sun")
+    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production JAVA_HOME=/usr/lib/jvm/java-6-sun'")
   end
   
   desc "Stop Persevere on the server"
   task :stop do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:stop PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production' JAVA_HOME=/usr/lib/jvm/java-6-sun")
+    run("bash -c 'cd #{current_path} && rake persvr:stop PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production JAVA_HOME=/usr/lib/jvm/java-6-sun'")
   end
   
   task :restart do

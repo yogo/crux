@@ -138,4 +138,14 @@ module ApplicationHelper
     "http:%s:8400/" % root_url.match(/\/\/([\w\d]+\.*)+/)[0]
   end
   
+  def kefed_storage_params
+    params = '&'
+    prsvr = Rails.configuration.database_configuration[Rails.env]['repositories']['yogo_persevere']
+    persevere_url = "http://%s:%s/" % [prsvr['host'], prsvr['port']]
+    ['model','schema','data'].each do |store|
+      params += "&#{store}StoreUrl=" + CGI.escape(persevere_url)
+    end
+    params
+  end
+  
 end

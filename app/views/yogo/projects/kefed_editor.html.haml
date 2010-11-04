@@ -1,5 +1,5 @@
 =clear_break
-%iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_editor_swf_url}#{@kefed_params}")
+%iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_editor_swf_url}#{@kefed_params}#{kefed_storage_params}")
   %p Your browser does not support iframes.
 
 :javascript
@@ -10,11 +10,12 @@
     //console.debug(this);    
     //console.debug($(this).contents().find('#kefedStatus').contents());
     this.contentWindow.editorCallback = function(params){
-      //alert("parent page" + params); 
+      uid = params.split('uid')[1].split('&')[0].slice(1);
+      //alert("uid: " + uid); 
       target = $('#kefed_finish').attr('href');
       if(!saved){
         $('#kefed_finish').attr('href', target + '?uid=' + params.uid);
-        $('#flash').html("<a href='#{add_kefed_diagram_yogo_project_url(@project)}?uid=" + params.uid + "'>Experimental Diagram Saved, Click Here to Finish</a>");
+        $('#flash').html("<a href='#{add_kefed_diagram_yogo_project_url(@project)}?uid=" + uid + "'>Experimental Diagram Saved, Click Here to Finish</a>");
         saved = true;
       }
     };

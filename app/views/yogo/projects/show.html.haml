@@ -2,29 +2,30 @@
 
 #kefed-navigator
   - if @project.yogo_model_uid
-    %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{@project.yogo_model_uid.to_s.upcase}&callbackFunction=navigatorCallback&zoom=0.2" width="100%" height="600")
+    %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{@project.yogo_model_uid.to_s.upcase}&callbackFunction=navigatorCallback&zoom=0.2#{kefed_storage_params}" width="100%" height="600")
       %p Your browser does not support iframes.
   - else
     %h3= link_to('Create An Experimental Design', kefed_library_yogo_project_url(@project))
 
 :javascript
-  document.domain = '#{(Rails.env == 'development') ? 'localhost' : 'crux.msu.montana.edu'}';
+  document.domain = '#{root_url.match(/\/\/([\w\d]+\.*)+/)[0][2..-1]}';
   var kefed_frame = $('iframe#kefedFrame');
   kefed_frame.load(function() {
-    //console.debug(this);    
-    //console.debug($(this).contents().find('#kefedStatus').contents());
+    console.debug(this);    
+    console.debug($(this).contents().find('#kefedStatus').contents());
     this.contentWindow.navigatorCallback = function(params){
-      split_params = params.split('&');
-      param_type = split_params[1].split('=')[1];
-      param_uid = split_params[2].split('=')[1];
-      //alert("parent page " + param_type + param_uid);
-      links = {#{@project.data_collections.map{|c|"'#{c.id.to_s.upcase}': '#{yogo_project_collection_items_url(@project, c)}'"}.join(',')}};
-      if(param_type == "Measurement%20Specification"){
-        //location.href = links[param_uid];
-        $('#mi_' + param_uid.toLowerCase() ).toggle(); 
-        $('#title_' + param_uid.toLowerCase()).toggleClass('icon-collapsed').toggleClass('icon-expanded');
+      param_hash = new Array();
+      sp = params.split('&');
+      for (i in sp) {
+        param_hash[sp[i].split('=')[0]] = sp[i].split('=')[1];
       }
-      
+      //alert("parent page: " + param_hash['uid']);
+      links = {#{@project.data_collections.map{|c|"'#{c.id.to_s.upcase}': '#{yogo_project_collection_items_url(@project, c)}'"}.join(',')}};
+      if(param_hash['type'] == "Measurement%20Specification"){
+        //location.href = links[param_uid];
+        $('#mi_' + param_hash['uid'].toLowerCase() ).toggle(); 
+        $('#title_' + param_hash['uid'].toLowerCase()).toggleClass('icon-collapsed').toggleClass('icon-expanded');
+      }
     };
   });
 
