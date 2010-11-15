@@ -11,8 +11,8 @@
   document.domain = '#{root_url.match(/\/\/([\w\d]+\.*)+/)[0][2..-1]}';
   var kefed_frame = $('iframe#kefedFrame');
   kefed_frame.load(function() {
-    console.debug(this);    
-    console.debug($(this).contents().find('#kefedStatus').contents());
+    //console.debug(this);    
+    //console.debug($(this).contents().find('#kefedStatus').contents());
     this.contentWindow.navigatorCallback = function(params){
       param_hash = new Array();
       sp = params.split('&');
