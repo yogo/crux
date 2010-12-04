@@ -70,6 +70,9 @@ module Yogo
         #debugger
         if kollection.save 
           kollection.update_model
+        else
+          logger.info { "Database Update Error: #{kollection.errors.inspect}" }
+          flash[:error] = "The database was not successfully updated from the experimental design."
         end
       end
     end

@@ -13,7 +13,7 @@ set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
 set :user, "crux"
 set :deploy_to, "/home/crux/rails3/"
-server "crux2.msu.montana.edu", :app, :web, :db, :primary => true
+server "crux.msu.montana.edu", :app, :web, :db, :primary => true
 
 # before deploy, :user_settings
 

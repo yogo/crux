@@ -6,7 +6,7 @@
           %th= h.name
         %th= collection.name
     %tbody
-    - for d in collection.items[0..4]
+    - for d in collection.items.all(:limit => 4 )
       %tr{:class => cycle("cycle-odd","cycle-even")}
         - collection.kefed_ordered_schema.each do |p|
           %td= yogo_show_helper(d, p, @project, collection)
