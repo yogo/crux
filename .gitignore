@@ -10,3 +10,5 @@ vendor/blazeds
 vendor/blazeds/**/*
 vendor/persevere/*
 config/database.yml
+public/uploads/*
+public/asset_collection/*
