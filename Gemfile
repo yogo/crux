@@ -16,7 +16,7 @@ gem 'inherited_resources', '~> 1.1.2'
 gem 'dm-core',              DM_VERSION
 gem 'dm-rails',             '~> 1.0.3'
 gem 'dm-sqlite-adapter',    DM_VERSION, :require => nil
-gem 'dm-postgres-adapter',  DM_VERSION, :require => nil
+# gem 'dm-postgres-adapter',  DM_VERSION, :require => nil
 gem 'dm-mysql-adapter',     DM_VERSION, :require => nil
 gem "dm-persevere-adapter", "0.72.0",   :require => nil
 
