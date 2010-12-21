@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 RAILS_VERSION = '~> 3.0.0'
 DM_VERSION    = '~>1.0.0'
-RSPEC_VERSION = '~> 2.0.0.beta.20'
+RSPEC_VERSION = '~> 2.3.0'
 
 DATAMAPPER = 'git://github.com/datamapper'
 
@@ -56,6 +56,8 @@ group :development, :test do
   gem 'rspec-expectations', RSPEC_VERSION, :require => 'rspec/expectations'
   gem 'rspec-mocks',        RSPEC_VERSION, :require => 'rspec/mocks'
   gem 'rspec-rails',        RSPEC_VERSION
+  gem 'autotest'
+  gem 'webrat'
   
   # To get a detailed overview about what queries get issued and how long they take
    # have a look at rails_metrics. Once you bundled it, you can run
