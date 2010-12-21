@@ -144,6 +144,8 @@ module ApplicationHelper
     persevere_url = "http://%s:%s/" % [prsvr['host'], prsvr['port']]
     ['model','schema','data'].each do |store|
       params += "&#{store}StoreUrl=" + CGI.escape(persevere_url)
+      params += "crux__yogo_model%2F" if store == 'schema'
+      params += "KefedModel%2F" if store == 'model'
     end
     params
   end
