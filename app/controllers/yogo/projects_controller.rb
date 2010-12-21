@@ -42,12 +42,12 @@ class Yogo::ProjectsController < Yogo::BaseController
     end
   end
   
-  def show
-    @collections = @project.kefed_ordered_data_collections
-    super do |format|
-      format.html
-    end
-  end
+  # def show
+  #   @collections = @project.kefed_ordered_data_collections
+  #   super do |format|
+  #     format.html
+  #   end
+  # end
   
   def create
     expire_action :action => :show
