@@ -10,10 +10,12 @@
 
 class Yogo::ProjectsController < Yogo::BaseController
   defaults :route_collection_name => :projects, :route_instance_name => :project
+  
+  caches_action :show
 
   # Setting some pagination for this controller
   def paginated_scope(relation)
-    instance_variable_set("@projects", relation.paginate(:page => params[:page], :per_page => 5))
+    instance_variable_set("@projects", relation.paginate(:page => params[:page], :per_page => 10))
   end
   hide_action :paginated_scope
 
@@ -40,7 +42,15 @@ class Yogo::ProjectsController < Yogo::BaseController
     end
   end
   
+  def show
+    @collections = @project.kefed_ordered_data_collections
+    super do |format|
+      format.html
+    end
+  end
+  
   def create
+    expire_action :action => :show
     create! do |success, failure|
       success.html { redirect_to kefed_library_yogo_project_url(@project.id.to_s) }
     end
@@ -94,6 +104,7 @@ class Yogo::ProjectsController < Yogo::BaseController
   end
   
   def add_kefed_diagram
+    expire_action :action => :show
     @project = Yogo::Project.get(params[:id])
     @project.yogo_model_uid = params[:uid]
     @project.save
