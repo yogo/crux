@@ -26,9 +26,13 @@ namespace :yogo do
       host += ':' + @cfg['repositories']['yogo_persevere']['port'].to_s
       cd @export_dir do
         dest = "KefedModel.json"
-        sh "curl -i -H \"Accept: application/json\" #{host}/KefedModel/ > #{dest}"
-        dest = "YogoModel.json"
-        sh "curl -i -H \"Accept: application/json\" #{host}/crux__yogo_model/ > #{dest}"
+        sh "curl -i -H \"Accept: application/json\" #{host}/KefedModel/ > #{dest}" do |ok,resp|
+          unless ok
+            fail "Curl failed.  It is likely that persevere is not running, please run `rake persvr:start` then try again."
+          end
+          dest = "YogoModel.json"
+          sh "curl -i -H \"Accept: application/json\" #{host}/crux__yogo_model/ > #{dest}"          
+        end
       end
     end
 
@@ -45,7 +49,7 @@ namespace :yogo do
     task :all => [:kefed, :collection] 
     
     desc "Export all of the crux data and models and create a tgz package"
-    task :zip => [:all] do
+    task :tgz => [:all] do
       sh "tar czf #{@export_dir}-crux-export.tgz #{@export_dir}"
       rm_rf @export_dir
     end
