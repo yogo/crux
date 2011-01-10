@@ -44,6 +44,11 @@ namespace :yogo do
     desc "Export the crux data and kefed models"
     task :all => [:kefed, :collection] 
     
+    desc "Export all of the crux data and models and create a tgz package"
+    task :zip => [:all] do
+      sh "tar czf #{@export_dir}-crux-export.tgz #{@export_dir}"
+      rm_rf @export_dir
+    end
   end
 end
 
