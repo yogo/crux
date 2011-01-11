@@ -48,9 +48,10 @@ class Yogo::ProjectsController < Yogo::BaseController
   #     format.html
   #   end
   # end
+  # 
   
   def create
-    expire_action :action => :show
+    # expire_action :action => :show
     create! do |success, failure|
       success.html { redirect_to kefed_library_yogo_project_url(@project.id.to_s) }
     end
