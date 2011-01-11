@@ -4,7 +4,7 @@
     - design = @experimental_designs.select{|e| e.uid == project.yogo_model_uid.to_s.upcase}.first
     %h3= link_to(project.name + ': ' + design.model_name, 
           kefed_editor_yogo_project_url(@project) + "?uid=#{design.uid}&editor_action=copyModel", 
-          :class => 'icon icon-blueprint')
+          :class => 'icon icon-blueprint') if design
       
   %h2 Or
   
