@@ -19,8 +19,12 @@ namespace :crux do
   end
   
   task :stop do
-    cd Rails.root / 'tmp' / 'pids' do
-      sh 'kill `cat server.pid`'
+    begin
+      cd Rails.root / 'tmp' / 'pids' do
+        sh 'kill `cat server.pid`' 
+      end
+    rescue Exception => e
+      puts "#{e}\n++ Rails is not running or there is no pids directory."
     end
     Rake::Task['persvr:stop'].invoke
     Rake::Task['tomcat:stop'].invoke
