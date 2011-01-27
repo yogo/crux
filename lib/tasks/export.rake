@@ -45,8 +45,14 @@ namespace :yogo do
       end
     end
     
-    desc "Export the crux data and kefed models"
-    task :all => [:kefed, :collection] 
+    desc "Export the yogo metadata"
+    task :yogo => :init do
+      db = @cfg['path']
+      sh "cp #{db} ."
+    end
+    
+    desc "Export the crux data, kefed models and yogo metadata"
+    task :all => [:kefed, :collection, :yogo] 
     
     desc "Export all of the crux data and models and create a tgz package"
     task :tgz => [:all] do
