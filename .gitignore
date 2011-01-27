@@ -3,6 +3,8 @@
 bin/*
 db/sqlite3/*.sqlite3
 db/persvr/*
+db/export
+db/import
 log/*.log
 public/stylesheets/compiled/*
 tmp/**/*
