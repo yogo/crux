@@ -16,7 +16,8 @@ namespace :yogo do
 
     task :init do
       @cfg = YAML.load_file(::Rails.root.to_s/'config'/'database.yml')[::Rails.env]
-      @export_dir = ::Rails.root.to_s/'db'/'export'/Time.now.strftime("%Y-%m-%d")
+      @date_dir = Time.now.strftime("%Y-%m-%d")
+      @export_dir = ::Rails.root.to_s/'db'/'export'/@date_dir
       sh "mkdir -p #{@export_dir}" unless File.exists?(@export_dir)
     end
 
@@ -47,8 +48,10 @@ namespace :yogo do
     
     desc "Export the yogo metadata"
     task :yogo => :init do
-      db = @cfg['path']
-      sh "cp #{db} ."
+      db = ::Rails.root.to_s/@cfg['path']
+      cd @export_dir do
+        sh "cp #{db} ."
+      end
     end
     
     desc "Export the crux data, kefed models and yogo metadata"
@@ -56,8 +59,10 @@ namespace :yogo do
     
     desc "Export all of the crux data and models and create a tgz package"
     task :tgz => [:all] do
-      sh "tar czf #{@export_dir}-crux-export.tgz #{@export_dir}"
-      rm_rf @export_dir
+      cd @export_dir+'/..' do
+        sh "tar czf #{@date_dir}-crux-export.tgz #{@date_dir}"
+        rm_rf @export_dir
+      end
     end
   end
 end
