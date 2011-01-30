@@ -8,6 +8,9 @@
 # and additionally: upload of CSV files, an example project and rereflection
 # of the yogo repository.
 
+require "fastercsv"
+require 'ftools'
+
 class Yogo::ProjectsController < Yogo::BaseController
   defaults :route_collection_name => :projects, :route_instance_name => :project
   
@@ -23,7 +26,7 @@ class Yogo::ProjectsController < Yogo::BaseController
   # Show all the projects
   #
   # @example 
-  #   get /projects
+  #   get /yogo/projects
   #
   # @return [Array] Retrives all project and passes them to the view
   #
@@ -56,11 +59,29 @@ class Yogo::ProjectsController < Yogo::BaseController
     end
   end
   
+  # def update
+  #   if update! do |success, failure|
+  #     if success
+  #       flash[:notice] = "Project #{resource.name} was successfully updated."
+  #     if failure
+  #       flash[:notice] = "Project #{resource.name} was not updated."
+  #   end
+  # end
+  
+  def destroy
+    if resource.destroy!
+      flash[:notice] = "Project #{resource.name} was successfully deleted."
+    else
+      flash[:error] = "Project #{resource.name} was not deleted."
+    end
+    redirect_to( yogo_projects_path )
+  end
+  
   
   # Load the kefed editor swf
   #
   # @example 
-  #   get /projects/1/kefed_editor
+  #   get /yogo/projects/1/kefed_editor
   #
   # @param [Hash] params
   # @option params [String]:id
@@ -88,7 +109,7 @@ class Yogo::ProjectsController < Yogo::BaseController
   # Load the kefed editor swf
   #
   # @example 
-  #   get /projects/1/kefed_library
+  #   get /yogo/projects/1/kefed_library
   #
   # @param [Hash] params
   # @option params [String]:id
@@ -112,34 +133,65 @@ class Yogo::ProjectsController < Yogo::BaseController
     redirect_to yogo_project_url(@project)
   end
   
-  # def update
-  #   if update! do |success, failure|
-  #     if success
-  #       flash[:notice] = "Project #{resource.name} was successfully updated."
-  #     if failure
-  #       flash[:notice] = "Project #{resource.name} was not updated."
-  #   end
-  # end
-  
-  def destroy
-    if resource.destroy!
-      flash[:notice] = "Project #{resource.name} was successfully deleted."
+  # The import spreadsheet tool.  This is stateful.
+  # @example
+  #   get /yogo/projects/1/import_spreadsheet
+  def import_spreadsheet
+    @project = Yogo::Project.get(params[:id])
+    @total_steps = 4
+
+    case params[:step]
+    when '2'
+        file = copy_uploaded_file(params[:spreadsheet])
+        session[:import_file] = file
+        contents = FasterCSV.read(file)
+        @headers = contents[0]
+        @rows = contents.length - 1
+        @measurements = params[:measurements].keys.map{|k| @project.data_collections.get k }
+        @import_step = 2
+    when '3'
+      contents = FasterCSV.read(session[:import_file])
+      @measurements = {}
+      params['measurements'].each do |m_id, parameters|
+        m = @project.data_collections.get m_id
+        m_hash = {}
+        m_hash['measurement'] = parameters.delete('measurement')
+        m_hash['parameters'] = []
+        parameters.each do |p_id, header|
+          p = m.schema.get p_id
+          m_hash['parameters'] << [p, header]
+        end
+        @measurements[m] = m_hash
+      end
+      @headers = contents[0]
+      @example = {}
+      @headers.each { |h| @example[h] = [] }
+      contents[1..5].each do |row|
+        row.each_index do |i|
+          @example[@headers[i]] << row[i]
+        end
+      end
+      @rows = contents.length - 1
+      @import_step = 3
+    when '4'
+      @import_step = 4
     else
-      flash[:error] = "Project #{resource.name} was not deleted."
+      @import_step = 1
     end
-    redirect_to( yogo_projects_path )
+
+    render("import_spreadsheet_#{@import_step}")
   end
-  
+
   protected
 
   def resource
     @project ||= resource_class.get(params[:id])
   end
-  
+
   def collection
     @projects ||= resource_class.all #.paginate(:page => params[:page], :per_page => 5)
   end
-  
+
   def resource_class
     Yogo::Project
   end
@@ -152,6 +204,17 @@ class Yogo::ProjectsController < Yogo::BaseController
       end
       hash
     end
+  end
+  
+  private 
+
+  def copy_uploaded_file(file)
+    tmpdir = Rails.root.to_s + '/tmp/csv_upload/' + File.basename(file.tempfile.path)
+    File.makedirs(tmpdir)
+    src = file.tempfile.path
+    dest = tmpdir + '/' + file.original_filename
+    File.copy(src, dest)
+    dest
   end
   
 end

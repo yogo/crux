@@ -1,0 +1,30 @@
+%h1 Map the the Import Columns
+
+%h2 Sheet Info
+%table{:style => 'width: auto'}
+  %tr
+    %td  Name 
+    %td= File.basename session[:import_file]
+  %tr
+    %td  Rows 
+    %td= @rows
+  %tr
+    %td  Spreadsheet Columns
+    %td= @headers.join(', ')
+
+= form_tag(import_spreadsheet_yogo_project_url(@project, :step => @import_step + 1), {:multipart => true}) do |form|
+
+  %h2 Measurements
+  - for m in @measurements
+    %h3
+      = m.name
+      = select_tag("measurements[#{m.id}][measurement]", options_for_select(@headers + [''], m.name))
+    %table{:style => 'width: auto'}
+      %tr
+        %th Parameter
+        %th Spreadsheet Column
+      - for p in m.kefed_ordered_schema
+        %tr
+          %td #{p.name} (#{p.type.to_s.split('::').last})
+          %td= select_tag("measurements[#{m.id}][#{p.id}]", options_for_select(@headers + [''], p.name))
+  = submit_tag("Next Step")

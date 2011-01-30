@@ -1,0 +1,38 @@
+%h1 Verify and Finish
+
+%h2 Sheet Info
+%table{:style => 'width: auto'}
+  %tr
+    %td  Name 
+    %td= File.basename session[:import_file]
+  %tr
+    %td  Rows 
+    %td= @rows
+  %tr
+    %td  Spreadsheet Columns
+    %td= @headers.join(', ')
+
+%h2 Measurement Mappings
+
+= form_tag(import_spreadsheet_yogo_project_url(@project, :step => @import_step + 1)) do |form|
+  - @measurements.each do |m, val|
+    %h3= m.name
+    %p
+      = check_box_tag("replace_data[#{m.id}]", :value => '1') 
+      Replace Existing Data (check this to wipe the existing data)
+    %table{:style => 'width: auto'}
+      %tr
+        %th Parameter
+        %th Spreadsheet Column
+        %th{:colspan => 5} Example Values
+      %tr
+        %td= m.name
+        %td= val['measurement']
+        - 5.times do |i|
+          %td= @example[val['measurement']][i]
+      - val['parameters'].each do |p|
+        %tr
+          %td #{p[0].name} (#{p[0].type.to_s.split('::').last})
+          %td= p[1]
+          - 5.times do |i| 
+            %td= p[1].blank? ? '' : @example[p[1]][i]
