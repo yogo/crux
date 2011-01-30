@@ -6,6 +6,8 @@ Yogo::Application.routes.draw do
         get :kefed_library
         get :add_kefed_diagram
         get :kefed_editor
+        get :import_spreadsheet
+        post :import_spreadsheet
         post :upload
       end
       collection do
