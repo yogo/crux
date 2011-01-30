@@ -126,8 +126,8 @@ class Yogo::ItemsController < Yogo::BaseController
     
     # fields = header.collect{|i| @data_collection.schema.first(:name => i).to_s.intern }
     # fields = @data_collection.schema.all(:name => header).map{|h| h.to_s.intern } )
-    if contents[3..-1]
-      contents[3..-1].each do |row|
+    if contents[1..-1]
+      contents[1..-1].each do |row|
         tmp_hash = {}
         row.each_index do |i|
           tmp_hash[fields[header[i]]] = row[i] unless row[i].blank?
