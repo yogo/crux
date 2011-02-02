@@ -138,7 +138,7 @@ class Yogo::ProjectsController < Yogo::BaseController
   #   get /yogo/projects/1/import_spreadsheet
   def import_spreadsheet
     @project = Yogo::Project.get(params[:id])
-    @total_steps = 4
+    @total_steps = 3
 
     case params[:step]
     when '2'
@@ -150,8 +150,7 @@ class Yogo::ProjectsController < Yogo::BaseController
         @measurements = params[:measurements].keys.map{|k| @project.data_collections.get k }
         @import_step = 2
     when '3'
-      contents = FasterCSV.read(session[:import_file])
-      @measurements = {}
+      @measurements, @example, @rows = {}, {}, 0
       params['measurements'].each do |m_id, parameters|
         m = @project.data_collections.get m_id
         m_hash = {}
@@ -163,17 +162,51 @@ class Yogo::ProjectsController < Yogo::BaseController
         end
         @measurements[m] = m_hash
       end
-      @headers = contents[0]
-      @example = {}
-      @headers.each { |h| @example[h] = [] }
-      contents[1..5].each do |row|
-        row.each_index do |i|
-          @example[@headers[i]] << row[i]
+
+      FasterCSV.foreach(session[:import_file], :headers => true) do |row|
+        @headers ||= row.headers
+        @headers.each { |h| @example[h] = [] } if @example.empty?
+        if @rows < 5
+          row.each { |h, v| @example[h] << v }
         end
+        @measurements.each do |m, v|
+          @measurements[m]['count'] = 0 if @measurements[m]['count'].nil?
+          @measurements[m]['count'] += 1 unless row[v['measurement']].blank?
+        end
+        @rows += 1
       end
-      @rows = contents.length - 1
+      session_hash = {}
+      @measurements.each do |m,v|
+        session_hash[m.id] = v['parameters'].map{|p| [p[0].id, p[1]] }
+      end
+      session[:measurements] = session_hash
       @import_step = 3
     when '4'
+      @measurements = {}
+      session[:measurements].each do |m,v|
+        k = @project.data_collections.get(m)
+        @measurements[k] = {'parameters' => v}
+      end
+      @measurements.each do |m,v|
+        @measurements[m]['initial'] = m.items.all.count
+        if params['replace_data'][m.id] == 'DELETE'
+          m.items.all.destroy
+        end
+        @measurements[m]['deleted'] = @measurements[m]['initial'] - m.items.all.count
+        @measurements[m]['added'] = 0
+      end
+      FasterCSV.foreach(session[:import_file], :headers => true) do |row|
+        @headers ||= row.headers
+        @measurements.each do |m, v|
+          values = {}
+          v['parameters'].each do |p,h|
+            values[p] = row[h]
+          end
+          m.data_model.create(values)
+          @measurements[m]['added'] += 1
+        end
+      end
+      @measurements.each_key{|m| @measurements[m]['total'] = m.items.all.count }
       @import_step = 4
     else
       @import_step = 1

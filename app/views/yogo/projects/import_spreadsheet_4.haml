@@ -1,0 +1,23 @@
+%h1 Import Complete
+%h2 Summary
+
+- @measurements.each do |m, v|
+  %h3= m.name
+  %table{:style => 'width: auto'}
+    %tr
+      %th Action
+      %th #Rows
+    %tr
+      %td Initial Rows 
+      %td= v['initial']
+    %tr  
+      %td Rows Deleted 
+      %td= v['deleted']
+    %tr  
+      %td Rows Added 
+      %td= v['added']
+    %tr  
+      %td Current Row Total 
+      %td= v['total']
+
+.link= link_to("Experiment Dashboard", yogo_project_path(@project), :class => 'icon icon-projects')
