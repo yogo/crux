@@ -39,7 +39,8 @@
     %strong Experiment Description:
     != tooltip(@project.description, @project.name + ' Description', 200)
   .import
-    = link_to("Import Spreadsheet", import_spreadsheet_yogo_project_path(@project))
+    - if @project.yogo_model_uid
+      = link_to("Import Spreadsheet", import_spreadsheet_yogo_project_path(@project)) 
   %h2 Measurements
   %dl
     - for collection in @project.kefed_ordered_data_collections
