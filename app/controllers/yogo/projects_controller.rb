@@ -183,13 +183,13 @@ class Yogo::ProjectsController < Yogo::BaseController
       @import_step = 3
     when '4'
       @measurements = {}
-      session[:measurements].each do |m,v|
-        k = @project.data_collections.get(m)
-        @measurements[k] = {'parameters' => v}
+      session[:measurements].each do |m_id,v|
+        m = @project.data_collections.get(m_id)
+        @measurements[m] = {'parameters' => v}
       end
       @measurements.each do |m,v|
         @measurements[m]['initial'] = m.items.all.count
-        if params['replace_data'][m.id] == 'DELETE'
+        if params['replace_data'] && (params['replace_data'][m.id.to_s] == 'DELETE')
           m.items.all.destroy
         end
         @measurements[m]['deleted'] = @measurements[m]['initial'] - m.items.all.count

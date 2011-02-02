@@ -18,7 +18,7 @@
   - @measurements.each do |m, val|
     %h3= m.name
     %p
-      = check_box_tag("replace_data[#{m.id}]", :value => 'DELETE') 
+      = check_box_tag("replace_data[#{m.id}]", 'DELETE') 
       Replace Existing Data (check this to wipe the existing data)
     %p
       %span.bold Existing Data Rows: #{m.items.count}
