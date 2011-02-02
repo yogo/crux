@@ -28,5 +28,4 @@
           %td #{p.name} (#{p.type.to_s.split('::').last})
           %td
             = select_tag("measurements[#{m.id}][#{p.id}]", options_for_select(@headers + [''], (@headers.include?(p.name) ? p.name : '')))
-            %span{:style => 'cursor: pointer', :onClick => "$('#measurements_#{m.id}_#{p.id}').val('')"}= image_tag('icons/blank.png')
   = submit_tag("Next Step")
