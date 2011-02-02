@@ -5,12 +5,20 @@
 %p Spreadsheets can contain data for one or more measurements at a time. Select the Measurements that are contained in the spreadsheet, choose a file to upload, and then click "Next".
 %p The sheets should be in CSV format with the top row containing parameter and measurement names.
 
+#kefed-navigator
+  - if @project.yogo_model_uid
+    %iframe(name='kefedFrame' id='kefedFrame' src="#{kefed_navigator_swf_url}?uid=#{@project.yogo_model_uid.to_s.upcase}&callbackFunction=navigatorCallback&zoom=0.2#{kefed_storage_params}" width="100%" height="600")
+      %p Your browser does not support iframes.
+  - else
+    %h3= link_to('Create An Experimental Design', kefed_library_yogo_project_url(@project))
 
 = form_tag(import_spreadsheet_yogo_project_url(@project, :step => @import_step + 1), {:multipart => true}) do |form|
+  %h3 The File
+  %p Browse and select the spreadsheet file
+  = file_field_tag('spreadsheet')
   %h3 Measurements
-  %ul.measurements
+  %p Which measurements are in the file you are importing?
+  %ul.measurements{:style => 'list-style-type: none'}
     - for collection in @project.kefed_ordered_data_collections
       %li= check_box_tag("measurements[#{collection.id}]") + collection.name
-  %h3 The File
-  = file_field_tag('spreadsheet')
   = submit_tag('Next Step')
