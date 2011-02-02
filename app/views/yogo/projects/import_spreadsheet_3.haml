@@ -18,8 +18,12 @@
   - @measurements.each do |m, val|
     %h3= m.name
     %p
-      = check_box_tag("replace_data[#{m.id}]", :value => '1') 
+      = check_box_tag("replace_data[#{m.id}]", :value => 'DELETE') 
       Replace Existing Data (check this to wipe the existing data)
+    %p
+      %span.bold Existing Data Rows: #{m.items.count}
+      %br/
+      Num. of Rows that will be Imported: #{val['count']}
     %table{:style => 'width: auto'}
       %tr
         %th Parameter
@@ -36,3 +40,4 @@
           %td= p[1]
           - 5.times do |i| 
             %td= p[1].blank? ? '' : @example[p[1]][i]
+  %div{:style => 'margin: 1em 0'}= submit_tag('Import the Data')
