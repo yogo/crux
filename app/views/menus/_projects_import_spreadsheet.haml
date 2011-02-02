@@ -1,5 +1,8 @@
 #menu-title
   %h1#content-title 
-    #{@project.name} &raquo; Import Spreadsheet Step #{@import_step} of #{@total_steps}
+    - if @import_step < 4
+      #{@project.name} &raquo; Import Spreadsheet Step #{@import_step} of #{@total_steps}
+    - else
+      #{@project.name} &raquo; Import Spreadsheet Complete
 #menu-actions
   = link_to("Back to Experiment Dashboard", yogo_project_path(@project), :class => 'icon icon-back')
