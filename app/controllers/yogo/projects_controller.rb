@@ -136,6 +136,7 @@ class Yogo::ProjectsController < Yogo::BaseController
   # The import spreadsheet tool.  This is stateful.
   # @example
   #   get /yogo/projects/1/import_spreadsheet
+  # I am so so sorry, this was a fit of madness. It started off so small...
   def import_spreadsheet
     @project = Yogo::Project.get(params[:id])
     @total_steps = 3
@@ -150,34 +151,43 @@ class Yogo::ProjectsController < Yogo::BaseController
         @measurements = params[:measurements].keys.map{|k| @project.data_collections.get k }
         @import_step = 2
     when '3'
-      @measurements, @example, @rows = {}, {}, 0
+      @measurements, @example, @sheet_rows = {}, {}, 0
       params['measurements'].each do |m_id, parameters|
         m = @project.data_collections.get m_id
         m_hash = {}
-        m_hash['measurement'] = parameters.delete('measurement')
+        m_hash['measurement'] = [m.measurement_schema.id, parameters.delete('measurement')]
         m_hash['parameters'] = []
         parameters.each do |p_id, header|
           p = m.schema.get p_id
           m_hash['parameters'] << [p, header]
         end
         @measurements[m] = m_hash
+        @measurements[m]['count'] = 0
+        @measurements[m]['example'] = {}
       end
 
       FasterCSV.foreach(session[:import_file], :headers => true) do |row|
         @headers ||= row.headers
-        @headers.each { |h| @example[h] = [] } if @example.empty?
-        if @rows < 5
-          row.each { |h, v| @example[h] << v }
-        end
+        
         @measurements.each do |m, v|
-          @measurements[m]['count'] = 0 if @measurements[m]['count'].nil?
-          @measurements[m]['count'] += 1 unless row[v['measurement']].blank?
+          if @measurements[m]['example'].empty?
+            @headers.each { |h| @measurements[m]['example'][h] = [] } 
+          end
+          unless row[v['measurement'][1]].blank?
+            if @measurements[m]['count'] < 5
+              row.each { |h, v| @measurements[m]['example'][h] << v }
+            end
+            @measurements[m]['count'] += 1 
+          end
         end
-        @rows += 1
+        @sheet_rows += 1
       end
       session_hash = {}
       @measurements.each do |m,v|
-        session_hash[m.id] = v['parameters'].map{|p| [p[0].id, p[1]] }
+        session_hash[m.id] = {
+          'parameters' => v['parameters'].map{|p| [p[0].id, p[1]] }, 
+          'measurement' => v['measurement']
+        }
       end
       session[:measurements] = session_hash
       @import_step = 3
@@ -185,7 +195,7 @@ class Yogo::ProjectsController < Yogo::BaseController
       @measurements = {}
       session[:measurements].each do |m_id,v|
         m = @project.data_collections.get(m_id)
-        @measurements[m] = {'parameters' => v}
+        @measurements[m] = v
       end
       @measurements.each do |m,v|
         @measurements[m]['initial'] = m.items.all.count
@@ -199,11 +209,16 @@ class Yogo::ProjectsController < Yogo::BaseController
         @headers ||= row.headers
         @measurements.each do |m, v|
           values = {}
-          v['parameters'].each do |p,h|
-            values[p] = row[h]
+          unless row[v['measurement'][1]].blank?
+            fields = {}
+            m.schema.each{|s| fields[s.id.to_s] = s.to_s.intern }
+            v['parameters'].each do |p,h|
+              values[fields[p.to_s]] = row[h]
+            end
+            values[fields[v['measurement'][0].to_s]] = row[v['measurement'][1]]
+            m.data_model.create(values)
+            @measurements[m]['added'] += 1
           end
-          m.data_model.create(values)
-          @measurements[m]['added'] += 1
         end
       end
       @measurements.each_key{|m| @measurements[m]['total'] = m.items.all.count }

@@ -7,7 +7,7 @@
     %td= File.basename session[:import_file]
   %tr
     %td  Rows 
-    %td= @rows
+    %td= @sheet_rows
   %tr
     %td  Spreadsheet Columns
     %td= @headers.join(', ')
@@ -31,13 +31,13 @@
         %th{:colspan => 5} Example Values
       %tr
         %td= m.name
-        %td= val['measurement']
+        %td= val['measurement'][1]
         - 5.times do |i|
-          %td= @example[val['measurement']][i]
+          %td= val['example'][val['measurement'][1]][i]
       - val['parameters'].each do |p|
         %tr
           %td #{p[0].name} (#{p[0].type.to_s.split('::').last})
           %td= p[1]
           - 5.times do |i| 
-            %td= p[1].blank? ? '' : @example[p[1]][i]
+            %td= p[1].blank? ? '' : val['example'][p[1]][i]
   %div{:style => 'margin: 1em 0'}= submit_tag('Import the Data')
