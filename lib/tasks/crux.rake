@@ -11,9 +11,12 @@ require 'slash_path'
 require 'yaml'
 
 namespace :crux do
-  task :start do
+  task :start_db do
     Rake::Task['persvr:start'].invoke
     Rake::Task['tomcat:start'].invoke
+  end
+
+  task :start => :start_db do
     sh "rails server -d" 
     sh "reset"
   end
