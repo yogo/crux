@@ -16,16 +16,19 @@
 
   %h2 Measurements
   - for m in @measurements
-    %h3
-      = m.name
-      = select_tag("measurements[#{m.id}][measurement]", options_for_select(@headers + [''], m.name))
-    %table{:style => 'width: auto'}
-      %tr
-        %th Parameter
-        %th Spreadsheet Column
-      - for p in m.kefed_ordered_schema
+    .measurement
+      %h3
+        = m.name
+        %br/
+        = select_tag("measurements[#{m.id}][measurement]", options_for_select(@headers + [''], spreadsheet_header_select(@headers,m.name)))
+      %table{:style => 'width: auto'}
         %tr
-          %td #{p.name} (#{p.type.to_s.split('::').last})
-          %td
-            = select_tag("measurements[#{m.id}][#{p.id}]", options_for_select(@headers + [''], (@headers.include?(p.name) ? p.name : '')))
+          %th Parameter
+          %th Spreadsheet Column
+        - for p in m.kefed_ordered_schema
+          %tr
+            %td #{p.name} (#{p.type.to_s.split('::').last})
+            %td
+              = select_tag("measurements[#{m.id}][#{p.id}]", options_for_select([''] + @headers.sort , spreadsheet_header_select(@headers,p.name)))
+  =clear_break
   = submit_tag("Next Step")

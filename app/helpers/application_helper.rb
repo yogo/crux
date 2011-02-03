@@ -150,4 +150,12 @@ module ApplicationHelper
     params
   end
   
+  def spreadsheet_header_select(headers, name)
+    if headers.include?(name)
+      result = name
+    else 
+      result = headers.select{|h| h.downcase.gsub(/[^a-z0-9]/,'') == name.downcase.gsub(/[^a-z0-9]/,'')}.first
+    end
+    return result ? result : ''
+  end
 end
