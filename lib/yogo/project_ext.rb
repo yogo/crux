@@ -52,13 +52,18 @@ module Yogo
 
         yogo_model.measurement_parameters(measurement_uid).each do |parameter|
           property = kollection.schema.first_or_new(:kefed_uid => parameter['uid'])
-          property.attributes = { 
+          attributes = { 
             :name => parameter['label'], 
             :type  => Crux::YogoModel.legacy_type(parameter),
             :options => {:required => false},
             :kefed_uid => parameter['uid']
           }
-          property.save unless property.new?
+          property[:type] = attributes[:type]
+          # if property.class == Yogo::Collection::Property::Boolean
+          #   debugger
+          # end
+          property.attributes = attributes  
+          result = property.save unless property.new?
         end
 
         # clean up orphaned non-asset columns (this can cause data loss)
@@ -71,7 +76,7 @@ module Yogo
         if kollection.save 
           kollection.update_model
         else
-          logger.info { "Database Update Error: #{kollection.errors.inspect}" }
+          Rails.logger.info { "Database Update Error: #{kollection.errors.inspect}" }
           flash[:error] = "The database was not successfully updated from the experimental design."
         end
       end
