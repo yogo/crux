@@ -204,6 +204,7 @@ class Yogo::ProjectsController < Yogo::BaseController
         end
         @measurements[m]['deleted'] = @measurements[m]['initial'] - m.items.all.count
         @measurements[m]['added'] = 0
+        @measurements[m]['errors'] = []
       end
       FasterCSV.foreach(session[:import_file], :headers => true) do |row|
         @headers ||= row.headers
@@ -216,7 +217,12 @@ class Yogo::ProjectsController < Yogo::BaseController
               values[fields[p.to_s]] = row[h]
             end
             values[fields[v['measurement'][0].to_s]] = row[v['measurement'][1]]
-            m.data_model.create(values)
+            d = m.data_model.new(values)
+            if d.valid?
+              d.save
+            else
+              @measurements[m]['errors'] << d.errors.full_messages.join(", ")
+            end
             @measurements[m]['added'] += 1
           end
         end
