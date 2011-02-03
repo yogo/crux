@@ -40,4 +40,5 @@
           %td= p[1]
           - 5.times do |i| 
             %td= p[1].blank? ? '' : val['example'][p[1]][i]
+  =clear_break
   %div{:style => 'margin: 1em 0'}= submit_tag('Import the Data')
