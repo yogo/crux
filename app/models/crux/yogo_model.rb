@@ -162,7 +162,14 @@ class Crux::YogoModel
   end
   
   def self.legacy_type(node)
-    node['schema']['type'].split('::').last
+    case node['schema']['type'].split('::').last
+    when 'Float': 'Float'
+    when 'Decimal': 'Float'
+    when 'Integer': 'Integer'
+    when 'Text': 'Text'
+    when 'Boolean': 'Boolean'
+    else 'String'
+    end
   end
   
   def self.is_asset_measurement?(node)
