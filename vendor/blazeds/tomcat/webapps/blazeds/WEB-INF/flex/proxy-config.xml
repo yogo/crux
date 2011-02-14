@@ -20,8 +20,8 @@
     </default-channels>
 
     <destination id="DefaultHTTP">
-	<properties>
-                <dynamic-url>http://localhost:8080/*</dynamic-url>
+        <properties>
+                <dynamic-url>http://localhost:*/*</dynamic-url>
                 <dynamic-url>http://rest.bioontology.org/bioportal/*</dynamic-url>
         </properties>
     </destination>
