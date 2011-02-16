@@ -9,11 +9,13 @@
    that support only a single ontology and that don't return a
    list of ontologies.
 
-   The other four queries are four variants created for searching
-   for terms in the ontology service.  The four variants are created
-   by handling the cross-product of two binary choices:
-      Exact vs Substring (really regular expression) match
-      Include or exclude properties
+   The other queries are variants created for searching
+   for terms in the ontology service.  The variants are created
+   by handling the cross-product of  four entity types and two
+   binary choices.
+      type being one of variable, activity, entity, default
+      exact vs partial (really regular expression) match
+      include documentation (label vs documentation)
    with the query to use to query for terms.
 
    The search string will be substituted for all occurrences of
@@ -33,7 +35,7 @@ WHERE {?ontologyId rdf:type owl:Ontology .
        OPTIONAL { ?ontologyId owl:versionInfo ?versionNumber } .
 } ORDER BY (?ontologyId)
 ]]></listOntologiesQuery>
-  <termExactWithPropertiesQuery><![CDATA[
+  <variable-exact-documentation><![CDATA[
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -50,8 +52,57 @@ WHERE {?termId rdf:type ?type .
 	)
 
 }
-]]></termExactWithPropertiesQuery>
-  <termExactWithoutPropertiesQuery><![CDATA[
+]]></variable-exact-documentation>
+  <variable-exact-label><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER ( str(?termId) = "$SEARCH_STRING"
+	|| str(?displayName) = "$SEARCH_STRING"
+	)
+}
+]]></variable-exact-label>
+  <variable-partial-documentation><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER (regex(str(?termId), "$SEARCH_STRING", "i" )
+	|| regex(str(?displayName), "$SEARCH_STRING", "i" )
+	|| regex(str(?description), "$SEARCH_STRING", "i" )
+	)
+}
+]]></variable-partial-documentation>
+  <variable-partial-label><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER (regex(str(?termId), "$SEARCH_STRING", "i" )
+	|| regex(str(?displayName), "$SEARCH_STRING", "i" )
+	)
+}
+]]></variable-partial-label>
+  <activity-exact-documentation><![CDATA[
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -66,19 +117,26 @@ WHERE {?termId rdf:type ?type .
 	|| str(?displayName) = "$SEARCH_STRING"
 	|| str(?description) = "$SEARCH_STRING"
 	)
-       FILTER (?type != owl:Property
-        && ?type != rdf:Property
-        && ?type != owl:Property
-        && ?type != owl:AnnotationProperty
-        && ?type != owl:ObjectProperty
-        && ?type != owl:DatatypeProperty
-        && ?type != owl:FunctionalProperty
-        && ?type != owl:TransitiveProperty
-        && ?type != owl:SymmetricProperty
-        )
+
 }
-]]></termExactWithoutPropertiesQuery>
-  <termSubstringWithPropertiesQuery><![CDATA[
+]]></activity-exact-documentation>
+  <activity-exact-label><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER ( str(?termId) = "$SEARCH_STRING"
+	|| str(?displayName) = "$SEARCH_STRING"
+	)
+}
+]]></activity-exact-label>
+  <activity-partial-documentation><![CDATA[
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -94,8 +152,58 @@ WHERE {?termId rdf:type ?type .
 	|| regex(str(?description), "$SEARCH_STRING", "i" )
 	)
 }
-]]></termSubstringWithPropertiesQuery>
-  <termSubstringWithoutPropertiesQuery><![CDATA[
+]]></activity-partial-documentation>
+  <activity-partial-label><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER (regex(str(?termId), "$SEARCH_STRING", "i" )
+	|| regex(str(?displayName), "$SEARCH_STRING", "i" )
+	)
+}
+]]></activity-partial-label>
+  <entity-exact-documentation><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER ( str(?termId) = "$SEARCH_STRING"
+	|| str(?displayName) = "$SEARCH_STRING"
+	|| str(?description) = "$SEARCH_STRING"
+	)
+
+}
+]]></entity-exact-documentation>
+  <entity-exact-label><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER ( str(?termId) = "$SEARCH_STRING"
+	|| str(?displayName) = "$SEARCH_STRING"
+	)
+}
+]]></entity-exact-label>
+  <entity-partial-documentation><![CDATA[
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -110,16 +218,89 @@ WHERE {?termId rdf:type ?type .
 	|| regex(str(?displayName), "$SEARCH_STRING", "i" )
 	|| regex(str(?description), "$SEARCH_STRING", "i" )
 	)
-       FILTER (?type != owl:Property
-        && ?type != rdf:Property
-        && ?type != owl:Property
-        && ?type != owl:AnnotationProperty
-        && ?type != owl:ObjectProperty
-        && ?type != owl:DatatypeProperty
-        && ?type != owl:FunctionalProperty
-        && ?type != owl:TransitiveProperty
-        && ?type != owl:SymmetricProperty
-        )
 }
-]]></termSubstringWithoutPropertiesQuery>
+]]></entity-partial-documentation>
+  <entity-partial-label><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER (regex(str(?termId), "$SEARCH_STRING", "i" )
+	|| regex(str(?displayName), "$SEARCH_STRING", "i" )
+	)
+}
+]]></entity-partial-label>
+  <default-exact-documentation><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER ( str(?termId) = "$SEARCH_STRING"
+	|| str(?displayName) = "$SEARCH_STRING"
+	|| str(?description) = "$SEARCH_STRING"
+	)
+
+}
+]]></default-exact-documentation>
+  <default-exact-label><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER ( str(?termId) = "$SEARCH_STRING"
+	|| str(?displayName) = "$SEARCH_STRING"
+	)
+}
+]]></default-exact-label>
+  <default-partial-documentation><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER (regex(str(?termId), "$SEARCH_STRING", "i" )
+	|| regex(str(?displayName), "$SEARCH_STRING", "i" )
+	|| regex(str(?description), "$SEARCH_STRING", "i" )
+	)
+}
+]]></default-partial-documentation>
+  <default-partial-label><![CDATA[
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?termId ?displayName ?description
+WHERE {?termId rdf:type ?type .
+       OPTIONAL { ?termId rdfs:comment ?description } .
+       OPTIONAL { ?termId rdfs:label ?displayName } .
+       FILTER (?type != owl:Ontology)
+       FILTER (regex(str(?termId), "$SEARCH_STRING", "i" )
+	|| regex(str(?displayName), "$SEARCH_STRING", "i" )
+	)
+}
+]]></default-partial-label>
 </sparqlQueries>
