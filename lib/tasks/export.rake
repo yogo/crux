@@ -60,7 +60,7 @@ namespace :yogo do
     desc "Export all of the crux data and models and create a tgz package"
     task :tgz => [:all] do
       cd @export_dir+'/..' do
-        sh "tar czf #{@date_dir}-crux-export.tgz #{@date_dir}"
+        sh "tar czf --remove-files #{@date_dir}-crux-export.tgz #{@date_dir}"
         rm_rf @export_dir
       end
     end
