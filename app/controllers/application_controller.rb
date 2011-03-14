@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   extend Yogo::Chainable
   protect_from_forgery
   
-  before_filter :basic_auth
+  # before_filter :basic_auth
   
   def no_blueprint
     @no_blueprint = true
