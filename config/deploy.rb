@@ -11,9 +11,9 @@ set :repository,  "git://github.com/pol/crux.git"
 set :branch, "master"
 set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
-set :user, "crux"
-set :deploy_to, "/home/crux/rails3/"
-server "crux.msu.montana.edu", :app, :web, :db, :primary => true
+set :user, "sapphire"
+set :deploy_to, "/home/sapphire/rails/"
+server "sapphire.msu.montana.edu", :app, :web, :db, :primary => true
 
 # before deploy, :user_settings
 
