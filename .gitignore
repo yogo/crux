@@ -1,5 +1,6 @@
 .DS\_Store
 .bundle
+.rvmrc
 bin/*
 db/sqlite3/*.sqlite3
 db/persvr/*
