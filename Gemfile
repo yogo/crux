@@ -53,7 +53,10 @@ gem 'carrierwave',                         :git => 'git://github.com/jnicklas/ca
 group :development, :test do
 
   # Dev Webserver
-  gem 'passenger',                           :require => nil
+  gem 'passenger',                          :require => nil
+  
+  # Deployment
+  gem 'capistrano',                         :require => nil
 
   platforms(:mri_19){ gem 'ruby-debug19'}
   platforms(:mri_18){ gem 'ruby-debug'}
