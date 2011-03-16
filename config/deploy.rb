@@ -4,7 +4,7 @@ $:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory
 require "rvm/capistrano"                  # Load RVM's capistrano plugin.
 set :rvm_ruby_string, 'ruby-1.8.7-p174'        # Or whatever env you want it to run in.
 
-set :application, "crux"
+set :application, "sapphire"
 set :use_sudo,    false
 set :scm, :git
 set :repository,  "git://github.com/pol/crux.git"
