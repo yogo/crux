@@ -93,7 +93,7 @@ class Yogo::ProjectsController < Yogo::BaseController
   # @api semipublic
   def kefed_editor
     @project = Yogo::Project.get(params[:id])
-    @uid = @project.yogo_model_uid || params[:uid]
+    @uid = @project.yogo_model_uid || params[:uid] || UUIDTools::UUID.random_create
     @action = params[:action]
     @kefed_params = "callbackFunction=editorCallback"
     if params[:editor_action]
