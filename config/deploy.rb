@@ -7,7 +7,7 @@ set :rvm_ruby_string, 'ruby-1.8.7-p174'        # Or whatever env you want it to 
 set :application, "sapphire"
 set :use_sudo,    false
 set :scm, :git
-set :repository,  "git://github.com/pol/crux.git"
+set :repository,  "git://github.com/yogo/crux.git"
 set :branch, "sapphire"
 set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
