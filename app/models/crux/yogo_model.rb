@@ -163,11 +163,13 @@ class Crux::YogoModel
   
   def self.legacy_type(node)
     case node['schema']['type'].split('::').last
-    when 'Float': 'Float'
-    when 'Decimal': 'Float'
-    when 'Integer': 'Integer'
-    when 'Text': 'Text'
-    when 'Boolean': 'Boolean'
+    when 'Float'     : 'Float'
+    when 'Decimal'   : 'Float'
+    when 'Integer'   : 'Integer'
+    when 'Text'      : 'Text'
+    when 'Boolean'   : 'Boolean'
+    when 'YogoImage' : 'YogoImage'
+    when 'YogoFile'  : 'YogoFile'
     else 'String'
     end
   end
