@@ -48,7 +48,15 @@ module Yogo
         
         collection_opts[:name] = measurement['label']
         kollection.attributes = collection_opts
-        kollection.save
+        
+        begin
+          kollection.save
+        rescue ::DataMapper::SaveFailureError 
+          ::Rails.logger.info {"----- ERROR: Unable To Save Collection (#{kollection.attributes[:name]}) -----"}
+          ::Rails.logger.info { kollection.inspect }
+          ::Rails.logger.info {"Database Error(s): #{kollection.errors.inspect}"}
+          # flash[:error] = "ERROR: Unable to save collection (#{kollection.attributes[:name]})"
+        end
 
         yogo_model.measurement_parameters(measurement_uid).each do |parameter|
           property = kollection.schema.first_or_new(:kefed_uid => parameter['uid'])
@@ -63,7 +71,15 @@ module Yogo
           #   debugger
           # end
           property.attributes = attributes  
-          result = property.save unless property.new?
+          
+          begin
+           result = property.save unless property.new?
+          rescue ::DataMapper::SaveFailureError 
+            ::Rails.logger.info {"----- ERROR: Unable To Save Property (#{property.attributes[:name]}) -----"}
+            ::Rails.logger.info { property.inspect }
+            ::Rails.logger.info {"Database Error(s): #{property.errors.inspect}"}
+            # flash[:error] = "ERROR: Unable to save collection (#{property.attributes[:name]})"
+          end
         end
 
         # clean up orphaned non-asset columns (this can cause data loss)
@@ -73,11 +89,13 @@ module Yogo
           orphan.destroy if orphan
         end
         #debugger
-        if kollection.save 
-          kollection.update_model
-        else
-          Rails.logger.info { "Database Update Error: #{kollection.errors.inspect}" }
-          flash[:error] = "The database was not successfully updated from the experimental design."
+        begin
+          kollection.save
+        rescue ::DataMapper::SaveFailureError 
+          ::Rails.logger.info {"----- ERROR: Unable To Save Collection (#{kollection.attributes[:name]}) -----"}
+          ::Rails.logger.info { kollection.inspect }
+          ::Rails.logger.info {"Database Error(s): #{kollection.errors.inspect}"}
+          # flash[:error] = "ERROR: Unable to save collection (#{kollection.attributes[:name]})"
         end
       end
     end
