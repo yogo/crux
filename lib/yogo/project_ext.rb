@@ -88,9 +88,9 @@ module Yogo
 
     # TODO: Optimize me, this is slow
     def kefed_ordered_data_collections
-      yogo_model.ordered_measurements.map do |ym| 
+      yogo_model.ordered_measurements.map { |ym| 
         data_collections.select{|dc| dc.id.to_s == ym['uid'].downcase }[0]
-      end
+      }.compact
     end
 
     def permissions_for(user)
