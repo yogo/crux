@@ -77,6 +77,18 @@ module ApplicationHelper
     end
   end
   
+  # Return an appropriate view of the asset
+  # If it is a file, offer a download link
+  # if it is an image, offer a linked thumb
+  def yogo_asset_helper(f)
+    if ['jpg','png','bmp','jpeg','gif'].include?(f.path.split('.').last.downcase)
+      image_tag(f.path, :size => "50x50")
+    else
+      # fail gracefully!
+      link_to("Download File", d.file.url ) unless d.file.blank?
+    end
+  end
+  
   
   # Return the kefed editor swf url
   #

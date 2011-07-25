@@ -40,7 +40,7 @@
             - @data_collection.kefed_ordered_schema.each do |p|
               %td= yogo_show_helper(d, p, @project, @data_collection)
             - if @data_collection.asset_collection?
-              %td= link_to("Download File", d.file.url ) unless d.file.blank?
+              %td= yogo_asset_helper(d.file) unless d.file.blank?
             - else
               %td= yogo_show_helper(d, @data_collection.measurement_schema, @project, @data_collection)
             %td
