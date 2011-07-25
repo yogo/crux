@@ -37,19 +37,19 @@
         #flash
           - if flash[:notice]
             - if flash[:notice_link]
-              .notice= link_to(flash[:notice], flash[:notice_link])
+              .notice= link_to(flash.now[:notice], flash.now[:notice_link])
             - else
-              .notice= flash[:notice]
+              .notice= flash.now[:notice]
           - if flash[:error]
             - if flash[:error_link]
-              .error= link_to(flash[:error], flash[:error_link])
+              .error= link_to(flash.now[:error], flash.now[:error_link])
             - else
-              .error= flash[:error]
+              .error= flash.now[:error]
           - if flash[:alert]
             - if flash[:error_link]
-              .error= link_to(flash[:error], flash[:error_link])
+              .error= link_to(flash.now[:error], flash.now[:error_link])
             - else
-              .error= flash[:alert]
+              .error= flash.now[:alert]
     #content
       = yield 
 
